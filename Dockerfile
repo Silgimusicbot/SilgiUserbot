@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip
 RUN pip install lxml
 RUN pip install wheel
+RUN apt-get update && apt-get install -y build-essential
 RUN python3 --version
 RUN git clone https://github.com/Silgimusicbot/SilgiUserbot /root/SilgiUserbot
 WORKDIR /root/SilgiUserbot/
