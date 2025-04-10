@@ -1,7 +1,9 @@
+# ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Əkmə OĞLUMMM
 from telethon import events
 from userbot import bot
 from userbot.modules.sql_helper import chatbot_sql as db
 from userbot.events import register
+from userbot.cmdhelp import CmdHelp
 import random
 
 @register(outgoing=True, pattern="^.chatbot (on|off)$")
@@ -38,3 +40,8 @@ async def chatbot_main(event):
         if replied and replied.sender_id != (await bot.get_me()).id:
             original = replied.text.strip().lower()
             db.add_pair(original, message_text)
+CmdHelp('chatbot').add_command(
+    'chatbot', '<on/off>', 'Yazdığınız gruplarda ChatBot özəlliyini aktivləşdirər'
+).add_info(
+    '⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Məhsuludur'
+).add()
