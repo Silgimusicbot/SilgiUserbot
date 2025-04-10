@@ -48,7 +48,7 @@ async def igpt_plugin(event):
 CmdHelp('chatgpt').add_command(
     'gpt', 'sual', 'ChatGPT nin UserBot versiyası məsələn .gpt SilgiUserbot niyə ən yaxşı userbotdur?'
 ).add_command(
-    'igpt', 'şəkil', Yazdığınız şəkli yaradar'
+    'igpt', 'şəkil', 'Yazdığınız şəkli yaradar'
 ).add_info(
     '⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Məhsuludur'
 ).add()
