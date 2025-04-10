@@ -8,7 +8,7 @@ import random
 
 @register(outgoing=True, pattern="^.chatbot (on|off)$")
 async def toggle_chatbot(event):
-    cmd = event.pattern_match.group(1).lower()
+    cmd = event.pattern_match.group(1)
     chat_id = event.chat_id
 
     if cmd == "on":
@@ -25,7 +25,7 @@ async def chatbot_main(event):
     if not db.is_chat_active(chat_id):
         return
 
-    message_text = event.text.strip().lower()
+    message_text = event.text.strip()
 
     if event.sender_id == (await bot.get_me()).id:
         return
