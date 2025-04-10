@@ -20,3 +20,8 @@ async def gpt_plugin(event):
         await event.edit(f"**GPT Cavabı:**\n{cavab}")
     except Exception as e:
         await event.edit(f"Xəta baş verdi:\n`{str(e)}`")
+CmdHelp('cevir').add_command(
+    'gpt', 'sual', 'ChatGPT nin UserBot versiyası məsələn .gpt SilgiUserbot niyə ən yaxşı userbotdur?'
+).add_info(
+    '⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Məhsuludur'
+).add()
