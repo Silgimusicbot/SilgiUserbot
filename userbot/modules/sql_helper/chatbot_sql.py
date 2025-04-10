@@ -34,12 +34,12 @@ CREATE TABLE IF NOT EXISTS user_messages (
 
 conn.commit()
 
-def user_elave(question, answer):
+def elave_et(question, answer):
     with lock:
         cursor.execute("INSERT OR REPLACE INTO chatbot (question, answer) VALUES (?, ?)", (question.lower(), answer))
         conn.commit()
 
-def get_answers(question):
+def cavab(question):
     with lock:
         cursor.execute("SELECT answer FROM chatbot WHERE question = ?", (question.lower(),))
         result = cursor.fetchall()
