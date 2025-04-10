@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS user_messages (
 
 conn.commit()
 
-def add_pair(question, answer):
+def user_elave(question, answer):
     with lock:
         cursor.execute("INSERT OR REPLACE INTO chatbot (question, answer) VALUES (?, ?)", (question.lower(), answer))
         conn.commit()
@@ -45,22 +45,22 @@ def get_answers(question):
         result = cursor.fetchall()
         return [row[0] for row in result] if result else None
 
-def activate_chat(chat_id):
+def aktiv_chat(chat_id):
     with lock:
         cursor.execute("INSERT OR IGNORE INTO active_chats (chat_id) VALUES (?)", (chat_id,))
         conn.commit()
 
-def deactivate_chat(chat_id):
+def deaktiv_chat(chat_id):
     with lock:
         cursor.execute("DELETE FROM active_chats WHERE chat_id = ?", (chat_id,))
         conn.commit()
 
-def is_chat_active(chat_id):
+def aktivdir(chat_id):
     with lock:
         cursor.execute("SELECT 1 FROM active_chats WHERE chat_id = ?", (chat_id,))
         return cursor.fetchone() is not None
 
-def add_user_message(user_id, message):
+def user_elave(user_id, message):
     with lock:
         cursor.execute("INSERT OR REPLACE INTO user_messages (user_id, message) VALUES (?, ?)", (user_id, message))
         conn.commit()
