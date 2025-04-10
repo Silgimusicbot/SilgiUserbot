@@ -7,7 +7,7 @@ from userbot.cmdhelp import CmdHelp
 import random
 
 @register(outgoing=True, pattern="^.chatbot (on|off)$")
-async def toggle_chatbot(event):
+async def acbagla(event):
     cmd = event.pattern_match.group(1)
     chat_id = event.chat_id
 
@@ -19,7 +19,7 @@ async def toggle_chatbot(event):
         await event.edit("**ChatBot bu söhbət üçün deaktiv edildi.**")
 
 @register(incoming=True)
-async def chatbot_main(event):
+async def chatbot_aktiv(event):
     chat_id = event.chat_id
     user_id = event.sender_id
     if not db.aktivdir(chat_id):
