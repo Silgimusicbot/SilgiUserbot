@@ -33,8 +33,8 @@ async def chatbot_aktiv(event):
     db.user_elave(user_id, mesaj)
 
     cavablar = db.cavab(mesaj)
-    if answers:
-        await event.reply(random.choice(answers))
+    if cavablar:
+        await event.reply(random.choice(cavablar))
     elif event.is_reply:
         cavablanan = await event.get_reply_message()
         if cavablanan and cavablanan.sender_id != (await bot.get_me()).id:
