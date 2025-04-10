@@ -18,7 +18,7 @@ def ids(chat_id):
 def userbot(chat_id):
     with INSERTION_LOCK:
         tchat = SESSION.query(ChatBot).get(str(chat_id))
-        if not tedechat:
+        if not tchat:
             tchat = ChatBot(str(chat_id))
         SESSION.add(tchat)
         SESSION.commit()
@@ -27,6 +27,6 @@ def userbot(chat_id):
 def chatbot(chat_id):
     with INSERTION_LOCK:
         tchat = SESSION.query(ChatBot).get(str(chat_id))
-        if tedechat:
+        if tchat:
             SESSION.delete(tchat)
         SESSION.commit()
