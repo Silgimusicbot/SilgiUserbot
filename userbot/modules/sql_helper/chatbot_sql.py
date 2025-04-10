@@ -19,13 +19,13 @@ CREATE TABLE IF NOT EXISTS chatbot (
 """)
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS active_chats (
+CREATE TABLE IF NOT EXISTS aktiv_chatlar (
     chat_id INTEGER PRIMARY KEY
 )
 """)
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS user_messages (
+CREATE TABLE IF NOT EXISTS istifadeci_mesajlari (
     user_id INTEGER,
     message TEXT,
     UNIQUE(user_id, message)
@@ -34,39 +34,33 @@ CREATE TABLE IF NOT EXISTS user_messages (
 
 conn.commit()
 
-def elave_et(question, answer):
+def elave_et(sual, cavab):
     with lock:
-        cursor.execute("INSERT OR REPLACE INTO chatbot (question, answer) VALUES (?, ?)", (question.lower(), answer))
+        cursor.execute("INSERT OR REPLACE INTO chatbot (question, answer) VALUES (?, ?)", (sual.lower(), cavab))
         conn.commit()
 
-def cavab(question):
+def cavab(sual):
     with lock:
-        cursor.execute("SELECT answer FROM chatbot WHERE question = ?", (question.lower(),))
+        cursor.execute("SELECT answer FROM chatbot WHERE question = ?", (sual.lower(),))
         result = cursor.fetchall()
         return [row[0] for row in result] if result else None
 
 def aktiv_chat(chat_id):
     with lock:
-        cursor.execute("INSERT OR IGNORE INTO active_chats (chat_id) VALUES (?)", (chat_id,))
+        cursor.execute("INSERT OR IGNORE INTO aktiv_chatlar (chat_id) VALUES (?)", (chat_id,))
         conn.commit()
 
 def deaktiv_chat(chat_id):
     with lock:
-        cursor.execute("DELETE FROM active_chats WHERE chat_id = ?", (chat_id,))
+        cursor.execute("DELETE FROM aktiv_chatlar WHERE chat_id = ?", (chat_id,))
         conn.commit()
 
 def aktivdir(chat_id):
     with lock:
-        cursor.execute("SELECT 1 FROM active_chats WHERE chat_id = ?", (chat_id,))
+        cursor.execute("SELECT 1 FROM aktiv_chatlar WHERE chat_id = ?", (chat_id,))
         return cursor.fetchone() is not None
 
-def user_elave(user_id, message):
+def user_elave(user_id, mesaj):
     with lock:
-        cursor.execute("INSERT OR REPLACE INTO user_messages (user_id, message) VALUES (?, ?)", (user_id, message))
+        cursor.execute("INSERT OR REPLACE INTO istifadeci_mesajlari (user_id, message) VALUES (?, ?)", (user_id, mesaj))
         conn.commit()
-
-def get_user_messages(user_id):
-    with lock:
-        cursor.execute("SELECT message FROM user_messages WHERE user_id = ?", (user_id,))
-        result = cursor.fetchall()
-        return [row[0] for row in result] if result else []
