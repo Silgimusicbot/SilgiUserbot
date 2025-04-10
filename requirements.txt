@@ -1,4 +1,5 @@
 deep-translator
+g4f
 aiohttp
 aiofiles
 pyautogui
