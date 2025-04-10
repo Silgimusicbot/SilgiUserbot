@@ -1,7 +1,7 @@
 # SilgiUserbot məhsuludur əkmə peysərin balası
 from telethon import events
 from userbot import bot
-import g4f.client import Client
+from g4f.client import Client
 import random
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
