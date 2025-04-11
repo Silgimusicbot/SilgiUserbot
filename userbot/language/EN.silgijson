@@ -172,7 +172,7 @@
             "DAY": " days, ",
             "HOURS": " hours, ",
             "MIN": " minutes, ",
-            "SEC": " seconds ",
+            "SEC": " seconds, ",
             "BEFORE": " before",
             "AFK": "`My owner AFK now.`",
             "IM_AFK": "`I'm AFK now.`",
