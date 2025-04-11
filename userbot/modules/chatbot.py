@@ -1,6 +1,6 @@
 # ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Əkmə OĞLUMMM
 from telethon import events
-from userbot import bot
+from userbot import bot, GRUP_ID
 from userbot.modules.sql_helper import chatbot_sql as db
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
@@ -21,6 +21,8 @@ async def acbagla(event):
 @register(incoming=True)
 async def chatbot_aktiv(event):
     chat_id = event.chat_id
+    if chat_id in GRUP_ID:
+        return
     user_id = event.sender_id
     if not db.aktivdir(chat_id):
         return
