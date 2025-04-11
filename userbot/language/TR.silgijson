@@ -172,6 +172,10 @@
 
         "afk": {
             "REASON": "`Sebep`",
+            "DAY": "gün, "
+            "HOURS": "saat, "
+            "MIN": "dakika, "
+            "SEC": "saniye "
             "AFK": "`Sahibim şu an AFK`",
             "AFK1": "<İsteğe bağlı sebep>",
             "AFK2": "AFK olduğunuzu belirtir. Kim size pm atarsa ya da sizi etiketlerse sizin AFK olduğunuzu ve belirlediğiniz sebebi gösterir. Herhangi bir yere mesaj yazdığınızda AFK modu kapanır.",
