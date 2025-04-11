@@ -169,6 +169,10 @@
         },
         "afk": {
             "REASON": "`Reason`",
+            "DAY": "days, "
+            "HOURS": "hours, "
+            "MIN": "minutes, "
+            "SEC": "seconds, "
             "AFK": "`My owner AFK now.`",
             "IM_AFK": "`I'm AFK now.`",
             "IM_NOT_AFK": "`I'm not AFK anymore.`",
