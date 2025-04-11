@@ -22,11 +22,11 @@ def time_formatter(seconds, short=True):
     minutes, seconds = divmod(int(seconds), 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
-    tmp = ((str(days) + (" gün, " if not short else "g, ")) if days else "") + \
-        ((str(hours) + (" saat, " if not short else "s, ")) if hours else "") + \
-        ((str(minutes) + (" dəqiqə, " if not short else "d, ")) if minutes else "") + \
-        ((str(seconds) + (" saniyə, " if not short else "s, ")) if seconds else "")
-    return tmp[:-2] + " əvvəl"
+    tmp = ((str(days) + (LANG['DAY'] if not short else "g, ")) if days else "") + \
+        ((str(hours) + (LANG['HOURS'] if not short else "s, ")) if hours else "") + \
+        ((str(minutes) + (LANG['MIN'] if not short else "d, ")) if minutes else "") + \
+        ((str(seconds) + (LANG['SEC'] if not short else "s, ")) if seconds else "")
+    return tmp[:-2] + LANG['BEFORE']
 
 
 seen_users = set()
