@@ -17,7 +17,7 @@ async def gpt_plugin(event):
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": mesaj}],
-            web_search=False
+            web_search=True
         )
 
         gpt_response = response.choices[0].message.content
