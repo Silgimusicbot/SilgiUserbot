@@ -45,8 +45,8 @@ async def tiktok_komut(event):
 
     try:
         fayl = requests.get(video_linki).content
-        filename = "tiktok.mp4"
-        await event.client.send_file(event.chat_id, file=fayl, caption=basliq, force_document=False, file_name=filename)
+        filename = basliq + ".mp4" if basliq else "tiktok_video.mp4"
+        await event.client.send_file(event.chat_id, file=fayl, caption=basliq or "TikTok videosu", force_document=False, file_name=filename)
         await event.delete()
     except Exception as e:
         await event.edit(f"Videonu göndərmək alınmadı:\n`{str(e)}`")
