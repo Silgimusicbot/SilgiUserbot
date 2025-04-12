@@ -20,7 +20,7 @@ async def progress_bar(current, total, event, start, type="Yüklənir"):
         except:
             pass
 
-@register(outgoing=True, pattern=r"^.tiktok(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.vtt(?: |$)(.*)")
 async def tiktok_download(event):
     import time
     url = event.pattern_match.group(1)
