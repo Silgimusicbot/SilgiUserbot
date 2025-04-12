@@ -5,11 +5,11 @@ from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 def tiktok_yukle(link):
     try:
-        api = "https://tikwm.com/api/"
-        parametrlər = {"url": link}
-        cavab = requests.get(api, params=parametrlər).json()
-        if cavab.get("data") and cavab["data"].get("play") and cavab["data"].get("title"):
-            return cavab["data"]["play"], cavab["data"]["title"]
+        api = f"https://ssstik.io/abc/api/convert"
+        params = {"url": link}
+        response = requests.get(api, params=params).json()
+        if response.get("url"):
+            return response["url"], response.get("title", "tiktok_video")
     except:
         pass
     return None, None
@@ -45,7 +45,7 @@ async def tiktok_komut(event):
 
     try:
         fayl = requests.get(video_linki).content
-        filename = basliq + ".mp4" if basliq else "tiktok_video.mp4"
+        filename = "silgiuserbot.mp4"  
         await event.client.send_file(event.chat_id, file=fayl, caption=basliq or "TikTok videosu", force_document=False, file_name=filename)
         await event.delete()
     except Exception as e:
