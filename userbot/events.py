@@ -82,7 +82,7 @@ def register(**args):
                     text = "**✥ ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ ΣRROR ✥**\n\n"
                     
                     if len(silgitext)<10:
-                        text += LANG['CMD']
+                        text += LANG['CMD'].format(silgitext=silgitext)
                     text += LANG['ERR']
                     text += LANG['LINK']
                     text += LANG['AB']
