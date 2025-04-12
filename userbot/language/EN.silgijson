@@ -4,6 +4,18 @@
     "LANGCODE": "en",
     "AUTHOR": "@hvseyn",
     "STRINGS": {
+        "errors": {
+            "CMD": "⌨️ **Command:** {silgitext}\n\n",
+            "ERR": "**An error occurred ❗**\n",
+            "LINK": "**ℹ️ Send this log to the** [⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Support Group](https://t.me/silgiub) **for help.**",
+            "AB": "**Learn what the error means**\n",
+            "DATE": "\nDate: ",
+            "ID": "\nGroup ID: ",
+            "USERID": "\nSender User ID: ",
+            "REASON": "\n\nError reason:\n",
+            "INFO": "\n\nTraceback info:\n",
+            "TEXT": "\n\nError text:\n"
+        },
         "__plugin": {
             "REPLY_FOR_PORT": "`Please give a file for Plugin-Port`",
             "DOWNLOADING": "`File is downloading...`",
