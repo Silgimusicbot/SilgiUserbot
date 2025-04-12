@@ -3,16 +3,15 @@ import re
 import requests
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
-def tiktok_yukle(link):
-    try:
-        api = f"https://ssstik.io/abc/api/convert"
-        params = {"url": link}
-        response = requests.get(api, params=params).json()
-        if response.get("url"):
-            return response["url"], response.get("title", "tiktok_video")
-    except:
-        pass
-    return None, None
+def snaptik_yukle(link):
+    url = "https://snaptik.io/abc2"
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+    data = {"url": link}
+    cavab = requests.post(url, data=data, headers=headers)
+    video_linkləri = re.findall(r'https://[^"]+\.mp4', cavab.text)
+    return video_linkləri
 def indown_yukle(link):
     try:
         url = "https://indown.io/download/"
@@ -30,26 +29,27 @@ def indown_yukle(link):
         return []
 
 @register(outgoing=True, pattern=r"^.vtt(?: |$)(.*)")
-async def tiktok_komut(event):
+async def snaptik_komut(event):
     link = event.pattern_match.group(1).strip()
     if not link:
-        await event.edit("TikTok linkini daxil edin.\nMisal: `.vtt https://www.tiktok.com/...`")
+        await event.edit("Zəhmət olmasa TikTok linkini daxil edin.\nMisal: `.vtt https://www.tiktok.com/...`")
         return
 
-    await event.edit("TikTok videosu yüklənir...")
-
-    video_linki, basliq = tiktok_yukle(link)
-    if not video_linki:
-        await event.edit("Video tapılmadı və ya link səhvdir.")
-        return
+    await event.edit("SnapTik ilə video yüklənir...")
 
     try:
-        fayl = requests.get(video_linki).content
-        filename = "silgiuserbot.mp4"  
-        await event.client.send_file(event.chat_id, file=fayl, caption=basliq or "TikTok videosu", force_document=False, file_name=filename)
+        video_linkləri = snaptik_yukle(link)
+        if not video_linkləri:
+            await event.edit("Video tapılmadı və ya link səhvdir.")
+            return
+
+        for video_url in video_linkləri:
+            video_bytes = requests.get(video_url).content
+            await event.client.send_file(event.chat_id, video_bytes, caption="TikTok videosu (SnapTik)")
         await event.delete()
+
     except Exception as e:
-        await event.edit(f"Videonu göndərmək alınmadı:\n`{str(e)}`")
+        await event.edit(f"Xəta baş verdi:\n`{str(e)}`")
 
 @register(outgoing=True, pattern=r"^.mig(?: |$)(.*)")
 async def instagram_indown_komut(event):
