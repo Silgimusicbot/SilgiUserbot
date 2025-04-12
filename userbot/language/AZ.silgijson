@@ -4,6 +4,9 @@
     "LANGCODE": "az",
     "AUTHOR": "@hvseyn",
     "STRINGS": {
+        "errors": {
+            "LINK": "[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Dəstək Qrupuna](https://t.me/silgiub)",
+            "CMD": "⌨️ **Əmr:** {silgitext}\n\n",
         "__plugin": {
             
             "REPLY_FOR_PORT": "`Zəhmət olmasa Plugin-Port üçün bir fayla cavab yazın`",
