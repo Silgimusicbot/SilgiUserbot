@@ -10,7 +10,7 @@ from userbot.language import get_value
 from telethon import events
 
 from userbot import bot, BOTLOG_CHATID, LOGSPAMMER, PATTERNS, ADMINS, DEV
-
+LANG = get_value("errors")
 
 def register(**args):
     pattern = args.get('pattern', None)
@@ -80,22 +80,22 @@ def register(**args):
 
                     silgitext = str(check.text)
                     text = "**✥ ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ ΣRROR ✥**\n\n"
-                    link = "[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Dəstək Qrupuna](https://t.me/silgiub)"
+                    
                     if len(silgitext)<10:
-                        text += f"⌨️ **Əmr:** {silgitext}\n\n"
-                    text += "**Xəta baş verdi ❗**\n"
-                    text += f"**ℹ️ Bu log'u** {link} **göndərin.**"
-                    text += "**Xətanın nə oluğunu öyrənin**\n"
+                        text += LANG['CMD']
+                    text += LANG['ERR']
+                    text += LANG['LINK']
+                    text += LANG['AB']
                     
                     ftext = "--------⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ ΣRROR--------\n"
-                    ftext += "\nTarix: " + date
-                    ftext += "\nQrup ID: " + str(check.chat_id)
-                    ftext += "\nGöndərən istifadəçinin ID: " + str(check.sender_id)
-                    ftext += "\n\nXəta səbəbi:\n"
+                    ftext += LANG['DATE'] + date
+                    ftext += LANG['ID'] + str(check.chat_id)
+                    ftext += LANG['USERID'] + str(check.sender_id)
+                    ftext += LANG['REASON']
                     ftext += str(check.text)
-                    ftext += "\n\nGeri izləmə məlumatı:\n"
+                    ftext += LANG['INFO']
                     ftext += str(format_exc())
-                    ftext += "\n\nXəta mətni:\n"
+                    ftext += LANG['TEXT']
                     ftext += str(sys.exc_info()[1])
                     ftext += "\n\n--------⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ ΣRROR--------"
 
