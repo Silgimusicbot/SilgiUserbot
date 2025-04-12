@@ -1,83 +1,62 @@
 # ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Əkmə OĞLUMMM
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
-import requests
-import re
-import os
 import asyncio
-
-# Fayl yüklənərkən progress göstərmək üçün funksiyamız
-async def progress_bar(current, total, event, start, type="Yüklənir"):
-    now = time.time()
-    diff = now - start
-
-    if diff % 2 == 0 or current == total:
-        percent = int(current * 100 / total)
-        bar = "█" * (percent // 10) + "░" * (10 - (percent // 10))
-        status = f"{type}: [{bar}] {percent}%"
-        try:
-            await event.edit(status)
-        except:
-            pass
-
-@register(outgoing=True, pattern=r"^.vtt(?: |$)(.*)")
-async def tiktok_download(event):
-    import time
-    url = event.pattern_match.group(1)
-    if not url:
-        await event.edit("Zəhmət olmasa TikTok linkini daxil et: `.tiktok <link>`")
-        return
-
-    msg = await event.edit("Videonu yükləyirəm...")
+import random
+mesaj = "Video yükləndi.\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝"
+YUKLEYICI_BOT = "HK_tiktok_bot"
+async def yalanci_yukleme_gosterici(event, uzunluq=5):
+    mesaj = await event.edit("Yükləmə başlayır...")
+    addimlar = 10
+    for i in range(1, addimlar + 1):
+        faiz = i * 10
+        bar = "▓" * i + "░" * (addimlar - i)
+        suret = round(random.uniform(0.8, 4.5), 2)
+        metn = f"[{bar}] {faiz}% - {suret} MB/s"
+        await mesaj.edit(f"Yüklənir...\n{metn}")
+        await asyncio.sleep(uzunluq / addimlar)
+    await mesaj.edit("Yükləmə tamamlandı. Video hazırlanır...")
+async def gonder(event, link):
     try:
-        headers = {"user-agent": "Mozilla/5.0"}
-        session = requests.Session()
-
-        r1 = session.get("https://ssstik.io/en", headers=headers)
-        token = re.search(r'id="token" value="(.*?)"', r1.text).group(1)
-
-        response = session.post("https://ssstik.io/abc", data={
-            "id": url,
-            "locale": "en",
-            "tt": token
-        }, headers=headers)
-
-        video_url = re.search(r'href="(https:\/\/[^"]+)"', response.text)
-        if not video_url:
-            await msg.edit("Videonu yükləmək alınmadı.")
-            return
-
-        video_link = video_url.group(1)
-
-        file_name = "tiktok.mp4"
-        video_data = session.get(video_link, stream=True)
-
-        total_length = int(video_data.headers.get('content-length', 0))
-        downloaded = 0
-        start_time = time.time()
-
-        with open(file_name, "wb") as f:
-            for chunk in video_data.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
-                    downloaded += len(chunk)
-                    await progress_bar(downloaded, total_length, msg, start_time)
-
-        await msg.edit("Telegram-a göndərilir...")
+        bot = await event.client.get_entity(YUKLEYICI_BOT)
+        await gosterici(event, uzunluq=6)
+        await event.edit("Linki yükləyici bota göndərirəm...")
+        await event.client.send_message(bot, link)
+        cavab = await event.client.wait_for_event(
+            lambda e: (
+                e.chat_id == bot.id and e.sender_id == bot.id and
+                (e.video or e.document or e.photo)
+            ),
+            timeout=30
+        )
         await event.client.send_file(
             event.chat_id,
-            file_name,
-            caption="Budur TikTok videosu!",
-            progress_callback=lambda d, t: asyncio.ensure_future(
-                progress_bar(d, t, msg, start_time, type="Göndərilir")
-            )
+            cavab.media,
+            caption=mesaj,
+            reply_to=event.reply_to_msg_id
         )
-        await msg.delete()
-        os.remove(file_name)
+        await event.delete()
 
+    except asyncio.TimeoutError:
+        await event.edit("Bot cavab vermədi. Zəhmət olmasa linki yoxla.")
     except Exception as e:
-        await msg.edit(f"Xəta baş verdi: `{str(e)}`")
-
-CmdHelp("tiktok").add_command(
-    "tiktok", "<link>", "TikTok videosunu watermark olmadan yükləyir və çatda paylaşır. Yükləmə zamanı progress bar göstərilir."
+        await event.edit(f"Xəta baş verdi: `{str(e)}`")
+@register(outgoing=True, pattern=r"^.tiktok(?: |$)(.*)")
+async def tiktok(event):
+    link = event.pattern_match.group(1)
+    if not link:
+        await event.edit("Zəhmət olmasa TikTok linkini yazın: `.vtt <link>`")
+        return
+    await gonder(event, link)
+@register(outgoing=True, pattern=r"^.instagram(?: |$)(.*)")
+async def instagram(event):
+    link = event.pattern_match.group(1)
+    if not link:
+        await event.edit("Zəhmət olmasa Instagram linkini yazın: `.vig <link>`")
+        return
+    await gonder(event, link)
+CmdHelp("videosaver").add_command(
+    "vtt", "<link>", "TikTok videosunu yükləyir."
+).add_command(
+    "vig", "<link>", "Instagram videosunu yükləyir."
 ).add()
