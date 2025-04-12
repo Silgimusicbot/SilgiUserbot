@@ -1,3 +1,4 @@
+# ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Əkmə OĞLUMMM
 import re
 import requests
 from userbot.events import register
@@ -97,4 +98,4 @@ async def reel_komutu(event):
     except Exception as e:
         await event.edit(f"Videonu göndərmək mümkün olmadı:\n`{str(e)}`")
 CmdHelp("media").add_command("vtt <link>", None, "TikTok videosunu su nişanı olmadan yükləyər.").add_command(
-    "mig <link>", None, "Instagram postundakı şəkil və videonu yükləyər.").add_command("reel <link>", None, "Instagram Reels videosunu yükləyər və göndərər.").add()
+    "mig <link>", None, "Instagram postundakı şəkil və videonu yükləyər.").add_command("reel <link>", None, "Instagram Reels videosunu yükləyər və göndərər.").add_info("⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Məhsuludur").add()
