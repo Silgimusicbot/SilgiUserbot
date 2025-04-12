@@ -5,7 +5,7 @@ from telethon import events
 import asyncio
 import random
 
-mesaj = "Video yükləndi.\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝"
+mesaj = f"```Video yükləndi.\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```"
 YUKLEYICI_BOT = "HK_tiktok_bot"
 
 async def gosterici(event, uzunluq=6):
@@ -31,11 +31,13 @@ async def gonder(event, link):
             if mesaj.media:
                 cavab = mesaj
 
-        await event.edit("Yükləyici bota /start göndərilir...")
+        await event.edit("`Video analiz edilir...`")
         await event.client.send_message(bot, "/start")
-        await asyncio.sleep(1)
-        await event.edit("Link bota göndərilir...")
+        await asyncio.sleep(3)
+
+        await event.edit("`Link hazırlanır...`")
         await event.client.send_message(bot, link)
+
         await gosterici(event, uzunluq=6)
 
         for _ in range(20):
@@ -52,7 +54,7 @@ async def gonder(event, link):
             )
             await event.delete()
         else:
-            await event.edit("Botdan cavab gəlmədi. Linki və botun aktivliyini yoxla.")
+            await event.edit("Botdan cavab gəlmədi.")
     except Exception as e:
         await event.edit(f"Xəta baş verdi: `{str(e)}`")
 
