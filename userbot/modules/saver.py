@@ -1,102 +1,83 @@
 # ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Əkmə OĞLUMMM
-import re
-import requests
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
-def tiktok_yukle_rapidapi(link):
-    url = "https://tiktok-info.p.rapidapi.com/video/download-video-without-watermark"
-    headers = {
-        "X-RapidAPI-Key": "a9ff2b62a4mshc8b12f8b231650cp1f14f0jsn0a4f00cf5776",
-        "X-RapidAPI-Host": "tiktok-info.p.rapidapi.com"
-    }
-    params = {"url": link}
+import requests
+import re
+import os
+import asyncio
 
-    response = requests.get(url, headers=headers, params=params)
-    data = response.json()
+# Fayl yüklənərkən progress göstərmək üçün funksiyamız
+async def progress_bar(current, total, event, start, type="Yüklənir"):
+    now = time.time()
+    diff = now - start
 
-    if data.get("video"):
-        video_url = data["video"].get("url")
-        description = data.get("description", "TikTok videosu")
-        return video_url, description
-    return None, None
-def indown_yukle(link):
-    try:
-        url = "https://indown.io/download/"
-        headers = {
-            "User-Agent": "Mozilla/5.0",
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
-        data = {
-            "url": link
-        }
-        cavab = requests.post(url, headers=headers, data=data, timeout=10)
-        video_linkləri = re.findall(r'https:\/\/[^"]+\.mp4', cavab.text)
-        return video_linkləri
-    except:
-        return []
+    if diff % 2 == 0 or current == total:
+        percent = int(current * 100 / total)
+        bar = "█" * (percent // 10) + "░" * (10 - (percent // 10))
+        status = f"{type}: [{bar}] {percent}%"
+        try:
+            await event.edit(status)
+        except:
+            pass
 
-@register(outgoing=True, pattern=r"^.vtt(?: |$)(.*)")
-async def tiktok_komutu(event):
-    link = event.pattern_match.group(1).strip()
-    if not link:
-        await event.edit("Zəhmət olmasa TikTok linkini daxil edin.")
+@register(outgoing=True, pattern=r"^.tiktok(?: |$)(.*)")
+async def tiktok_download(event):
+    import time
+    url = event.pattern_match.group(1)
+    if not url:
+        await event.edit("Zəhmət olmasa TikTok linkini daxil et: `.tiktok <link>`")
         return
 
-    await event.edit("Videonu yükləyirəm...")
-
-    video_url, basliq = tiktok_yukle_rapidapi(link)
-    if not video_url:
-        await event.edit("Video tapılmadı və ya link səhvdir.")
-        return
-
+    msg = await event.edit("Videonu yükləyirəm...")
     try:
-        video = requests.get(video_url).content
-        await event.client.send_file(event.chat_id, file=video, caption=basliq or "TikTok videosu", force_document=False)
-        await event.delete()
+        headers = {"user-agent": "Mozilla/5.0"}
+        session = requests.Session()
+
+        r1 = session.get("https://ssstik.io/en", headers=headers)
+        token = re.search(r'id="token" value="(.*?)"', r1.text).group(1)
+
+        response = session.post("https://ssstik.io/abc", data={
+            "id": url,
+            "locale": "en",
+            "tt": token
+        }, headers=headers)
+
+        video_url = re.search(r'href="(https:\/\/[^"]+)"', response.text)
+        if not video_url:
+            await msg.edit("Videonu yükləmək alınmadı.")
+            return
+
+        video_link = video_url.group(1)
+
+        file_name = "tiktok.mp4"
+        video_data = session.get(video_link, stream=True)
+
+        total_length = int(video_data.headers.get('content-length', 0))
+        downloaded = 0
+        start_time = time.time()
+
+        with open(file_name, "wb") as f:
+            for chunk in video_data.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+                    downloaded += len(chunk)
+                    await progress_bar(downloaded, total_length, msg, start_time)
+
+        await msg.edit("Telegram-a göndərilir...")
+        await event.client.send_file(
+            event.chat_id,
+            file_name,
+            caption="Budur TikTok videosu!",
+            progress_callback=lambda d, t: asyncio.ensure_future(
+                progress_bar(d, t, msg, start_time, type="Göndərilir")
+            )
+        )
+        await msg.delete()
+        os.remove(file_name)
+
     except Exception as e:
-        await event.edit(f"Xəta baş verdi:\n`{str(e)}`")
+        await msg.edit(f"Xəta baş verdi: `{str(e)}`")
 
-@register(outgoing=True, pattern=r"^.mig(?: |$)(.*)")
-async def instagram_indown_komut(event):
-    link = event.pattern_match.group(1).strip()
-    if not link:
-        await event.edit("Instagram post linkini daxil edin.\nMisal: `.mig https://www.instagram.com/p/...`")
-        return
-
-    await event.edit("Instagram postu yüklənir...")
-
-    media_linkləri = indown_yukle(link)
-    if not media_linkləri:
-        await event.edit("Mediya tapılmadı və ya link səhvdir.")
-        return
-
-    try:
-        for media in media_linkləri:
-            fayl = requests.get(media).content
-            await event.client.send_file(event.chat_id, file=fayl, force_document=False, file_name="instagram.mp4")
-        await event.delete()
-    except Exception as e:
-        await event.edit(f"Mediya göndərilə bilmədi:\n`{str(e)}`")
-@register(outgoing=True, pattern=r"^.vig(?: |$)(.*)")
-async def instagram_reels_komut(event):
-    link = event.pattern_match.group(1).strip()
-    if not link:
-        await event.edit("Instagram Reels linkini daxil edin.\nMisal: `.vig https://www.instagram.com/reel/...`")
-        return
-
-    await event.edit("Reels videosu yüklənir...")
-
-    media_linkləri = indown_yukle(link)
-    if not media_linkləri:
-        await event.edit("Video tapılmadı və ya link səhvdir.")
-        return
-
-    try:
-        for media in media_linkləri:
-            fayl = requests.get(media).content
-            await event.client.send_file(event.chat_id, file=fayl, force_document=False, file_name="reel.mp4")
-        await event.delete()
-    except Exception as e:
-        await event.edit(f"Videonu göndərmək alınmadı:\n`{str(e)}`")
-CmdHelp("media").add_command("vtt <link>", None, "TikTok videosunu su nişanı olmadan yükləyər.").add_command(
-    "mig <link>", None, "Instagram postundakı şəkil və videonu yükləyər.").add_command("vig <link>", None, "Instagram Reels videosunu yükləyər və göndərər.").add_info("⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Məhsuludur").add()
+CmdHelp("tiktok").add_command(
+    "tiktok", "<link>", "TikTok videosunu watermark olmadan yükləyir və çatda paylaşır. Yükləmə zamanı progress bar göstərilir."
+).add()
