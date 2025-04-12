@@ -5,7 +5,7 @@ import asyncio
 import random
 mesaj = "Video yükləndi.\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝"
 YUKLEYICI_BOT = "HK_tiktok_bot"
-async def yalanci_yukleme_gosterici(event, uzunluq=5):
+async def gosterici(event, uzunluq=5):
     mesaj = await event.edit("Yükləmə başlayır...")
     addimlar = 10
     for i in range(1, addimlar + 1):
@@ -41,14 +41,14 @@ async def gonder(event, link):
         await event.edit("Bot cavab vermədi. Zəhmət olmasa linki yoxla.")
     except Exception as e:
         await event.edit(f"Xəta baş verdi: `{str(e)}`")
-@register(outgoing=True, pattern=r"^.tiktok(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.vtt(?: |$)(.*)")
 async def tiktok(event):
     link = event.pattern_match.group(1)
     if not link:
         await event.edit("Zəhmət olmasa TikTok linkini yazın: `.vtt <link>`")
         return
     await gonder(event, link)
-@register(outgoing=True, pattern=r"^.instagram(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.vig(?: |$)(.*)")
 async def instagram(event):
     link = event.pattern_match.group(1)
     if not link:
