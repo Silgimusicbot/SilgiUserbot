@@ -4,6 +4,18 @@
     "LANGCODE": "tr",
     "AUTHOR": "@hvseyn",
     "STRINGS": {
+        "errors": {
+            "CMD": "⌨️ **Komut:** {silgitext}\n\n",
+            "ERR": "**Bir hata oluştu ❗**\n",
+            "LINK": "**ℹ️ Bu log'u** [⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Destek Grubuna](https://t.me/silgiub) **gönderin.**",
+            "AB": "**Hatanın ne anlama geldiğini öğrenin**\n",
+            "DATE": "\nTarih: ",
+            "ID": "\nGrup ID'si: ",
+            "USERID": "\nGönderen Kullanıcı ID'si: ",
+            "REASON": "\n\nHata nedeni:\n",
+            "INFO": "\n\nİzleme bilgisi:\n",
+            "TEXT": "\n\nHata metni:\n"
+        },
         "__plugin": {
             "REPLY_FOR_PORT": "`Plugin-Port için lütfen bir dosyaya yanıt verin`",
             "DOWNLOADING": "`Dosya indiriliyor...`",
