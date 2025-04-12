@@ -3,15 +3,22 @@ import re
 import requests
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
-def snaptik_yukle(link):
-    url = "https://snaptik.io/abc2"
+def tiktok_yukle_rapidapi(link):
+    url = "https://tiktok-info.p.rapidapi.com/video/download-video-without-watermark"
     headers = {
-        "User-Agent": "Mozilla/5.0"
+        "X-RapidAPI-Key": "a9ff2b62a4mshc8b12f8b231650cp1f14f0jsn0a4f00cf5776",
+        "X-RapidAPI-Host": "tiktok-info.p.rapidapi.com"
     }
-    data = {"url": link}
-    cavab = requests.post(url, data=data, headers=headers)
-    video_linkləri = re.findall(r'https://[^"]+\.mp4', cavab.text)
-    return video_linkləri
+    params = {"url": link}
+
+    response = requests.get(url, headers=headers, params=params)
+    data = response.json()
+
+    if data.get("video"):
+        video_url = data["video"].get("url")
+        description = data.get("description", "TikTok videosu")
+        return video_url, description
+    return None, None
 def indown_yukle(link):
     try:
         url = "https://indown.io/download/"
@@ -29,25 +36,23 @@ def indown_yukle(link):
         return []
 
 @register(outgoing=True, pattern=r"^.vtt(?: |$)(.*)")
-async def snaptik_komut(event):
+async def tiktok_komutu(event):
     link = event.pattern_match.group(1).strip()
     if not link:
-        await event.edit("Zəhmət olmasa TikTok linkini daxil edin.\nMisal: `.vtt https://www.tiktok.com/...`")
+        await event.edit("Zəhmət olmasa TikTok linkini daxil edin.")
         return
 
-    await event.edit("SnapTik ilə video yüklənir...")
+    await event.edit("Videonu yükləyirəm...")
+
+    video_url, basliq = tiktok_yukle_rapidapi(link)
+    if not video_url:
+        await event.edit("Video tapılmadı və ya link səhvdir.")
+        return
 
     try:
-        video_linkləri = snaptik_yukle(link)
-        if not video_linkləri:
-            await event.edit("Video tapılmadı və ya link səhvdir.")
-            return
-
-        for video_url in video_linkləri:
-            video_bytes = requests.get(video_url).content
-            await event.client.send_file(event.chat_id, video_bytes, caption="TikTok videosu (SnapTik)")
+        video = requests.get(video_url).content
+        await event.client.send_file(event.chat_id, file=video, caption=basliq or "TikTok videosu", force_document=False)
         await event.delete()
-
     except Exception as e:
         await event.edit(f"Xəta baş verdi:\n`{str(e)}`")
 
