@@ -18,7 +18,7 @@ async def acbagla(event):
         db.deaktiv_chat(chat_id)
         await event.edit("**ChatBot bu söhbət üçün deaktiv edildi.**")
 
-@register(incoming=True)
+@register(incoming=True, disable_errors=True)
 async def chatbot_aktiv(event):
     chat_id = event.chat_id
     if chat_id in GRUP_ID:
