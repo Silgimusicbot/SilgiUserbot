@@ -14,7 +14,7 @@ async def gpt_plugin(event):
     await event.edit("⏳ Cavab axtarılır...")
 
     try:
-        response = client.chat.completions.create(
+        response = await client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": mesaj}],
             web_search=True
@@ -33,7 +33,7 @@ async def igpt_plugin(event):
     await event.edit("⏳ Şəkil axtarılır...")
 
     try:
-        image_response = client.images.generate(
+        image_response = await client.images.generate(
             model="flux",
             prompt=mesaj,
             response_format="url"
