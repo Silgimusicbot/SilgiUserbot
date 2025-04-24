@@ -43,9 +43,9 @@ def split_quotes(text: str):
         else:
             return text.split(None, 1)
 
-        # 1 to avoid starting quote, and counter is exclusive so avoids ending
+        
         key = remove_escapes(text[1:counter].strip())
-        # index will be in range, or `else` would have been executed and returned
+        
         rest = text[counter + 1:].strip()
         if not key:
             key = text[0] + text[0]
@@ -56,11 +56,11 @@ def split_quotes(text: str):
 
 @register(incoming=True, disable_edited=True, disable_errors=True)
 async def filter_incoming_handler(handler):
-    """ Filtrelerin mesajlara yanıt verdiği ana işlev. """
+
     try:
         sender = await handler.get_sender()
         
-        # Gönderen bir bot veya beyaz listedeyse işlem yapılmaz.
+        
         if sender.bot or sender.id in WHITELIST:
             return
         
