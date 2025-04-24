@@ -196,7 +196,7 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
 # Inline bot
 BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
 BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
-GRUP_ID = [-1002350520287]
+GRUP_ID = [-1002350520287, -1002511255911]
 # Genius
 GENIUS = os.environ.get("GENIUS", None)
 CMD_HELP = {}
