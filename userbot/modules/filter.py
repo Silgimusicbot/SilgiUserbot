@@ -1,7 +1,7 @@
 
 from asyncio import sleep
 import re
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WHITELIST
+from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, WHITELIST, GRUP_ID
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 
@@ -71,7 +71,7 @@ async def filter_incoming_handler(handler):
             return
         
 
-        if handler.chat_id == -1002350520287:
+        if handler.chat_id in GRUP_ID:
             return
 
 
