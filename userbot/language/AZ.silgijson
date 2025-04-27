@@ -810,7 +810,9 @@
             "PLUGINS": "Pluginlər",
             "OK": "Hər Şey Normaldır",
             "ALIVE1": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Aktivdir",
-            "INFO": "İSTİFADƏÇİ MƏLUMATLARI"
+            "INFO": "İSTİFADƏÇİ MƏLUMATLARI",
+            "NAME": "İstifadəçi adı",
+            "PYTHON": "Python versiyası"
         },
 
         "time": {
