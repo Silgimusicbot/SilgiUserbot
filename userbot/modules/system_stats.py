@@ -10,6 +10,7 @@ from userbot.main import PLUGIN_MESAJLAR
 from telethon import version
 from platform import python_version
 from userbot.cmdhelp import CmdHelp
+from userbot import silgi, SILGI_USER
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
@@ -118,7 +119,24 @@ async def pipcheck(pip):
                            f"\n**{LANG['RESULT']}: **\n{LANG['NOT_FOUND']}.")
     else:
         await pip.edit(LANG['EXAMPLE'])
-
+@register(outgoing=True, pattern="^.malive$")
+async def malive(event):
+    img = "path_to_your_gif.gif"  
+    caption = (
+        "**╭━━━➤ 『 BOT STATUS 』\n"
+        f"┣• {LANG['ALIVE1']}\n"
+        f"┣• {LANG['ALIVE2']}\n"
+        "╰━━━━━━━━━━━━━━━━━━━\n\n"
+        "╭━━━➤ 『 İSTİFADƏÇİ MƏLUMATLARI 』\n"
+        f"┣• 👤 Ad: `{SILGI_USER}`\n"
+        f"┣• ⚙️ Python: `{python_version()}`\n"
+        f"┣• 🛠️ Bot: `{silgi}`\n"
+        f"┣• 📚 Plugin: `{len(CMD_HELP)}`\n"
+        "╰━━━━━━━━━━━━━━━━━━━\n\n"
+        "**#SilgiUserbot**"
+    )
+    await event.client.send_file(event.chat_id, img, caption=caption)
+    await event.delete()
 @register(outgoing=True, pattern="^.alive$")
 async def amialive(e):
     me = await e.client.get_me()
