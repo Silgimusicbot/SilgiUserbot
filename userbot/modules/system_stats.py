@@ -121,7 +121,7 @@ async def pipcheck(pip):
         await pip.edit(LANG['EXAMPLE'])
 @register(outgoing=True, pattern="^.malive$")
 async def malive(event):
-    img = "path_to_your_gif.gif"  
+    img = "https://files.catbox.moe/eiqmdh.gif"  
     caption = (
         "**╭━━━➤ 『 BOT STATUS 』\n"
         f"┣• {LANG['ALIVE1']}\n"
