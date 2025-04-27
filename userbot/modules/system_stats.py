@@ -127,7 +127,7 @@ async def malive(event):
         f"┣• {LANG['ALIVE1']}\n"
         f"┣• {LANG['ALIVE2']}\n"
         "╰━━━━━━━━━━━━━━━━━━━\n\n"
-        "╭━━━➤ 『 İSTİFADƏÇİ MƏLUMATLARI 』\n"
+        "╭━━━➤ 『 LANG['INFO'] 』\n"
         f"┣• 👤 Ad: `{SILGI_USER}`\n"
         f"┣• ⚙️ Python: `{python_version()}`\n"
         f"┣• 🛠️ Bot: `{silgi}`\n"
