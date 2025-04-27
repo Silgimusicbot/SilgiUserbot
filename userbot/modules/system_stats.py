@@ -3,14 +3,14 @@ from asyncio.subprocess import PIPE as asyncPIPE
 from platform import uname
 from shutil import which
 from os import remove
-from userbot import CMD_HELP, SILGI_VERSION
+from userbot import CMD_HELP, SILGI_VERSION, SILGI_USER
 from telethon.tl.patched import Message
 from userbot.events import register
 from userbot.main import PLUGIN_MESAJLAR
 from telethon import version
 from platform import python_version
 from userbot.cmdhelp import CmdHelp
-from userbot import silgi, SILGI_USER
+
 
 # ================= CONSTANT =================
 DEFAULTUSER = uname().node
@@ -130,7 +130,7 @@ async def malive(event):
         f"╭━━━➤ 『 {LANG['INFO']} 』\n"
         f"┣• 👤 {LANG['NAME']}: `{SILGI_USER}`\n"
         f"┣• ⚙️ {LANG['PYTHON']}: `{python_version()}`\n"
-        f"┣• 🛠️ {LANG['VERSION']}: `{silgi}`\n"
+        f"┣• 🛠️ {LANG['VERSION']}: `{SILGI_VERSION}`\n"
         f"┣• 📚 {LANG['PLUGIN_COUNT']}: `{len(CMD_HELP)}`\n"
         "╰━━━━━━━━━━━━━━━━━━━\n\n"
         "**#SilgiUserbot**"
