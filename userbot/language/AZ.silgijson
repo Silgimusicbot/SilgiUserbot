@@ -804,7 +804,7 @@
             "SS3": "<modul(lar)>",
             "SS4": "Pip modullarında axtarış edər.",
             "SS5": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ botunun işləyib işləmədiyini yoxlamaq üçün işlədilir.",
-            "EXAMPLE": "`Bir nümunə görmək üçün .dto pip əmrindən istifadə edin.`",
+            "EXAMPLE": "`Bir nümunə görmək üçün .silgi pip əmrindən istifadə edin.`",
             "PLUGIN_COUNT": "Plugin Sayı",
             "PERMAMENT": "Ömürlük",
             "PLUGINS": "Pluginlər",
