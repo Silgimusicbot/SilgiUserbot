@@ -804,11 +804,13 @@
             "SS5": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝  botunun çalışıp çalışmadığını kontrol etmek için kullanılır.",
             "EXAMPLE": "`Bir örnek görmek için .silgi pip komutunu kullanın.`",
             "ALIVE1": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Aktif",
-            "PLUGIN_COUNT": "Plugin Sayısı",
+            "PLUGIN_COUNT": "Plugin Sayı",
             "PERMAMENT": "Kalıcı",
             "PLUGINS": "Pluginler",
             "OK": "Her Şey Normal",
-            "INFO": "KULLANICI BILGILERI"
+            "INFO": "KULLANICI BILGILERI",
+            "NAME": "Kullanıcı adı",
+            "PYTHON": "Python versiyonu"
 
         },
 
