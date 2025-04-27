@@ -781,7 +781,11 @@
             "SS3": "<modul(s)>",
             "SS4": "Searches in Pip modules.",
             "SS5": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ is used to check if the bot is working.",
-            "EXAMPLE": "`Use the .dto pip command to see an example. `"
+            "EXAMPLE": "`Use the .silgi pip command to see an example. `"
+            "PLUGIN_COUNT": "Plugin Count",
+            "PERMAMENT": "Permanent",
+            "PLUGINS": "Plugins",
+            "OK": "Everything OK"
         },
         "time": {
             "CLOCK": "Time here",
