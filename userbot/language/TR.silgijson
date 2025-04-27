@@ -802,7 +802,8 @@
             "SS3": "<modül(ler)>",
             "SS4": "Pip modüllerinde arama yapar.",
             "SS5": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝  botunun çalışıp çalışmadığını kontrol etmek için kullanılır.",
-            "EXAMPLE": "`Bir örnek görmek için .silgi pip komutunu kullanın.`"
+            "EXAMPLE": "`Bir örnek görmek için .silgi pip komutunu kullanın.`",
+            "ALIVE1": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ Aktif",
 
         },
 
