@@ -785,7 +785,8 @@
             "PLUGIN_COUNT": "Plugin Count",
             "PERMAMENT": "Permanent",
             "PLUGINS": "Plugins",
-            "OK": "Everything OK"
+            "OK": "Everything OK",
+            "ALIVE1": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ is active"
         },
         "time": {
             "CLOCK": "Time here",
