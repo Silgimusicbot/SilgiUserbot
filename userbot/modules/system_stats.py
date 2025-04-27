@@ -128,7 +128,7 @@ async def malive(event):
         f"┣• {LANG['OK']}\n"
         "╰━━━━━━━━━━━━━━━━━━━\n\n"
         f"╭━━━➤ 『 {LANG['INFO']} 』\n"
-        f"┣• 👤 {LANG['NAME']}: `{SILGI_USER}`\n"
+        f"┣• 👤 {LANG['NAME']}: {SILGI_USER}\n"
         f"┣• ⚙️ {LANG['PYTHON']}: `{python_version()}`\n"
         f"┣• 🛠️ {LANG['VERSION']}: `{SILGI_VERSION}`\n"
         f"┣• 📚 {LANG['PLUGIN_COUNT']}: `{len(CMD_HELP)}`\n"
