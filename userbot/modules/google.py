@@ -1,39 +1,41 @@
 import requests
-from bs4 import BeautifulSoup
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
+SERPER_API_KEY = "bb3ddc47d064d10495d0a158f3748c68c8ffef69"
 
 @register(outgoing=True, pattern=r"^.google(?: |$)(.*)")
-async def google_axtar(event):
-    axtaris = event.pattern_match.group(1).strip()
-    if not axtaris:
-        await event.edit("Zəhmət olmasa axtarmaq istədiyin sözü yaz.\nMisal: `.google Telegram Userbot`")
+async def google_serper(event):
+    axtarish = event.pattern_match.group(1).strip()
+    if not axtarish:
+        await event.edit("Zəhmət olmasa axtarmaq istədiyin sözü yaz.\nMisal: `.google Telegram userbot`")
         return
 
-    await event.edit("Google-da axtarılır...")
+    await event.edit("Axtarış edilir...")
 
     try:
-        link = f"https://www.google.com/search?q={axtaris.replace(' ', '+')}"
+        url = "https://google.serper.dev/search"
         headers = {
-            "User-Agent": "Mozilla/5.0"
+            "X-API-KEY": SERPER_API_KEY,
+            "Content-Type": "application/json"
         }
-        req = requests.get(link, headers=headers)
-        soup = BeautifulSoup(req.text, "html.parser")
-        
-        cavablar = []
-        for result in soup.find_all('div', class_='tF2Cxc')[:5]:  
-            basliq = result.find('h3')
-            url = result.find('a')['href']
-            if basliq and url:
-                cavablar.append(f"[{basliq.text}]({url})")
-        
-        if cavablar:
-            await event.edit("**Google Axtarış Nəticələri:**\n\n" + "\n\n".join(cavablar), link_preview=False)
-        else:
+        data = {
+            "q": axtarish
+        }
+        cavab = requests.post(url, headers=headers, json=data).json()
+
+        nəticələr = cavab.get("organic", [])
+        if not nəticələr:
             await event.edit("Heç bir nəticə tapılmadı.")
-    
+            return
+
+        mesaj = "**Google Axtarış Nəticələri:**\n\n"
+        for nəticə in nəticələr[:5]:
+            başlıq = nəticə.get("title")
+            link = nəticə.get("link")
+            mesaj += f"[{başlıq}]({link})\n\n"
+
+        await event.edit(mesaj, link_preview=False)
+
     except Exception as e:
-        await event.edit(f"Axtarış zamanı xəta baş verdi:\n`{str(e)}`")
-
-
-CmdHelp("google").add_command("google <axtarış>", None, "Google-da axtarış edib nəticələri göstərər.").add()
+        await event.edit(f"Xəta baş verdi:\n`{str(e)}`")
+CmdHelp("google").add_command("google <söz>", None, "Google-da axtarış edər və nəticələri göstərər.").add()
