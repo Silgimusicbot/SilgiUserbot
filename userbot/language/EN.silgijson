@@ -787,7 +787,9 @@
             "PLUGINS": "Plugins",
             "OK": "Everything OK",
             "ALIVE1": "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ is active",
-            "INFO": "USER INFORMATIONS"
+            "INFO": "USER INFORMATIONS",
+            "NAME": "User Name",
+            "PYTHON": "Python version"
         },
         "time": {
             "CLOCK": "Time here",
