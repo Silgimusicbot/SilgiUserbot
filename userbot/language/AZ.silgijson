@@ -5,7 +5,7 @@
     "AUTHOR": "@hvseyn",
     "STRINGS": {
         "init": {
-            "START": "Salam mən ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝! Mən sahibimə (@{me.username}) kömək olmaq üçün varam, yəni sənə köməkçi ola bilmərəm :/ Ama sən də bir ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ quraşdıra bilərsən; Qrupa bax @silgiub",
+            "START": "Salam mən ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝! Mən sahibimə (@{username}) kömək olmaq üçün varam, yəni sənə köməkçi ola bilmərəm :/ Ama sən də bir ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ quraşdıra bilərsən; Qrupa bax @silgiub",
             "ITITLE": "Xaiş sadəcə .kömek əmri ilə işladin",
             "IHELP": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __💻__\n\n**Yüklənən Modul Sayı:** `{cmdlen}`\n**Səhifə:** 1/{veriler}",
             "WORK": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __işləyir__\n\n👤 **Sahibim** {SILGI_USER}\n __Qulluğunda hazıram__",
