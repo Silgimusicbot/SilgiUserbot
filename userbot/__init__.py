@@ -7,7 +7,6 @@ import gc
 import asyncio
 from itertools import zip_longest
 from re import compile
-from userbot.config_lang import LANGUAGE, bot, LOGS, PLUGIN_CHANNEL_ID
 from sys import version_info
 from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
@@ -24,9 +23,7 @@ from telethon.sessions import StringSession
 from telethon.events import callbackquery, InlineQuery, NewMessage
 from math import ceil
 import heroku3
-from userbot.language import load_language_file, get_value
-load_language_file()
-LANG = get_value("init")
+
 
 load_dotenv("config.env")
 
@@ -45,7 +42,7 @@ if CONSOLE_LOGGER_VERBOSE:
 else:
     basicConfig(format="%(asctime)s - @silgiub - %(levelname)s - %(message)s",
                 level=INFO)
-
+LOGS = getLogger(__name__)
 
 if version_info[0] < 3 or version_info[1] < 6:
     LOGS.info("Ən az python 3.6 versiyasına sahib olmanız lazımdır."
@@ -63,7 +60,11 @@ if CONFIG_CHECK:
     quit(1)
 
 # Bot'un dili
+LANGUAGE = os.environ.get("LANGUAGE", None).upper()
 
+if not LANGUAGE in ["EN", "TR", "AZ", "UZ", "DEFAULT"]:
+    LOGS.info("Bilinməyən bir dil seçdiniz. Buna görə DEFAULT işlədilir.")
+    LANGUAGE = "DEFAULT"
     
 # SilgiUserbot Versiyası
 SILGI_VERSION = "x7.6.2"
@@ -136,8 +137,10 @@ GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", None)
 
 PLUGINID = os.environ.get("PLUGIN_CHANNEL_ID", None)
 # Plugin 
-
-
+if not PLUGINID:
+    PLUGIN_CHANNEL_ID = "me"
+else:
+    PLUGIN_CHANNEL_ID = int(PLUGINID)
 
 # OpenWeatherMap API Key
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -233,7 +236,12 @@ for binary, path in binaries.items():
     os.chmod(path, 0o755)
 
 # 'bot' dəyişkəni
-
+if STRING_SESSION:
+    
+    bot = TelegramClient(StringSession(STRING_SESSION), API_KEY, API_HASH)
+else:
+    
+    bot = TelegramClient("userbot", API_KEY, API_HASH)
 
 if os.path.exists("dtobrain.check"):
     os.remove("dtobrain.check")
@@ -298,8 +306,8 @@ def butonlastir(sayfa, moduller):
             custom.Button.inline("🔸 " + pair, data=f"bilgi[{sayfa}]({pair})") for pair in pairs
         ])
 
-    butonlar.append([custom.Button.inline(LANG['BACKK'], data=f"sayfa({(max_pages - 1) if sayfa == 0 else (sayfa - 1)})"), custom.Button.inline(LANG['NEXT'], data=f"sayfa({0 if sayfa == (max_pages - 1) else sayfa + 1})")])
-    butonlar.append([custom.Button.inline("📂Menu", data="evvel")])
+    butonlar.append([custom.Button.inline("◀️ Geri", data=f"sayfa({(max_pages - 1) if sayfa == 0 else (sayfa - 1)})"), custom.Button.inline("İrəli ▶️", data=f"sayfa({0 if sayfa == (max_pages - 1) else sayfa + 1})")])
+    butonlar.append([custom.Button.inline("📂Menyu", data="evvel")])
     return [max_pages, butonlar]
 
 
@@ -308,6 +316,7 @@ with bot:
         try:
             bot(JoinChannelRequest("@silgiub"))
             bot(JoinChannelRequest("@silgiuserbots"))
+            bot(JoinChannelRequest("@silgiuserbotchat"))
             bot(JoinChannelRequest("@silgiubplugin"))
             
             
@@ -323,7 +332,7 @@ with bot:
         @tgbot.on(NewMessage(pattern='/start'))
         async def start_bot_handler(event):
             if not event.message.from_id == uid:
-                await event.reply(LANG['START'].format(username=me.username))
+                await event.reply(f'`Salam mən `⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ `! Mən sahibimə (`@{me.username}`) kömək olmaq üçün varam, yəni sənə köməkçi ola bilmərəm :/ Ama sən da bir ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ quraşdıra bilərsən; Qrupa bax` @silgiub')
             else:
                 await event.reply(f'`⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝`')
 
@@ -332,25 +341,25 @@ with bot:
             builder = event.builder
             result = None
             query = event.text
-            tt= LANG['ITITLE']
             if event.query.user_id == uid and query == "kömek":
                 rev_text = query[::-1]
                 veriler = (butonlastir(0, sorted(CMD_HELP)))
                 result = await builder.article(
-                    tt,
-                    text=LANG['IHELP'].format(cmdlen=len(CMD_HELP), veriler=veriler[0]),
+                    f"Xaiş sadəcə .kömek əmri ilə işladin",
+                    text=f"**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __💻__\n\n**Yüklənən Modul Sayı:** `{len(CMD_HELP)}`\n**Səhifə:** 1/{veriler[0]}",
                     buttons=veriler[1],
                     link_preview=False
                 )
             elif event.query.user_id == uid and query == "@SilgiUB":
-                text = LANG['WORK'].format(SILGI_USER=SILGI_USER)
+                text = "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __işləyir__\n\n"
+                text += f"👤 **Sahibim** {SILGI_USER}\n __Qulluğunda hazıram__"
                 result = builder.document(
                      file=botgif,
                      title="⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝",
                      text=text,
                      buttons=[
-                         [custom.Button.inline(LANG['PLIST'], data="komek")],
-                         [custom.Button.inline(LANG['CLISTS'], data="config")]
+                         [custom.Button.inline("📲Plugin Listi", data="komek")],
+                         [custom.Button.inline("🛠️Bot Configləri", data="config")]
                      ],
                      link_preview=False
                  )
@@ -367,14 +376,15 @@ with bot:
             else:
                 result = builder.article(
                     "⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝",
-                    text=LANG['IINFO'],
+                    text="""[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](https://t.me/silgiub)'u işlətməyi yoxlayın!
+Hesabınızı bot'a çevirə bilərsiz və bunları işlədə bilərsiz. Unutmayın, siz başqasının botunu idarə edə bilmərsiz! Altdakı GitHub adresindən bütün qurulum haqda məlumat var.""",
                     buttons=[
-                        [custom.Button.url(LANG['JOIN'], "https://t.me/silgiub"), custom.Button.url(
-                            LANG['MOWN'], "https://t.me/hvseyn")],
+                        [custom.Button.url("Dəstək qrupuna Qatıl", "https://t.me/silgiub"), custom.Button.url(
+                            "Sahibim", "https://t.me/hvseyn")],
                         [custom.Button.url(
                             "GitHub", "https://github.com/Silgimusicbot/SilgiUserbot")],
                         [custom.Button.url(
-                            LANG['BOT'], "https://t.me/silgiqur_bot")]
+                            "Qurulum botu", "https://t.me/silgiqur_bot")]
                     ],
                     link_preview=False
                 )
@@ -383,43 +393,44 @@ with bot:
         @tgbot.on(callbackquery.CallbackQuery(data=compile(b"sayfa\((.+?)\)")))
         async def sayfa(event):
             if not event.query.user_id == uid: 
-                return await event.answer(LANG['NO'], cache_time=0, alert=True)
+                return await event.answer("❌ Hey! Məni əlləmə! Özünə bir @silgiub qur.", cache_time=0, alert=True)
             sayfa = int(event.data_match.group(1).decode("UTF-8"))
             veriler = butonlastir(sayfa, CMD_HELP)
             await event.edit(
-                LANG['IHELP'].format(cmdlen=len(CMD_HELP), veriler=veriler[0]),
+                f"**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __işləyir__\n\n**Yüklənən Modul Sayı:** `{len(CMD_HELP)}`\n**Səhifə:** {sayfa + 1}/{veriler[0]}",
                 buttons=veriler[1],
                 link_preview=False
             )
         @tgbot.on(callbackquery.CallbackQuery(data=compile(b"komek")))
         async def inline_handler(event):
             if not event.query.user_id == uid:
-                return await event.answer(LANG['NO'], cache_time=0, alert=True)   
+                return await event.answer("❌ Hey! Məni əlləmə! Özünə bir @silgiub qur.", cache_time=0, alert=True)   
             query = event.data.decode("UTF-8")
             veriler = butonlastir(0, sorted(CMD_HELP))
             buttons = veriler[1]  
-            await event.answer(LANG['LIST'], cache_time=1)
+            await event.answer("📱Plugin listi açıldı", cache_time=1)
             await event.edit(
-                text=LANG['IHELP'].format(cmdlen=len(CMD_HELP), veriler=veriler[0]),
+                text=f"**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __💻__\n\n**Yüklənən Modul Sayı:** `{len(CMD_HELP)}`\n**Səhifə:** 1/{veriler[0]}",
                 buttons=buttons,  
                 link_preview=False
             )
         @tgbot.on(events.CallbackQuery(data=re.compile(b"evvel")))
         async def main_menu(event):
             if not event.query.user_id == uid:
-                return await event.answer(LANG['NO'], cache_time=0, alert=True)
-            text=LANG['WORK'].format(SILGI_USER=SILGI_USER)
+                return await event.answer("❌ Hey! Məni əlləmə! Özünə bir @silgiub qur.", cache_time=0, alert=True)
+            text="**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __işləyir__"
+            text += f"👤 **Sahibim** {SILGI_USER}\n __Qulluğunda hazıram__"
             buttons = [
-                [Button.inline(LANG['PLIST'], data="komek")],
-                [Button.inline(LANG['CLISTS'], data="config")]
+                [Button.inline("📲Plugin Listi", data="komek")],
+                [Button.inline("🛠️Bot Configləri", data="config")]
             ]
 
-            await event.answer(LANG['MENU'], cache_time=0)
+            await event.answer("📌 Əsas menyuya qayıdıldı", cache_time=0)
             await event.edit(text, buttons=buttons, link_preview=False)
         @tgbot.on(events.CallbackQuery(data=re.compile(b"config")))
         async def config_handler(event):
             if event.query.user_id != uid:
-                return await event.answer(LANG['NO'], cache_time=0, alert=True) 
+                return await event.answer("❌ Hey! Məni əlləmə! Özünə bir @silgiub qur.", cache_time=0, alert=True) 
     
             needed_keys = ["BOT_USERNAME", "BOT_TOKEN", "BOTLOG_CHATID", "API_HASH", "PM_AUTO_BAN", "TZ", "LANGUAGE", "COUNTRY", "PM_AUTO_BAN_LIMIT", "START_TIME", "WARN_LIMIT", "WARN_MODE"]  
             config_vars = app.config().to_dict()
@@ -432,44 +443,46 @@ with bot:
             for index, key in enumerate(config_keys, start=1):
                 text += f"**{index}.** `{key}`\n"
                 buttons.append(Button.inline(f"🔢 {index}", data=f"config_edit:{key}"))
-            buttons.append(Button.inline("📂Menu", data="evvel"))
+            buttons.append(Button.inline("📂Menyu", data="evvel"))
             if buttons:
                 buttons = list(itertools.zip_longest(*[iter(buttons)] * 3))
                 buttons = [list(filter(None, row)) for row in buttons]
-            await event.answer(LANG['CLIST'], cache_time=1)
+            await event.answer("Config listi açıldı🛠️", cache_time=1)
             await event.edit(text, buttons=buttons, link_preview=False)
 
         @tgbot.on(events.CallbackQuery(data=re.compile(b"config_edit:(.+)")))
         async def config_edit(event):
             if not event.query.user_id == uid: 
-                        return await event.answer(LANG['NO'], cache_time=0, alert=True)
+                        return await event.answer("❌ Hey! Məni əlləmə! Özünə bir @silgiub qur.", cache_time=0, alert=True)
             key = event.data_match.group(1).decode("UTF-8")
             user_id = event.query.user_id
             config_vars = app.config().to_dict()
             current_value = config_vars.get(key)
-            text = LANG['VEDIT'].format(key=key, current_value=current_value)
-            await event.answer(LANG['CEDIT'].format(key=key), cache_time=1)
-            await event.edit(text, buttons=[[Button.inline("🔙", data="config_back")]])
+            text = f"🔧 **{key}** dəyişdirilməsi\n\n"
+            text += f"🔹 Mövcud dəyər: `{current_value}`\n\n"
+            text += f"✏️ Dəyəri dəyişmək üçün:\n`.set var {key} yeni_dəyər`"
+            await event.answer(f"Config {key} açıldı", cache_time=1)
+            await event.edit(text, buttons=[[Button.inline("🔙 Geri", data="config_back")]])
         @tgbot.on(events.CallbackQuery(data=re.compile(b"config_back")))
         async def config_back(event):
-            await event.answer(LANG['BACK'], cache_time=1)
+            await event.answer("🔙 Geri qayıdıldı", cache_time=1)
             await config_handler(event)
         @tgbot.on(callbackquery.CallbackQuery(data=compile(b"bilgi\[(\d*)\]\((.*)\)")))
         async def bilgi(event):
             if not event.query.user_id == uid: 
-                return await event.answer(LANG['NO'], cache_time=0, alert=True)
+                return await event.answer("❌  Hey! Məni əlləmə! Özünə bir @silgiub qur.", cache_time=0, alert=True)
 
             sayfa = int(event.data_match.group(1).decode("UTF-8"))
             komut = event.data_match.group(2).decode("UTF-8")
             try:
                 butonlar = [custom.Button.inline("🔹 " + cmd[0], data=f"komut[{komut}[{sayfa}]]({cmd[0]})") for cmd in CMD_HELP_BOT[komut]['commands'].items()]
             except KeyError:
-                return await event.answer(LANG['NODESC'], cache_time=0, alert=True)
+                return await event.answer("❌ Bu modula açıqlama yazılmayıb.", cache_time=0, alert=True)
 
             butonlar = [butonlar[i:i + 2] for i in range(0, len(butonlar), 2)]
-            butonlar.append([custom.Button.inline(LANG['BACKK'], data=f"sayfa({sayfa})")])
+            butonlar.append([custom.Button.inline("◀️ Geri", data=f"sayfa({sayfa})")])
             await event.edit(
-                LANG['FINFO'].format(komut=komut, command_count=len(CMD_HELP_BOT[komut]['commands'])),
+                f"**📗 Fayl:** `{komut}`\n**🔢 Əmr sayı:** `{len(CMD_HELP_BOT[komut]['commands'])}`",
                 buttons=butonlar,
                 link_preview=False
             )
@@ -477,42 +490,42 @@ with bot:
         @tgbot.on(callbackquery.CallbackQuery(data=compile(b"komut\[(.*)\[(\d*)\]\]\((.*)\)")))
         async def komut(event):
             if not event.query.user_id == uid: 
-                return await event.answer(LANG['NO'], cache_time=0, alert=True)
+                return await event.answer("❌ Hey! Məni əlləmə! Özünə bir @silgiub qur.", cache_time=0, alert=True)
 
             cmd = event.data_match.group(1).decode("UTF-8")
             sayfa = int(event.data_match.group(2).decode("UTF-8"))
             komut = event.data_match.group(3).decode("UTF-8")
 
-            result = f"**{LANG['FULL']}** `{cmd}`\n"
+            result = f"**📗 Fayl:** `{cmd}`\n"
             if 'sahib' in CMD_HELP_BOT[cmd]['info'] and CMD_HELP_BOT[cmd]['info']['sahib']:
                 result += f"**👤 Sahib:** {CMD_HELP_BOT[cmd]['info']['sahib']}\n"
             if CMD_HELP_BOT[cmd]['info']['info'] == '':
                 if not CMD_HELP_BOT[cmd]['info']['warning'] == '':
                     result += f"**⬇️ Rəsmi:** {'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n"
-                    result += f"**⚠️ :** {CMD_HELP_BOT[cmd]['info']['warning']}\n\n"
+                    result += f"**⚠️ Xəbərdarlıq:** {CMD_HELP_BOT[cmd]['info']['warning']}\n\n"
                 else:
                     result += f"**⬇️ Rəsmi:** {'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n\n"
             else:
                 result += f"**⬇️ Rəsmi:** {'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n"
                 if not CMD_HELP_BOT[cmd]['info']['warning'] == '':
-                    result += f"**⚠️ :** {CMD_HELP_BOT[cmd]['info']['warning']}\n"
+                    result += f"**⚠️ Xəbərdarlıq:** {CMD_HELP_BOT[cmd]['info']['warning']}\n"
                 result += f"**ℹ️ Info:** {CMD_HELP_BOT[cmd]['info']['info']}\n\n"
 
             command = CMD_HELP_BOT[cmd]['commands'][komut]
             if command['params'] is None:
-                result += f"**{LANG['ICMD']}** `{PATTERNS[:1]}{command['command']}`\n"
+                result += f"**🛠 Əmr:** `{PATTERNS[:1]}{command['command']}`\n"
             else:
-                result += f"**{LANG['ICMD']}** `{PATTERNS[:1]}{command['command']} {command['params']}`\n"
+                result += f"**🛠 Əmr:** `{PATTERNS[:1]}{command['command']} {command['params']}`\n"
                 
             if command['example'] is None:
-                result += f"**{LANG['DCMD']}** `{command['usage']}`\n\n"
+                result += f"**💬 Açıqlama:** `{command['usage']}`\n\n"
             else:
-                result += f"**{LANG['DCMD']}** `{command['usage']}`\n"
-                result += f"**{LANG['ECMD']}** `{PATTERNS[:1]}{command['example']}`\n\n"
+                result += f"**💬 Açıqlama:** `{command['usage']}`\n"
+                result += f"**⌨️ Məsələn:** `{PATTERNS[:1]}{command['example']}`\n\n"
 
             await event.edit(
                 result,
-                buttons=[custom.Button.inline(LANG['BACKK'], data=f"bilgi[{sayfa}]({cmd})")],
+                buttons=[custom.Button.inline("◀️ Geri", data=f"bilgi[{sayfa}]({cmd})")],
                 link_preview=False
             )
     except Exception as e:
