@@ -7,7 +7,7 @@
         "init": {
             "START": "Salam mən ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝! Mən sahibimə (@{me.username}) kömək olmaq üçün varam, yəni sənə köməkçi ola bilmərəm :/ Ama sən də bir ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ quraşdıra bilərsən; Qrupa bax @silgiub",
             "ITITLE": "Xaiş sadəcə .kömek əmri ilə işladin",
-            "IHELP": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __💻__\n\n**Yüklənən Modul Sayı:** `{len(CMD_HELP)}`\n**Səhifə:** 1/{veriler[0]}",
+            "IHELP": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __💻__\n\n**Yüklənən Modul Sayı:** `{cmdlen}`\n**Səhifə:** 1/{veriler}",
             "WORK": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __işləyir__\n\n👤 **Sahibim** {SILGI_USER}\n __Qulluğunda hazıram__",
             "UPLOAD": "Fayl uğurlu bir şəkildə {site} saytına yükləndi!\n\nYükləmə zamanı: {time} saniyə\n[‏‏‎ ‎]({link})",
             "IINFO": "[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](https://t.me/silgiub)'u işlətməyi yoxlayın!\nHesabınızı bot'a çevirə bilərsiz və bunları işlədə bilərsiz. Unutmayın, siz başqasının botunu idarə edə bilmərsiz! Altdakı GitHub adresindən bütün qurulum haqda məlumat var.",
