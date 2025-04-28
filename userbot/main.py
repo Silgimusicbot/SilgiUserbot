@@ -8,7 +8,7 @@ import requests
 from telethon.tl.types import InputMessagesFilterDocument
 from telethon.errors.rpcerrorlist import PhoneNumberInvalidError
 from telethon.tl.functions.channels import GetMessagesRequest
-from . import BRAIN_CHECKER, BOT_TOKEN, LOGS, bot, PLUGIN_CHANNEL_ID, CMD_HELP, LANGUAGE, SILGI_VERSION, PATTERNS
+from . import BRAIN_CHECKER, BOT_TOKEN, CMD_HELP, SILGI_VERSION, PATTERNS
 from .modules import ALL_MODULES
 import userbot.modules.sql_helper.mesaj_sql as MSJ_SQL
 import userbot.modules.sql_helper.galeri_sql as GALERI_SQL
@@ -16,6 +16,7 @@ from pySmartDL import SmartDL
 from telethon.tl import functions
 from random import choice
 import chromedriver_autoinstaller
+from userbot.config_lang import LANGUAGE, LOGS, bot, PLUGIN_CHANNEL_ID
 from json import loads, JSONDecodeError
 import re
 import userbot.cmdhelp
