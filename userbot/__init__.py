@@ -23,7 +23,8 @@ from telethon.sessions import StringSession
 from telethon.events import callbackquery, InlineQuery, NewMessage
 from math import ceil
 import heroku3
-from userbot.language import get_value
+from userbot.language import load_language_file, get_value
+load_language_file()
 LANG = get_value("init")
 
 load_dotenv("config.env")
