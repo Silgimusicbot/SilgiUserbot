@@ -478,7 +478,7 @@ with bot:
             butonlar = [butonlar[i:i + 2] for i in range(0, len(butonlar), 2)]
             butonlar.append([custom.Button.inline(LANG['BACKK'], data=f"sayfa({sayfa})")])
             await event.edit(
-                LANG['FINFO'].format(komut=komut, command_count=len(CMD_HELP_BOT[komut]['commands']),
+                LANG['FINFO'].format(komut=komut, command_count=len(CMD_HELP_BOT[komut]['commands'])),
                 buttons=butonlar,
                 link_preview=False
             )
