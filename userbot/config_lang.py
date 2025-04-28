@@ -19,7 +19,7 @@ if LANGUAGE not in ["EN", "TR", "AZ", "UZ", "DEFAULT"]:
     LANGUAGE = "DEFAULT"
 
 # TELEGRAM BOT
-API_KEY = int(os.environ.get("API_ID", "0"))
+API_KEY = os.environ.get("API_KEY", None)
 API_HASH = os.environ.get("API_HASH", None)
 STRING_SESSION = os.environ.get("STRING_SESSION", None)
 
