@@ -7,7 +7,7 @@
         "init": {
             "START": "Hello, I am ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝! I am here to help my owner (@{me.username}), so I can't assist you :/ But you can set up a ⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝ for yourself; Check the group @silgiub",
             "ITITLE": "Please use the .help command",
-            "IHELP": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __💻__\n\n**Number of Modules Loaded:** `{len(CMD_HELP)}`\n**Page:** 1/{veriler[0]}",
+            "IHELP": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __💻__\n\n**Number of Modules Loaded:** `{cmdlen}`\n**Page:** 1/{veriler}",
             "WORK": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __is working__\n\n👤 **Owner** {SILGI_USER}\n __I am ready to serve__",
             "UPLOAD": "File successfully uploaded to {site} site!\n\nUpload time: {time} seconds\n[‏‏‎ ‎]({link})",
             "IINFO": "[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](https://t.me/silgiub) try using it!\nYou can turn your account into a bot and use these features. Keep in mind, you cannot manage someone else's bot! All setup information is available at the GitHub link below.",
