@@ -7,6 +7,7 @@ import gc
 import asyncio
 from itertools import zip_longest
 from re import compile
+from userbot.config_lang import LANGUAGE, bot, LOGS, PLUGIN_CHANNEL_ID
 from sys import version_info
 from logging import basicConfig, getLogger, INFO, DEBUG
 from distutils.util import strtobool as sb
@@ -44,7 +45,7 @@ if CONSOLE_LOGGER_VERBOSE:
 else:
     basicConfig(format="%(asctime)s - @silgiub - %(levelname)s - %(message)s",
                 level=INFO)
-LOGS = getLogger(__name__)
+
 
 if version_info[0] < 3 or version_info[1] < 6:
     LOGS.info("Ən az python 3.6 versiyasına sahib olmanız lazımdır."
@@ -135,10 +136,8 @@ GOOGLE_CHROME_BIN = os.environ.get("GOOGLE_CHROME_BIN", None)
 
 PLUGINID = os.environ.get("PLUGIN_CHANNEL_ID", None)
 # Plugin 
-if not PLUGINID:
-    PLUGIN_CHANNEL_ID = "me"
-else:
-    PLUGIN_CHANNEL_ID = int(PLUGINID)
+
+
 
 # OpenWeatherMap API Key
 OPEN_WEATHER_MAP_APPID = os.environ.get("OPEN_WEATHER_MAP_APPID", None)
@@ -234,12 +233,7 @@ for binary, path in binaries.items():
     os.chmod(path, 0o755)
 
 # 'bot' dəyişkəni
-if STRING_SESSION:
-    
-    bot = TelegramClient(StringSession(STRING_SESSION), API_KEY, API_HASH)
-else:
-    
-    bot = TelegramClient("userbot", API_KEY, API_HASH)
+
 
 if os.path.exists("dtobrain.check"):
     os.remove("dtobrain.check")
