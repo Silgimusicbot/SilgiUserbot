@@ -10,7 +10,8 @@ LANGUAGE_JSON = None
 
 def load_language_file():
     global LANGUAGE_JSON
-    from . import LANGUAGE, LOGS, bot, PLUGIN_CHANNEL_ID  # Importları burada yapıyoruz
+    from . import LOGS, bot, PLUGIN_CHANNEL_ID  
+    from userbot.config_lang import LANGUAGE
 
     pchannel = bot.get_entity(PLUGIN_CHANNEL_ID)
     LOGS.info("Dil faylı yüklənir...")
