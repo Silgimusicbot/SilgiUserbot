@@ -133,7 +133,7 @@ async def malive(event):
         f"┣• 🛠️ {LANG['VERSION']}: `{SILGI_VERSION}`\n"
         f"┣• 📚 {LANG['PLUGIN_COUNT']}: `{len(CMD_HELP)}`\n"
         "╰━━━━━━━━━━━━━━━━━━━\n\n"
-        "**#SilgiUserbot**"
+        "#SilgiUserbot"
     )
     await event.client.send_file(event.chat_id, img, caption=caption)
     await event.delete()
