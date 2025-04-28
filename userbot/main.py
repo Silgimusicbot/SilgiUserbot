@@ -16,7 +16,7 @@ from pySmartDL import SmartDL
 from telethon.tl import functions
 from random import choice
 import chromedriver_autoinstaller
-from userbot.config_lang import LANGUAGE, LOGS, bot, PLUGIN_CHANNEL_ID
+from . import LANGUAGE, LOGS, bot, PLUGIN_CHANNEL_ID
 from json import loads, JSONDecodeError
 import re
 import userbot.cmdhelp
