@@ -4,6 +4,16 @@
     "LANGCODE": "az",
     "AUTHOR": "@hvseyn",
     "STRINGS": {
+        "init": {
+            "LIST": "📲Plugin listi açıldı",
+            "MENU": "📌Əsas menyuya qayıdıldı",
+            "FILE": "📗Fayl: ",
+            "PAGE": "Səhifə: ",
+            "KOMUT": "Əmr: ",
+            "DESC": "Açıqlama: ",
+            "MEN": "📂Menyu",
+            "OWN": "**⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝** [SilgiUb](https://t.me/silgiub) __işləyir__"
+        },
         "errors": {
             "CMD": "⌨️ **Əmr:** {silgitext}\n\n",
             "ERR": "**Xəta baş verdi ❗**\n",
