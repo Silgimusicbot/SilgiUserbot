@@ -123,7 +123,7 @@ async def pipcheck(pip):
 async def malive(event):
     img = "https://files.catbox.moe/eiqmdh.gif"  
     caption = (
-        "**╭━━━➤ 『 BOT STATUS 』\n"
+        "╭━━━➤ 『 BOT STATUS 』\n"
         f"┣• {LANG['ALIVE1']}\n"
         f"┣• {LANG['OK']}\n"
         "╰━━━━━━━━━━━━━━━━━━━\n\n"
