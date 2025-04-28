@@ -332,7 +332,7 @@ with bot:
         @tgbot.on(NewMessage(pattern='/start'))
         async def start_bot_handler(event):
             if not event.message.from_id == uid:
-                await event.reply(LANG['START'].format(me.username=me.username))
+                await event.reply(LANG['START'].format(username=me.username))
             else:
                 await event.reply(f'`⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝`')
 
