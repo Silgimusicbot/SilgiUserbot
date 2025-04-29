@@ -22,7 +22,7 @@ from telethon.sessions import StringSession
 from telethon.events import callbackquery, InlineQuery, NewMessage
 from math import ceil
 import heroku3
-from . import bot, LOGS
+from userbot import bot, LOGS
 from userbot import CMD_HELP, CMD_HELP_BOT, PATTERNS
 from userbot.language import get_value
 LANG = get_value("init")
