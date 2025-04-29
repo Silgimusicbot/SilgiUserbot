@@ -1,6 +1,6 @@
 
 
-from userbot.asistant import BOT_USERNAME
+from userbot.modules.asistant import BOT_USERNAME
 from userbot.events import register
 
 # ██████ LANGUAGE CONSTANTS ██████ #
