@@ -1,5 +1,29 @@
 import os
-from . import LOGS, bot
+import time
+import re
+import itertools
+import gc
+import asyncio
+from itertools import zip_longest
+from re import compile
+from sys import version_info
+from logging import basicConfig, getLogger, INFO, DEBUG
+from distutils.util import strtobool as sb
+from pylast import LastFMNetwork, md5
+from pySmartDL import SmartDL
+from dotenv import load_dotenv
+from requests import get
+from telethon import Button, events
+from telethon.tl.functions.channels import GetFullChannelRequest as getchat
+from telethon.tl.functions.phone import GetGroupCallRequest as getvc
+from telethon.tl.functions.channels import JoinChannelRequest
+from telethon.sync import TelegramClient, custom
+from telethon.sessions import StringSession
+from telethon.events import callbackquery, InlineQuery, NewMessage
+from math import ceil
+import heroku3
+from . import bot, LOGS
+from userbot import CMD_HELP, CMD_HELP_BOT, PATTERNS
 from userbot.language import get_value
 LANG = get_value("init")
 
