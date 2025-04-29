@@ -3,7 +3,7 @@ import os
 from userbot import BOTLOG, BOTLOG_CHATID, TEMP_DOWNLOAD_DIRECTORY
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
-from userbot.modules.asistant import CMD_HELP
+from userbot import CMD_HELP
 
 DOGBIN_URL = "https://del.dog/"
 
