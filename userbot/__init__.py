@@ -23,6 +23,7 @@ from telethon.sessions import StringSession
 from telethon.events import callbackquery, InlineQuery, NewMessage
 from math import ceil
 import heroku3
+from userbot.modules.asistant import CMD_HELP_BOT, CMD_HELP
 
 
 load_dotenv("config.env")
@@ -199,8 +200,8 @@ BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
 GRUP_ID = [-1002350520287, -1002511255911]
 # Genius
 GENIUS = os.environ.get("GENIUS", None)
-CMD_HELP = {}
-CMD_HELP_BOT = {}
+CMD_HELP = CMD_HELP
+CMD_HELP_BOT = CMD_HELP_BOT
 PM_AUTO_BAN_LIMIT = int(os.environ.get("PM_AUTO_BAN_LIMIT", 4))
 
 SPOTIFY_DC = os.environ.get("SPOTIFY_DC", None)
