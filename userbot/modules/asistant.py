@@ -23,10 +23,10 @@ from telethon.events import callbackquery, InlineQuery, NewMessage
 from math import ceil
 import heroku3
 from userbot import bot, LOGS, HEROKU_APIKEY, HEROKU_APPNAME
-from userbot import CMD_HELP, CMD_HELP_BOT, PATTERNS
+from userbot import CMD_HELP_BOT, PATTERNS
 from userbot.language import get_value
 LANG = get_value("init")
-
+CMD_HELP={}
 API_KEY = os.environ.get("API_KEY", None)
 API_HASH = os.environ.get("API_HASH", None)
 AVTO_Q = sb(os.environ.get("AVTO_Q", "True"))
