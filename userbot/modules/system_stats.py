@@ -4,7 +4,7 @@ from platform import uname
 from shutil import which
 from os import remove
 from userbot import SILGI_VERSION
-from userbot.modules.asistant import SILGI_USER, CMD_HELP
+from userbot import SILGI_USER, CMD_HELP
 from telethon.tl.patched import Message
 from userbot.events import register
 from userbot.main import PLUGIN_MESAJLAR
