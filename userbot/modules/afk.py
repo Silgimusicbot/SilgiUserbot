@@ -4,8 +4,9 @@ from telethon.tl.types import Message
 from telethon.tl.types import Channel
 from telethon.events import StopPropagation
 
-from userbot import (AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG,
-                     BOTLOG_CHATID, USERS, PM_AUTO_BAN, SON_GORULME, SILGI_USER)
+from userbot import (AFKREASON, COUNT_MSG, ISAFK, BOTLOG,
+                     BOTLOG_CHATID, USERS, PM_AUTO_BAN, SON_GORULME)
+from userbot.modules.asistant import CMD_HELP, SILGI_USER
 from userbot.events import register
 from userbot.main import PLUGIN_MESAJLAR
 from time import time
