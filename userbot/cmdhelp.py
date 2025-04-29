@@ -1,7 +1,7 @@
 
 
 from userbot import PATTERNS, LANGUAGE
-from userbot.modules.asistant import CMD_HELP, CMD_HELP_BOT
+from userbot import CMD_HELP, CMD_HELP_BOT
 class CmdHelp:
     """
     
