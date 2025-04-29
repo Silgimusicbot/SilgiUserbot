@@ -2,7 +2,7 @@ from . import LANGUAGE, LOGS, bot, PLUGIN_CHANNEL_ID
 from json import loads, JSONDecodeError
 from os import path, remove
 from telethon.tl.types import InputMessagesFilterDocument
-bot.start()
+
 pchannel = bot.get_entity(PLUGIN_CHANNEL_ID)
 LOGS.info("Dil faylı yüklənir...")
 LANGUAGE_JSON = None
