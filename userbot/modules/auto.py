@@ -3,7 +3,8 @@ import asyncio
 import time
 from telethon.tl import functions
 
-from userbot import CMD_HELP, ASYNC_POOL
+from userbot import ASYNC_POOL
+from userbot.modules.asistant import CMD_HELP
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 
