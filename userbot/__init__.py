@@ -272,7 +272,14 @@ async def check_botlog_chatid():
 
     elif not BOTLOG or not LOGSPAMMER:
         return
-
+    try:
+        bot.loop.run_until_complete(check_botlog_chatid())
+    except:
+        LOGS.info(
+            "BOTLOG_CHATID ortam dəyişkəni kəçərli bir varlıq deyildir. "
+            "Ortam dəyişkənliyinizi / config.env faylını yoxlayın."
+        )
+        quit(1)
     entity = await bot.get_entity(BOTLOG_CHATID)
     if entity.default_banned_rights.send_messages:
         LOGS.info(
