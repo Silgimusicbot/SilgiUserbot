@@ -5,7 +5,7 @@ from telethon import TelegramClient
 from telethon.tl.functions.contacts import UnblockRequest
 from random import randint
 from userbot import BOT_TOKEN, HEROKU_APIKEY, HEROKU_APPNAME, bot
-from userbot.asistant import me
+from userbot.modules.asistant import me
 
 Silgi = os.path.join(os.getcwd(), "userbot", "SilgiUserbotlogo.jpg")
 
