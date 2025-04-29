@@ -7,7 +7,8 @@ import textwrap
 from PIL import Image, ImageChops, ImageDraw, ImageFont
 from telethon.tl.types import InputMessagesFilterDocument
 from userbot.events import register 
-from userbot import CMD_HELP, bot
+from userbot import bot
+from userbot.modules.asistant import CMD_HELP
 from userbot.cmdhelp import CmdHelp
 
 # ██████ LANGUAGE CONSTANTS ██████ #
