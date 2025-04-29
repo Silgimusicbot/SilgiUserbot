@@ -8,8 +8,8 @@ import importlib
 import time
 import traceback
 
-from userbot import CMD_HELP, bot, TEHLUKELI, PLUGIN_CHANNEL_ID, PATTERNS
-from userbot.modules.asistant import tgbot
+from userbot import bot, TEHLUKELI, PLUGIN_CHANNEL_ID, PATTERNS
+from userbot.modules.asistant import tgbot, CMD_HELP
 from userbot.events import register
 from userbot.main import extractCommands
 import userbot.cmdhelp
