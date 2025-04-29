@@ -1,6 +1,13 @@
+import os
+from . import LOGS, bot
+from userbot.language import get_value
+LANG = get_value("init")
 
-
-
+API_KEY = os.environ.get("API_KEY", None)
+API_HASH = os.environ.get("API_HASH", None)
+AVTO_Q = sb(os.environ.get("AVTO_Q", "True"))
+BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
+BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
 if not BOT_TOKEN == None:
     tgbot = TelegramClient(
         "TG_BOT_TOKEN",
