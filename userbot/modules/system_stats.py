@@ -3,8 +3,8 @@ from asyncio.subprocess import PIPE as asyncPIPE
 from platform import uname
 from shutil import which
 from os import remove
-from userbot import SILGI_VERSION
-from userbot.modules.asistant import CMD_HELP, SILGI_USER
+from userbot import SILGI_VERSION, CMD_HELP
+from userbot.modules.asistant import SILGI_USER
 from telethon.tl.patched import Message
 from userbot.events import register
 from userbot.main import PLUGIN_MESAJLAR
