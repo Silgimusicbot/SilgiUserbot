@@ -13,49 +13,46 @@ LANG = get_value("lyrics")
 
 # ████████████████████████████████ #
 
-@register(outgoing=True, pattern="^.lyrics(?: |$)(.*)")
-async def lyrics_handler(event):
+GENIUS_TOKEN = "BURAYA_SƏNİN_TOKEN"
+genius = lyricsgenius.Genius(GENIUS_TOKEN, skip_non_songs=True, excluded_terms=["(Remix)", "(Live)"])
+
+@register(outgoing=True, pattern=r"^.genius(?: |$)(.*)")
+async def genius_lyrics(event):
     query = event.pattern_match.group(1)
 
     if '-' not in query:
         await event.reply(LANG['WRONG_TYPE'])
         return
 
-    artist, title = [part.strip() for part in query.split('-', 1)]
-    await event.reply(LANG['SEARCHING'].format(artist, title)
+    artist, title = [x.strip() for x in query.split('-', 1)]
+    await event.reply(LANG['SEARCHING'].format(artist, title))
 
-    async with aiohttp.ClientSession() as session:
-        url = f"https://api.lyrics.ovh/v1/{artist}/{title}"
-        async with session.get(url) as resp:
-            if resp.status != 200:
-                await event.respond(LANG['NOT_FOUND'].format(artist, title)
-                return
+    try:
+        song = genius.search_song(title, artist)
+    except Exception:
+        await event.reply(f"Xəta:\n{str(e)}")
+        return
 
-            data = await resp.json()
-            lyrics = data.get("lyrics")
+    if not song or not song.lyrics:
+        await event.reply(LANG['NOT_FOUND'].format(artist, title))
+        return
 
-            if not lyrics:
-                await event.respond(LANG['NOT_FOUND'].format(artist, title))
-                return
+    lyrics = song.lyrics
 
-            if len(lyrics) > 4096:
-                await event.respond(LANG['TOO_LONG'])
-                with open("lyrics.txt", "w", encoding="utf-8") as f:
-                    f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
-                await event.client.send_file(
-                    event.chat_id,
-                    "lyrics.txt",
-                    reply_to=event.id,
-                )
-                os.remove("lyrics.txt")
-            else:
-                header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
-                formatted_lyrics = "<code>" + lyrics + "</code>"
-                await event.respond(header + formatted_lyrics, parse_mode='html')
-
-
-
-
+    if len(lyrics) > 4096:
+        await event.respond(LANG['TOO_LONG'])
+        with open("lyrics.txt", "w", encoding="utf-8") as f:
+            f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
+        await event.client.send_file(
+            event.chat_id,
+            "lyrics.txt",
+            reply_to=event.id,
+        )
+        os.remove("lyrics.txt")
+    else:
+        header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
+        formatted_lyrics = "<code>" + lyrics + "</code>"
+        await event.respond(header + formatted_lyrics, parse_mode='html')
 @register(outgoing=True, pattern="^.singer(?: |$)(.*)")
 async def singer(lyric):
     if r"-" in lyric.text:
