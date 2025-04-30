@@ -53,8 +53,9 @@ async def lyrics_handler(event):
                     )
                     os.remove("lyrics.txt")
                 else:
-                    header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
-                    await event.respond(header + "<code>" + lyrics + "</code>", parse_mode='html')
+                    basliq = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
+                    mahni = f"```{lyrics}```"
+                    await event.respond(basliq + mahni, parse_mode="Markdown")
 
     except Exception as e:
         await event.reply(f"Xəta baş verdi:\n<code>{str(e)}</code>", parse_mode="html")
