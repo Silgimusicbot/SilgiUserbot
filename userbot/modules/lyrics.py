@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from userbot.events import register
 from userbot import CMD_HELP, GENIUS
 from userbot.cmdhelp import CmdHelp
+import aiohttp
 
 # ██████ LANGUAGE CONSTANTS ██████ #
 
@@ -15,8 +16,8 @@ LANG = get_value("lyrics")
 # ████████████████████████████████ #
 
 
-@register(outgoing=True, pattern=r"^.genius(?: |$)(.*)")
-async def genius_scraper(event):
+@register(outgoing=True, pattern=r"^.lyrics(?: |$)(.*)")
+async def lyrics_handler(event):
     query = event.pattern_match.group(1)
 
     if '-' not in query:
@@ -24,55 +25,39 @@ async def genius_scraper(event):
         return
 
     artist, title = [x.strip() for x in query.split('-', 1)]
-    await event.reply(LANG['SEARCHING'].format(artist, title))
-
-    search_url = f"https://genius.com/api/search/multi?per_page=1&q={artist} {title}"
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
+    await event.reply(LANG['SEARCHING'].format(artist, title), parse_mode='html')
 
     try:
-        response = requests.get(search_url, headers=headers)
-        if response.status_code != 200:
-            await event.reply(f"{LANG['ERROR']}\n\n<b>Status:</b> {response.status_code}", parse_mode='html')
-            return
+        async with aiohttp.ClientSession() as session:
+            url = f"https://api.lyrics.ovh/v1/{artist}/{title}"
+            async with session.get(url) as resp:
+                if resp.status != 200:
+                    await event.reply(LANG['NOT_FOUND'].format(artist, title))
+                    return
 
-        json = response.json()
-        hits = json["response"]["sections"][0]["hits"]
-        if not hits:
-            await event.reply(LANG['NOT_FOUND'].format(artist, title))
-            return
+                data = await resp.json()
+                lyrics = data.get("lyrics")
 
-        song_url = hits[0]["result"]["url"]
-        page = requests.get(song_url, headers=headers)
-        soup = BeautifulSoup(page.text, "html.parser")
-        lyrics_div = soup.find("div", class_="lyrics") or soup.find("div", class_="Lyrics__Container-sc-1ynbvzw-6")
-        lyrics = lyrics_div.get_text(separator="\n") if lyrics_div else "Tapılmadı"
+                if not lyrics:
+                    await event.reply(LANG['NOT_FOUND'].format(artist, title))
+                    return
 
-        if len(lyrics) > 4096:
-            await event.respond(LANG['TOO_LONG'])
-            with open("lyrics.txt", "w", encoding="utf-8") as f:
-                f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
-            await event.client.send_file(
-                event.chat_id,
-                "lyrics.txt",
-                reply_to=event.id,
-            )
-            os.remove("lyrics.txt")
-        else:
-            header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
-            await event.respond(header + "<code>" + lyrics + "</code>", parse_mode='html')
+                if len(lyrics) > 4096:
+                    await event.respond(LANG['TOO_LONG'])
+                    with open("lyrics.txt", "w", encoding="utf-8") as f:
+                        f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
+                    await event.client.send_file(
+                        event.chat_id,
+                        "lyrics.txt",
+                        reply_to=event.id,
+                    )
+                    os.remove("lyrics.txt")
+                else:
+                    header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
+                    await event.respond(header + "<code>" + lyrics + "</code>", parse_mode='html')
 
     except Exception as e:
-        msg = str(e)
-        if hasattr(e, "response") and e.response is not None:
-            msg += f"\n\nStatus kodu: {e.response.status_code}"
-            try:
-                msg += f"\nCavab: {e.response.text}"
-            except:
-                pass
-
-    await event.reply(f"Xəta baş verdi:\n\n<code>{msg}</code>", parse_mode="html")
+        await event.reply(f"Xəta baş verdi:\n<code>{str(e)}</code>", parse_mode="html")
 @register(outgoing=True, pattern="^.singer(?: |$)(.*)")
 async def singer(lyric):
     if r"-" in lyric.text:
