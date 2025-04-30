@@ -18,7 +18,7 @@ async def lyrics_handler(event):
     query = event.pattern_match.group(1)
 
     if '-' not in query:
-        await event.reply("LANG['WRONG_TYPE'])
+        await event.reply(LANG['WRONG_TYPE'])
         return
 
     artist, title = [part.strip() for part in query.split('-', 1)]
