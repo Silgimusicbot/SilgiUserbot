@@ -14,53 +14,47 @@ LANG = get_value("lyrics")
 # ████████████████████████████████ #
 
 @register(outgoing=True, pattern="^.lyrics(?: |$)(.*)")
-async def lyrics(lyric):
-    if r"-" in lyric.text:
-        pass
-    else:
-        await lyric.edit(LANG['WRONG_TYPE'])
+async def lyrics_handler(event):
+    query = event.pattern_match.group(1)
+
+    if '-' not in query:
+        await event.reply("LANG['WRONG_TYPE'])
         return
 
-    if GENIUS:
-        await lyric.edit("heroku'daki, genius var'nı silin.")
-        return
-    else:
-        genius = lyricsgenius.Genius("7JWO79mydLFN2DatQv94mIyulpYH_1Mnw4jZ7e8OViyJpmUs75gEpRwVCZ30EsEA")
-        try:
-            args = lyric.text.split('.lyrics')[1].split('-')
-            artist = args[0].strip(' ')
-            song = args[1].strip(' ')
-        except:
-            await lyric.edit(LANG['GIVE_INFO'])
-            return
+    artist, title = [part.strip() for part in query.split('-', 1)]
+    await event.reply(LANG['SEARCHING'].format(artist, title)
 
-    if len(args) < 1:
-        await lyric.edit(LANG['GIVE_INFO'])
-        return
+    async with aiohttp.ClientSession() as session:
+        url = f"https://api.lyrics.ovh/v1/{artist}/{title}"
+        async with session.get(url) as resp:
+            if resp.status != 200:
+                await event.respond(LANG['NOT_FOUND'].format(artist, title)
+                return
 
-    await lyric.edit(LANG['SEARCHING'].format(artist, song))
+            data = await resp.json()
+            lyrics = data.get("lyrics")
 
-    try:
-        songs = genius.search_song(song, artist)
-    except TypeError:
-        songs = None
+            if not lyrics:
+                await event.respond(LANG['NOT_FOUND'].format(artist, title))
+                return
 
-    if songs is None:
-        await lyric.edit(LANG['NOT_FOUND'].format(artist, song))
-        return
-    if len(songs.lyrics) > 4096:
-        await lyric.edit(LANG['TOO_LONG'])
-        with open("lyrics.txt", "w+") as f:
-            f.write(f"{LANG['LYRICS']} \n{artist} - {song}\n\n{songs.lyrics}")
-        await lyric.client.send_file(
-            lyric.chat_id,
-            "lyrics.txt",
-            reply_to=lyric.id,
-        )
-        os.remove("lyrics.txt")
-    else:
-        await lyric.edit(f"{LANG['LYRICS']} \n`{artist} - {song}`\n\n```{songs.lyrics}```")
-    return
+            if len(lyrics) > 4096:
+                await event.respond(LANG['TOO_LONG'])
+                with open("lyrics.txt", "w", encoding="utf-8") as f:
+                    f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
+                await event.client.send_file(
+                    event.chat_id,
+                    "lyrics.txt",
+                    reply_to=event.id,
+                )
+                os.remove("lyrics.txt")
+            else:
+                header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
+                formatted_lyrics = "<code>" + lyrics + "</code>"
+                await event.respond(header + formatted_lyrics, parse_mode='html')
+
+
+
 
 @register(outgoing=True, pattern="^.singer(?: |$)(.*)")
 async def singer(lyric):
@@ -120,4 +114,6 @@ CmdHelp('lyrics').add_command(
     'lyrics', (LANG['LY1']), (LANG['LY2']), (LANG['LY3'])
 ).add_command(
     'singer', (LANG['SG1']), (LANG['SG2']), (LANG['SG3'])
+).add_sahib(
+    "[SILGI](t.me/silgiteam) tərəfindən hazırlanmışdır"
 ).add()
