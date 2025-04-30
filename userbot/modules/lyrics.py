@@ -64,7 +64,15 @@ async def genius_scraper(event):
             await event.respond(header + "<code>" + lyrics + "</code>", parse_mode='html')
 
     except Exception as e:
-        await event.reply(f"Xəta:\n\n<code>{str(e)}</code>", parse_mode="html")
+        msg = str(e)
+        if hasattr(e, "response") and e.response is not None:
+            msg += f"\n\nStatus kodu: {e.response.status_code}"
+            try:
+                msg += f"\nCavab: {e.response.text}"
+            except:
+                pass
+
+    await event.reply(f"Xəta baş verdi:\n\n<code>{msg}</code>", parse_mode="html")
 @register(outgoing=True, pattern="^.singer(?: |$)(.*)")
 async def singer(lyric):
     if r"-" in lyric.text:
