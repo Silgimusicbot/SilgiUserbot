@@ -13,7 +13,7 @@ LANG = get_value("lyrics")
 
 # ████████████████████████████████ #
 
-GENIUS_TOKEN = "BURAYA_SƏNİN_TOKEN"
+GENIUS_TOKEN = "iZZ3e8mnUK3uNDnLkfeG42DgFL-84N9MvQaSLZLHIG1ufkNdmLgGYz-beFudrOhz"
 genius = lyricsgenius.Genius(GENIUS_TOKEN, skip_non_songs=True, excluded_terms=["(Remix)", "(Live)"])
 
 @register(outgoing=True, pattern=r"^.genius(?: |$)(.*)")
