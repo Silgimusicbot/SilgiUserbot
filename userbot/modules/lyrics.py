@@ -1,7 +1,8 @@
 import os
 import lyricsgenius
 import asyncio
-
+import requests
+from bs4 import BeautifulSoup
 from userbot.events import register
 from userbot import CMD_HELP, GENIUS
 from userbot.cmdhelp import CmdHelp
@@ -13,11 +14,9 @@ LANG = get_value("lyrics")
 
 # ████████████████████████████████ #
 
-GENIUS_TOKEN = "iZZ3e8mnUK3uNDnLkfeG42DgFL-84N9MvQaSLZLHIG1ufkNdmLgGYz-beFudrOhz"
-genius = lyricsgenius.Genius(GENIUS_TOKEN, skip_non_songs=True, excluded_terms=["(Remix)", "(Live)"])
 
 @register(outgoing=True, pattern=r"^.genius(?: |$)(.*)")
-async def genius_lyrics(event):
+async def genius_scraper(event):
     query = event.pattern_match.group(1)
 
     if '-' not in query:
@@ -27,32 +26,45 @@ async def genius_lyrics(event):
     artist, title = [x.strip() for x in query.split('-', 1)]
     await event.reply(LANG['SEARCHING'].format(artist, title))
 
+    search_url = f"https://genius.com/api/search/multi?per_page=1&q={artist} {title}"
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+
     try:
-        song = genius.search_song(title, artist)
+        response = requests.get(search_url, headers=headers)
+        if response.status_code != 200:
+            await event.reply(f"{LANG['ERROR']}\n\n<b>Status:</b> {response.status_code}", parse_mode='html')
+            return
+
+        json = response.json()
+        hits = json["response"]["sections"][0]["hits"]
+        if not hits:
+            await event.reply(LANG['NOT_FOUND'].format(artist, title))
+            return
+
+        song_url = hits[0]["result"]["url"]
+        page = requests.get(song_url, headers=headers)
+        soup = BeautifulSoup(page.text, "html.parser")
+        lyrics_div = soup.find("div", class_="lyrics") or soup.find("div", class_="Lyrics__Container-sc-1ynbvzw-6")
+        lyrics = lyrics_div.get_text(separator="\n") if lyrics_div else "Tapılmadı"
+
+        if len(lyrics) > 4096:
+            await event.respond(LANG['TOO_LONG'])
+            with open("lyrics.txt", "w", encoding="utf-8") as f:
+                f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
+            await event.client.send_file(
+                event.chat_id,
+                "lyrics.txt",
+                reply_to=event.id,
+            )
+            os.remove("lyrics.txt")
+        else:
+            header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
+            await event.respond(header + "<code>" + lyrics + "</code>", parse_mode='html')
+
     except Exception as e:
-        await event.reply(f"Xəta:\n{str(e)}")
-        return
-
-    if not song or not song.lyrics:
-        await event.reply(LANG['NOT_FOUND'].format(artist, title))
-        return
-
-    lyrics = song.lyrics
-
-    if len(lyrics) > 4096:
-        await event.respond(LANG['TOO_LONG'])
-        with open("lyrics.txt", "w", encoding="utf-8") as f:
-            f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
-        await event.client.send_file(
-            event.chat_id,
-            "lyrics.txt",
-            reply_to=event.id,
-        )
-        os.remove("lyrics.txt")
-    else:
-        header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
-        formatted_lyrics = "<code>" + lyrics + "</code>"
-        await event.respond(header + formatted_lyrics, parse_mode='html')
+        await event.reply(f"{LANG['ERROR']}\n\n<code>{str(e)}</code>", parse_mode="html")
 @register(outgoing=True, pattern="^.singer(?: |$)(.*)")
 async def singer(lyric):
     if r"-" in lyric.text:
