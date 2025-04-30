@@ -64,7 +64,7 @@ async def genius_scraper(event):
             await event.respond(header + "<code>" + lyrics + "</code>", parse_mode='html')
 
     except Exception as e:
-        await event.reply(f"{LANG['ERROR']}\n\n<code>{str(e)}</code>", parse_mode="html")
+        await event.reply(f"Xəta:\n\n<code>{str(e)}</code>", parse_mode="html")
 @register(outgoing=True, pattern="^.singer(?: |$)(.*)")
 async def singer(lyric):
     if r"-" in lyric.text:
