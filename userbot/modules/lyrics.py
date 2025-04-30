@@ -29,7 +29,7 @@ async def genius_lyrics(event):
 
     try:
         song = genius.search_song(title, artist)
-    except Exception:
+    except Exception as e:
         await event.reply(f"Xəta:\n{str(e)}")
         return
 
