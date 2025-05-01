@@ -21,11 +21,11 @@ async def lyrics_handler(event):
     query = event.pattern_match.group(1)
 
     if '-' not in query:
-        await event.reply(LANG['WRONG_TYPE'])
+        await event.edit(LANG['WRONG_TYPE'])
         return
 
     artist, title = [x.strip() for x in query.split('-', 1)]
-    await event.reply(LANG['SEARCHING'].format(artist, title), parse_mode='html')
+    await event.edit(LANG['SEARCHING'].format(artist, title), parse_mode='html')
 
     try:
         async with aiohttp.ClientSession() as session:
@@ -43,7 +43,7 @@ async def lyrics_handler(event):
                     return
 
                 if len(lyrics) > 4096:
-                    await event.respond(LANG['TOO_LONG'])
+                    await event.edit(LANG['TOO_LONG'])
                     with open("lyrics.txt", "w", encoding="utf-8") as f:
                         f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
                     await event.client.send_file(
@@ -53,9 +53,9 @@ async def lyrics_handler(event):
                     )
                     os.remove("lyrics.txt")
                 else:
-                    basliq = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
+                    basliq = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n**{artist} - {title}**\n\n"
                     mahni = f"```{lyrics}```"
-                    await event.respond(basliq + mahni, parse_mode="Markdown")
+                    await event.edit(basliq + mahni, parse_mode="Markdown")
 
     except Exception as e:
         await event.reply(f"Xəta baş verdi:\n<code>{str(e)}</code>", parse_mode="html")
