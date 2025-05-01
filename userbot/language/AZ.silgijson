@@ -491,7 +491,7 @@
             "WRONG_TYPE": "`Xəta: zəhmət olmasa <müğənni> və <mahnı> üçün bölücü olaraq '-' istifadə edin`\nNümunə: `Duman - Haberin Yok Ölüyorum`",
             "GENIUS_NOT_FOUND": "`Zəhmət olmasa Genius tokenini təyin edin`",
             "GIVE_INFO": "`Zəhmət olmasa ifaçı və mahnı adını verin`",
-            "SEARCHING": "SilgiUserbot `{} - {} üçün mahnı sözləri axtarılır...`",
+            "SEARCHING": "`SilgiUserbot {} - {} üçün mahnı sözləri axtarılır...`",
             "NOT_FOUND": "Mahnı **{} - {}** tapılmadı!",
             "TOO_LONG": "`Mahnı sözləri çox uzundur, görmək üçün fayla baxın.`",
             "LYRICS": "**Axtarış sorğusu**:",
