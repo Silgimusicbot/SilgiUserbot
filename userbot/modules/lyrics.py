@@ -1,6 +1,7 @@
 import os
 import lyricsgenius
 import asyncio
+import time
 import requests
 from bs4 import BeautifulSoup
 from userbot.events import register
@@ -23,7 +24,7 @@ def scrape_lyrics(artist, title):
     # Genius'taki arama URL'si
     search_query = f"{artist} {title}"
     search_url = f"https://genius.com/search?q={search_query}"
-
+    time.sleep(10)
     # Sayfa yüklenmesini beklemek için 2 saniye bekliyoruz
     response = requests.get(search_url)
     if response.status_code != 200:
