@@ -267,39 +267,6 @@ async def moni(event):
 def progress(current, total):
     logger.info("Downloaded {} of {}\nCompleted {}".format(current, total, (current / total) * 100))
 
-@register(outgoing=True, pattern=r"^.google ?(.*)")
-async def gsearch(q_event):
-    """ .google  """
-    match = q_event.pattern_match.group(1)
-    page = findall(r"page=\d+", match)
-    try:
-        page = page[0]
-        page = page.replace("page=", "")
-        match = match.replace("page=" + page[0], "")
-    except IndexError:
-        page = 1
-    search_args = (str(match), int(page))
-    gsearch = GoogleSearch()
-    gresults = await gsearch.async_search(*search_args)
-    msg = ""
-    for i in range(10):
-        try:
-            title = gresults["titles"][i]
-            link = gresults["links"][i]
-            desc = gresults["descriptions"][i]
-            msg += f"[{title}]({link})\n`{desc}`\n\n"
-        except IndexError:
-            break
-    await q_event.edit("**Axtardığın şey:**\n`" + match + "`\n\n**Tapılan:**\n" +
-                       msg,
-                       link_preview=False)
-
-    if BOTLOG:
-        await q_event.client.send_message(
-            BOTLOG_CHATID,
-            match + "`Sözlük googledə axtarıldı!`",
-        )
-
 
 @register(outgoing=True, pattern=r"^.wiki (.*)")
 async def wiki(wiki_q):
