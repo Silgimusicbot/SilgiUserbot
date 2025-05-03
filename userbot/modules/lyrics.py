@@ -19,53 +19,36 @@ LANG = get_value("lyrics")
 
 
 # Genius
-GENIUS_SEARCH_URL = "https://genius.com/api/search/multi"
-
-async def fetch_lyrics(artist, title, event):
+def scrape_lyrics(artist, title):
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
-
-    params = {"q": f"{artist} {title}"}
-    response = requests.get(GENIUS_SEARCH_URL, params=params, headers=headers)
-
+    search_query = f"{artist} {title}"
+    search_url = "https://genius.com/search?q=" + requests.utils.quote(search_query)
+    
+    response = requests.get(search_url, headers=headers)
     if response.status_code != 200:
-        await event.reply(f"Genius API hatası: {response.status_code}", parse_mode="html")
         return None
 
-    try:
-        data = response.json()
-    except Exception as e:
-        await event.reply(f"Genius yanıtı çözülemedi:\n<code>{response.text[:1000]}</code>", parse_mode="html")
+    soup = BeautifulSoup(response.text, "html.parser")
+    first_result = soup.select_one("a[href^='/lyrics/'], a[href^='https://genius.com/']")
+    if not first_result:
         return None
 
-    sections = data.get("response", {}).get("sections", [])
-    hits = []
-    for section in sections:
-        if "hits" in section:
-            hits.extend(section["hits"])
-
-    if not hits:
-        await event.reply("Hit bulunamadı.\n<code>{}</code>".format(response.text[:1000]), parse_mode="html")
+    song_url = first_result["href"]
+    song_page = requests.get(song_url, headers=headers)
+    if song_page.status_code != 200:
         return None
 
-    song_path = hits[0]["result"]["path"]
-    page_url = f"https://genius.com{song_path}"
-
-    page_response = requests.get(page_url, headers=headers)
-    if page_response.status_code != 200:
-        await event.reply(f"Sayfa yüklenemedi: <code>{page_url}</code>", parse_mode="html")
-        return None
-
-    soup = BeautifulSoup(page_response.text, "html.parser")
-    lyrics_divs = soup.find_all("div", attrs={"data-lyrics-container": "true"})
-    lyrics = "\n".join([div.get_text(separator="\n") for div in lyrics_divs]).strip()
+    soup = BeautifulSoup(song_page.text, "html.parser")
+    lyrics_blocks = soup.find_all("div", attrs={"data-lyrics-container": "true"})
+    lyrics = "\n".join(block.get_text(separator="\n") for block in lyrics_blocks).strip()
 
     return lyrics if lyrics else None
 
 @register(outgoing=True, pattern=r"^.lyrics(?: |$)(.*)")
 async def lyrics_handler(event):
-    query = event.pattern_match.group(1)
+    query = event.pattern_match.group(1).strip()
 
     if '-' not in query:
         await event.edit(LANG['WRONG_TYPE'])
@@ -75,7 +58,8 @@ async def lyrics_handler(event):
     await event.edit(LANG['SEARCHING'].format(artist, title), parse_mode='html')
 
     try:
-        lyrics = await fetch_lyrics(artist, title, event)
+        loop = asyncio.get_event_loop()
+        lyrics = await loop.run_in_executor(None, scrape_lyrics, artist, title)
 
         if not lyrics:
             await event.reply(LANG['NOT_FOUND'].format(artist, title))
@@ -83,18 +67,13 @@ async def lyrics_handler(event):
 
         if len(lyrics) > 4096:
             await event.edit(LANG['TOO_LONG'])
-            with open("lyrics.txt", "w", encoding="utf-8") as f:
+            filename = "lyrics.txt"
+            with open(filename, "w", encoding="utf-8") as f:
                 f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
-            await event.client.send_file(
-                event.chat_id,
-                "lyrics.txt",
-                reply_to=event.id,
-            )
-            os.remove("lyrics.txt")
+            await event.client.send_file(event.chat_id, filename, reply_to=event.id)
+            os.remove(filename)
         else:
-            basliq = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n**{artist} - {title}**\n\n"
-            mahni = f"```{lyrics}```"
-            await event.edit(basliq + mahni, parse_mode="Markdown")
+            await event.edit(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n**{artist} - {title}**\n\n```{lyrics}```", parse_mode="Markdown")
 
     except Exception as e:
         await event.reply(f"Xəta baş verdi:\n<code>{str(e)}</code>", parse_mode="html")
