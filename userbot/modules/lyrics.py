@@ -22,8 +22,12 @@ LANG = get_value("lyrics")
 GENIUS_SEARCH_URL = "https://genius.com/api/search/multi"
 
 def fetch_lyrics(artist, title):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+
     params = {"q": f"{artist} {title}"}
-    response = requests.get(GENIUS_SEARCH_URL, params=params)
+    response = requests.get(GENIUS_SEARCH_URL, params=params, headers=headers)
     if response.status_code != 200:
         return None
 
@@ -40,7 +44,7 @@ def fetch_lyrics(artist, title):
     song_path = hits[0]["result"]["path"]
     page_url = f"https://genius.com{song_path}"
 
-    page_response = requests.get(page_url)
+    page_response = requests.get(page_url, headers=headers)
     if page_response.status_code != 200:
         return None
 
