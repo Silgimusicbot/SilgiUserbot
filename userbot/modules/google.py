@@ -3,7 +3,7 @@ from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 SERPER_API_KEY = "bb3ddc47d064d10495d0a158f3748c68c8ffef69"
 
-@register(outgoing=True, pattern=r"^.google(?: |$)(.*)")
+@register(outgoing=True, disable_errors=True, pattern=r"^.google(?: |$)(.*)")
 async def google_serper(event):
     axtarish = event.pattern_match.group(1).strip()
     if not axtarish:
