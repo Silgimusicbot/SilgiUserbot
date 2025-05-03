@@ -19,9 +19,35 @@ LANG = get_value("lyrics")
 LANG = get_value("lyrics")
 
 # Genius
-GENIUS_API_TOKEN = "MzGtNRFOK_6rGyuBzhn5aN5hed_LlI6I9ykQbdQZeB8NLqepONtr-4HcBzj9P5V9"
+GENIUS_SEARCH_URL = "https://genius.com/api/search/multi"
 
-genius = lyricsgenius.Genius(GENIUS_API_TOKEN, timeout=10)
+def fetch_lyrics(artist, title):
+    params = {"q": f"{artist} {title}"}
+    response = requests.get(GENIUS_SEARCH_URL, params=params)
+    if response.status_code != 200:
+        return None
+
+    data = response.json()
+    sections = data.get("response", {}).get("sections", [])
+    hits = []
+    for section in sections:
+        if "hits" in section:
+            hits.extend(section["hits"])
+
+    if not hits:
+        return None
+
+    song_path = hits[0]["result"]["path"]
+    page_url = f"https://genius.com{song_path}"
+
+    page_response = requests.get(page_url)
+    if page_response.status_code != 200:
+        return None
+
+    soup = BeautifulSoup(page_response.text, "html.parser")
+    lyrics_divs = soup.find_all("div", attrs={"data-lyrics-container": "true"})
+    lyrics = "\n".join([div.get_text(separator="\n") for div in lyrics_divs]).strip()
+    return lyrics if lyrics else None
 
 @register(outgoing=True, pattern=r"^.lyrics(?: |$)(.*)")
 async def lyrics_handler(event):
@@ -35,22 +61,11 @@ async def lyrics_handler(event):
     await event.edit(LANG['SEARCHING'].format(artist, title), parse_mode='html')
 
     try:
-        song = genius.search_song(title, artist)
+        lyrics = fetch_lyrics(artist, title)
 
-        if not song or not song.lyrics:
+        if not lyrics:
             await event.reply(LANG['NOT_FOUND'].format(artist, title))
             return
-
-        lyrics = song.lyrics
-        for marker in [
-            "You might also like",
-            "Embed",
-            "ContributorsTranslations",
-            "Read more on Genius",
-            "More on Genius",
-        ]:
-            if marker in lyrics:
-                lyrics = lyrics.split(marker)[0].strip()
 
         if len(lyrics) > 4096:
             await event.edit(LANG['TOO_LONG'])
