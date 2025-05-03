@@ -21,17 +21,24 @@ LANG = get_value("lyrics")
 # Genius
 GENIUS_SEARCH_URL = "https://genius.com/api/search/multi"
 
-def fetch_lyrics(artist, title):
+async def fetch_lyrics(artist, title, event):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
 
     params = {"q": f"{artist} {title}"}
     response = requests.get(GENIUS_SEARCH_URL, params=params, headers=headers)
+
     if response.status_code != 200:
+        await event.reply(f"Genius API hatası: {response.status_code}", parse_mode="html")
         return None
 
-    data = response.json()
+    try:
+        data = response.json()
+    except Exception as e:
+        await event.reply(f"Genius yanıtı çözülemedi:\n<code>{response.text[:1000]}</code>", parse_mode="html")
+        return None
+
     sections = data.get("response", {}).get("sections", [])
     hits = []
     for section in sections:
@@ -39,6 +46,7 @@ def fetch_lyrics(artist, title):
             hits.extend(section["hits"])
 
     if not hits:
+        await event.reply("Hit bulunamadı.\n<code>{}</code>".format(response.text[:1000]), parse_mode="html")
         return None
 
     song_path = hits[0]["result"]["path"]
@@ -46,11 +54,13 @@ def fetch_lyrics(artist, title):
 
     page_response = requests.get(page_url, headers=headers)
     if page_response.status_code != 200:
+        await event.reply(f"Sayfa yüklenemedi: <code>{page_url}</code>", parse_mode="html")
         return None
 
     soup = BeautifulSoup(page_response.text, "html.parser")
     lyrics_divs = soup.find_all("div", attrs={"data-lyrics-container": "true"})
     lyrics = "\n".join([div.get_text(separator="\n") for div in lyrics_divs]).strip()
+
     return lyrics if lyrics else None
 
 @register(outgoing=True, pattern=r"^.lyrics(?: |$)(.*)")
@@ -65,7 +75,7 @@ async def lyrics_handler(event):
     await event.edit(LANG['SEARCHING'].format(artist, title), parse_mode='html')
 
     try:
-        lyrics = fetch_lyrics(artist, title)
+        lyrics = await fetch_lyrics(artist, title, event)
 
         if not lyrics:
             await event.reply(LANG['NOT_FOUND'].format(artist, title))
