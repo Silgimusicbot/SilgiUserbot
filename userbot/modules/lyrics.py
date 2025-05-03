@@ -16,6 +16,13 @@ LANG = get_value("lyrics")
 # ████████████████████████████████ #
 
 
+LANG = get_value("lyrics")
+
+# Genius
+GENIUS_API_TOKEN = "MzGtNRFOK_6rGyuBzhn5aN5hed_LlI6I9ykQbdQZeB8NLqepONtr-4HcBzj9P5V9"
+
+genius = lyricsgenius.Genius(GENIUS_API_TOKEN, timeout=10)
+
 @register(outgoing=True, pattern=r"^.lyrics(?: |$)(.*)")
 async def lyrics_handler(event):
     query = event.pattern_match.group(1)
@@ -28,34 +35,37 @@ async def lyrics_handler(event):
     await event.edit(LANG['SEARCHING'].format(artist, title), parse_mode='html')
 
     try:
-        async with aiohttp.ClientSession() as session:
-            url = f"https://api.lyrics.ovh/v1/{artist}/{title}"
-            async with session.get(url) as resp:
-                if resp.status != 200:
-                    await event.reply(LANG['NOT_FOUND'].format(artist, title))
-                    return
+        song = genius.search_song(title, artist)
 
-                data = await resp.json()
-                lyrics = data.get("lyrics")
+        if not song or not song.lyrics:
+            await event.reply(LANG['NOT_FOUND'].format(artist, title))
+            return
 
-                if not lyrics:
-                    await event.reply(LANG['NOT_FOUND'].format(artist, title))
-                    return
+        lyrics = song.lyrics
+        for marker in [
+            "You might also like",
+            "Embed",
+            "ContributorsTranslations",
+            "Read more on Genius",
+            "More on Genius",
+        ]:
+            if marker in lyrics:
+                lyrics = lyrics.split(marker)[0].strip()
 
-                if len(lyrics) > 4096:
-                    await event.edit(LANG['TOO_LONG'])
-                    with open("lyrics.txt", "w", encoding="utf-8") as f:
-                        f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
-                    await event.client.send_file(
-                        event.chat_id,
-                        "lyrics.txt",
-                        reply_to=event.id,
-                    )
-                    os.remove("lyrics.txt")
-                else:
-                    basliq = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n**{artist} - {title}**\n\n"
-                    mahni = f"```{lyrics}```"
-                    await event.edit(basliq + mahni, parse_mode="Markdown")
+        if len(lyrics) > 4096:
+            await event.edit(LANG['TOO_LONG'])
+            with open("lyrics.txt", "w", encoding="utf-8") as f:
+                f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
+            await event.client.send_file(
+                event.chat_id,
+                "lyrics.txt",
+                reply_to=event.id,
+            )
+            os.remove("lyrics.txt")
+        else:
+            basliq = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n**{artist} - {title}**\n\n"
+            mahni = f"```{lyrics}```"
+            await event.edit(basliq + mahni, parse_mode="Markdown")
 
     except Exception as e:
         await event.reply(f"Xəta baş verdi:\n<code>{str(e)}</code>", parse_mode="html")
