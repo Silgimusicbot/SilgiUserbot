@@ -20,28 +20,34 @@ LANG = get_value("lyrics")
 
 # Genius
 def scrape_lyrics(artist, title):
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-    }
+    # Genius'taki arama URL'si
     search_query = f"{artist} {title}"
-    search_url = "https://genius.com/search?q=" + requests.utils.quote(search_query)
-    
-    response = requests.get(search_url, headers=headers)
+    search_url = f"https://genius.com/search?q={search_query}"
+
+    # Sayfa yüklenmesini beklemek için 2 saniye bekliyoruz
+    response = requests.get(search_url)
     if response.status_code != 200:
         return None
 
+    # BeautifulSoup ile HTML parsing
     soup = BeautifulSoup(response.text, "html.parser")
-    first_result = soup.select_one("a[href^='/lyrics/'], a[href^='https://genius.com/']")
+
+    # İlk şarkıyı bulmak için sonuçları alıyoruz
+    first_result = soup.select_one("a[href^='/lyrics/']")
     if not first_result:
         return None
 
-    song_url = first_result["href"]
-    song_page = requests.get(song_url, headers=headers)
+    # Şarkının tam URL'sini alıyoruz
+    song_url = "https://genius.com" + first_result["href"]
+
+    # Şarkı sayfasını çekiyoruz
+    song_page = requests.get(song_url)
     if song_page.status_code != 200:
         return None
 
+    # Şarkı sayfasından sözleri almak
     soup = BeautifulSoup(song_page.text, "html.parser")
-    lyrics_blocks = soup.find_all("div", attrs={"data-lyrics-container": "true"})
+    lyrics_blocks = soup.find_all("div", class_="lyrics")
     lyrics = "\n".join(block.get_text(separator="\n") for block in lyrics_blocks).strip()
 
     return lyrics if lyrics else None
@@ -62,18 +68,20 @@ async def lyrics_handler(event):
         lyrics = await loop.run_in_executor(None, scrape_lyrics, artist, title)
 
         if not lyrics:
-            await event.reply(LANG['NOT_FOUND'].format(artist, title))
+            await event.edit(LANG['NOT_FOUND'].format(artist, title))
             return
+
+        header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n**{artist} - {title}**\n\n"
 
         if len(lyrics) > 4096:
             await event.edit(LANG['TOO_LONG'])
             filename = "lyrics.txt"
             with open(filename, "w", encoding="utf-8") as f:
-                f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
+                f.write(f"{header}{lyrics}")
             await event.client.send_file(event.chat_id, filename, reply_to=event.id)
             os.remove(filename)
         else:
-            await event.edit(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n**{artist} - {title}**\n\n```{lyrics}```", parse_mode="Markdown")
+            await event.edit(header + f"```{lyrics}```", parse_mode="Markdown")
 
     except Exception as e:
         await event.reply(f"Xəta baş verdi:\n<code>{str(e)}</code>", parse_mode="html")
