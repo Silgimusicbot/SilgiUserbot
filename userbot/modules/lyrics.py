@@ -16,7 +16,7 @@ LANG = get_value("lyrics")
 # ████████████████████████████████ #
 
 
-LANG = get_value("lyrics")
+
 
 # Genius
 GENIUS_SEARCH_URL = "https://genius.com/api/search/multi"
