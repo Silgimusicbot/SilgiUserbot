@@ -35,7 +35,7 @@ async def magaza(event):
         random = choice(random)
         random_file = random.file.name
 
-    result = f'**[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](@silgiub) Plugin Mağazası**\n\n**🔎 Axtarış:** `{plugin}`\n**🔢 Nəticələr: __({len(plugins)})__**\n➖➖➖➖➖\n\n'
+    result = f'**[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](@silgiub) Plugin Mağazası**\n\n**🔎 Axtarış:** `{plugin}`\n**🔢 Nəticələr: __({len(plugins)})__**\n➖➖➖➖➖➖➖➖➖➖➖➖➖\n\n'
     
     if len(plugins) == 0:
         result += f'**Həç bir şey tapa bilmədim...**\n`{random_file}` __plugininə nə deirsən?__'
