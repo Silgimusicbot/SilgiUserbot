@@ -17,6 +17,6 @@ async def spaminfo(event):
     except Exception as e:
         await event.edit("Spam məlumatını yoxlamaq mümkün olmadı.")
 CmdHelp('spaminfo').add_command(
-    'spaminfo', '', '@spambot-a start yazaraq spam məlumatını əldə edər.'
+    'spinfo', '', '@spambot-a start yazaraq spam məlumatını əldə edər.'
 ).add()
 
