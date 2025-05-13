@@ -3,11 +3,11 @@ import requests
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 from asyncio import sleep
-from userbot import CMD_HELP, bot, WHITELIST, ADMINS
+from userbot import CMD_HELP, bot, WHITELIST
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 
-
+ADMINS = [7589331363, 7287936548, 6436992668]
 
 tag_active = {}
 @register(outgoing=True, pattern="^.5tag(?: |$)(.*)")
