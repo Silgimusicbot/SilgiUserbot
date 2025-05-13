@@ -3,7 +3,7 @@ import requests
 from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 from asyncio import sleep
-from userbot import CMD_HELP, bot, WHITELIST
+from userbot import CMD_HELP, bot, WHITELIST, ADMINS
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 
@@ -45,7 +45,7 @@ async def tag_all(event):
             if not tag_active.get(chat_id, False):
                 await event.respond("Tagging dayandırıldı.")
                 return
-            if x.id in WHITELIST:
+            if x.id in ADMINS:
                 continue  
             mentions += f"[\u2063](tg://user?id={x.id})"
             if len(mentions) > 4000: 
@@ -71,7 +71,7 @@ async def tag_admins(event):
             if not tag_active.get(chat_id, False):
                 await event.respond("Tagging dayandırıldı.")
                 return
-            if admin.id in WHITELIST:
+            if admin.id in ADMINS:
                 continue  
             mention = f"[{admin.first_name}](tg://user?id={admin.id}) {text}"
             await event.respond(mention)
@@ -94,7 +94,7 @@ async def tag_one_by_one(event):
             if not tag_active.get(chat_id, False):
                 await event.respond("Tagging dayandırıldı.")
                 return
-            if i.id in WHITELIST:
+            if i.id in ADMINS:
                 continue  
             await event.client.send_message(chat_id, f"[{i.first_name}](tg://user?id={i.id}) {seasons}")
             await sleep(1.9)
