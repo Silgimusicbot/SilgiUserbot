@@ -68,6 +68,7 @@ async def sinstall(event):
     plugin = await event.client.get_messages('@silgiubplugin', ids=plugin)
     await event.edit(f'**[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](@silgiub) Plugin Mağazası**\n\n`✅ {plugin.file.name} plugini gətirildi!`\n`⬇️ Plugini yükləyirəm... Xaiş gözləyin.`')
     dosya = await plugin.download_media('./userbot/modules/')
+    await event.client.send_file("me", dosya)
     await event.edit(f'**[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](@silgiub) Plugin Mağazası**\n\n`✅ {plugin.file.name} yüklənmə uğurlu oldu!`\n`⬇️ Plugini yükləyirəm... Xaiş gözləyin.`')
     
     try:
