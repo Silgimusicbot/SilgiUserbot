@@ -6,6 +6,7 @@ from telethon.tl.functions.contacts import UnblockRequest
 from random import randint
 from userbot import BOT_TOKEN, HEROKU_APIKEY, HEROKU_APPNAME, bot
 from userbot import me, LOGS
+import random
 
 Silgi = os.path.join(os.getcwd(), "userbot", "SilgiUserbotlogo.jpg")
 
