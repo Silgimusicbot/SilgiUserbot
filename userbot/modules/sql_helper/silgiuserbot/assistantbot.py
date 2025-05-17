@@ -35,28 +35,19 @@ async def silgiassistantbot(app, config):
 
     me = await bot.get_me()
     bot_name = f"{me.first_name} SilgiUserbot Assistant"
-    for attempt in range(10): 
-        username = f"silgiub{random.randint(1000, 9999)}bot" if me.username else f"silgi{str(me.id)[-6:]}bot"
-        await bot.send_message(bot_father, "/newbot")
-        await asyncio.sleep(2)
-        await bot.send_message(bot_father, bot_name)
-        await asyncio.sleep(2)
-        await bot.send_message(bot_father, username)
-        await asyncio.sleep(3)
-        messages = await bot.get_messages(bot_father, limit=5)
-        for msg in messages:
-            if msg.text:
-                if "Sorry, this username is already taken." in msg.text:
-                    LOGS.error(f"⚠️ Username alınıb: {username}, yenidən yoxlanılır...")
-                    break  
-                elif "Use this token to access the HTTP API:" in msg.text:
-                    token = msg.text.split("`")[1] if "`" in msg.text else msg.text.split("\n")[2]
-                    LOGS.info("✅ Asistant bot uğurla yaradıldı!")
-                    LOGS.info(f"🤖 Token: {token}")
-                    return token
+    username = f"silgiub{random.randint(10000, 999999)}bot" if me.username else f"silgi{str(me.id)[5:]}bot"
+
+    await bot.send_message(bot_father, "/newbot")
+    await asyncio.sleep(2)
+    await bot.send_message(bot_father, bot_name)
+    await asyncio.sleep(2)
+    await bot.send_message(bot_father, username)
+
     token = await get_botfather_message()
-    LOGS.error("❌ Bot yaradıla bilmədi.")
-    return None
+    LOGS.info("✅ Yeni asistant botu yaradıldı")
+    LOGS.info(f"🤖 Bot adı: {bot_name}")
+    LOGS.info(f"🧩 Bot username: {username}")
+    LOGS.info(f"⚙️ Bot token: {token}")
 
     
 
