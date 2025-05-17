@@ -54,10 +54,11 @@ async def silgiassistantbot(app, config):
                     LOGS.info("✅ Asistant bot uğurla yaradıldı!")
                     LOGS.info(f"🤖 Token: {token}")
                     return token
+    token = await get_botfather_message()
     LOGS.error("❌ Bot yaradıla bilmədi.")
     return None
 
-    token = await get_botfather_message()
+    
 
     if not token:
         await bot.send_message("me", "❌ Bot yaradılmadı. @BotFather-dən əl ilə cəhd edin.")
