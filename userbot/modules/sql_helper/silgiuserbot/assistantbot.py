@@ -5,7 +5,7 @@ from telethon import TelegramClient
 from telethon.tl.functions.contacts import UnblockRequest
 from random import randint
 from userbot import BOT_TOKEN, HEROKU_APIKEY, HEROKU_APPNAME, bot
-from userbot import me
+from userbot import me, LOGS
 
 Silgi = os.path.join(os.getcwd(), "userbot", "SilgiUserbotlogo.jpg")
 
@@ -46,14 +46,14 @@ async def silgiassistantbot(app, config):
         for msg in messages:
             if msg.text:
                 if "Sorry, this username is already taken." in msg.text:
-                    print(f"⚠️ Username already taken: {username}, trying again...")
+                    LOGS.error(f"⚠️ Username alınıb: {username}, yenidən yoxlanılır...")
                     break  
                 elif "Use this token to access the HTTP API:" in msg.text:
                     token = msg.text.split("`")[1] if "`" in msg.text else msg.text.split("\n")[2]
-                    print("✅ Bot successfully created!")
-                    print(f"🤖 Token: {token}")
+                    LOGS.info("✅ Asistant bot uğurla yaradıldı!")
+                    LOGS.info(f"🤖 Token: {token}")
                     return token
-    print("❌ Could not create bot after several attempts.")
+    LOGS.error("❌ Bot yaradıla bilmədi.")
     return None
 
     token = await get_botfather_message()
