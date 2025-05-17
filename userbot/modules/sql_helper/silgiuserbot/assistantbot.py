@@ -34,13 +34,27 @@ async def silgiassistantbot(app, config):
 
     me = await bot.get_me()
     bot_name = f"{me.first_name} SilgiUserbot Assistant"
-    username = f"silgiub{randint(1, 1000)}bot" if me.username else f"silgi{str(me.id)[5:]}bot"
-
-    await bot.send_message(bot_father, "/newbot")
-    await asyncio.sleep(2)
-    await bot.send_message(bot_father, bot_name)
-    await asyncio.sleep(2)
-    await bot.send_message(bot_father, username)
+    for attempt in range(10): 
+        username = f"silgiub{random.randint(1000, 9999)}bot" if me.username else f"silgi{str(me.id)[-6:]}bot"
+        await bot.send_message(bot_father, "/newbot")
+        await asyncio.sleep(2)
+        await bot.send_message(bot_father, bot_name)
+        await asyncio.sleep(2)
+        await bot.send_message(bot_father, username)
+        await asyncio.sleep(3)
+        messages = await bot.get_messages(bot_father, limit=5)
+        for msg in messages:
+            if msg.text:
+                if "Sorry, this username is already taken." in msg.text:
+                    print(f"⚠️ Username already taken: {username}, trying again...")
+                    break  
+                elif "Use this token to access the HTTP API:" in msg.text:
+                    token = msg.text.split("`")[1] if "`" in msg.text else msg.text.split("\n")[2]
+                    print("✅ Bot successfully created!")
+                    print(f"🤖 Token: {token}")
+                    return token
+    print("❌ Could not create bot after several attempts.")
+    return None
 
     token = await get_botfather_message()
 
