@@ -2,7 +2,6 @@
 from telethon import events
 from userbot import bot
 from g4f.client import Client
-import random
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 
@@ -14,7 +13,7 @@ async def gpt_plugin(event):
     await event.edit("⏳ Cavab axtarılır...")
 
     try:
-        response = await client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": mesaj}],
             web_search=True
@@ -33,7 +32,7 @@ async def igpt_plugin(event):
     await event.edit("⏳ Şəkil axtarılır...")
 
     try:
-        image_response = await client.images.generate(
+        image_response = client.images.generate(
             model="flux",
             prompt=mesaj,
             response_format="url"
@@ -41,7 +40,7 @@ async def igpt_plugin(event):
 
         image_url = image_response.data[0].url
         await event.edit("Şəkil tapıldı!")
-        await event.respond(f"**Generated Image:**", file=image_url)
+        await event.respond("**Generated Image:**", file=image_url)
 
     except Exception as e:
         await event.edit(f"Xəta baş verdi:\n`{str(e)}`")
