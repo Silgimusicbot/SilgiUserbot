@@ -132,7 +132,8 @@ async def malive(event):
         f"┣• 👤 {LANG['NAME']}: {SILGI_USER}\n"
         f"┣• ⚙️ {LANG['PYTHON']}: `{python_version()}`\n"
         f"┣• 🛠️ {LANG['VERSION']}: `{SILGI_VERSION}`\n"
-        f"┣• 📚 {LANG['PLUGIN_COUNT']}: `{len(CMD_HELP)}`\n"
+        f"┣• 📥 {LANG['PLUGIN_COUNT']}: `{len(CMD_HELP)}`\n"
+        f"┣• 📍 Telethon: `{telethon}`\n"
         "╰━━━━━━━━━━━━━━━━━━━\n\n"
         "#SilgiUserbot"
     )
