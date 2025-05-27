@@ -122,6 +122,7 @@ async def pipcheck(pip):
         await pip.edit(LANG['EXAMPLE'])
 @register(outgoing=True, pattern="^.malive$")
 async def malive(event):
+    telethon=version.__version__
     img = "https://files.catbox.moe/eiqmdh.gif"  
     caption = (
         "╭━━━➤ 『 BOT STATUS 』\n"
