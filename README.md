@@ -1,43 +1,82 @@
-<p align="center"><a href="https://t.me/silgiub"><img src="https://raw.githubusercontent.com/Silgimusicbot/SilgiUserbot/master/userbot/SilgiUserbotlogo.jpg" alt="SilgiUserbot" width="500"></a></p> 
-<h1 align="center"><b>⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝</b></h1>
-<h3 align="center">SilgiUserbot, Telegram işlətməyinizi asandlaşdıran bir botdur. Tamamilə açıq qaynağlı və ödənişsizdir.</h3>
-<h3 align="center">SilgiUserbot is a bot that makes it easy to use Telegram. Completely open source and free.</h3>
 
-## Diqqət!
-bu reponu əkən şəxs burdan bircə hərf belə götürən şəxs sənin ananı bajını nesilini 7 sülaleni s2m ƏKMƏ PEYSƏR
+<div align="center">
 
-## Kömək / Support
-
-<a href="https://t.me/silgiub"><img src="https://img.shields.io/badge/Join-Telegram%20Channel-red.svg?logo=Telegram"></a>
-
-<a href="https://t.me/silgiub"><img src="https://img.shields.io/badge/Join-Telegram%20Group-blue.svg?logo=telegram"></a>
-
-## Qurulum / Method
-
-
-
-**Android üçün:** Termuxu açın bu kodu yapışdırın: `bash <(curl -L https://raw.githubusercontent.com/Silgimusicbot/SilgiUbInstaller/master/silgi.sh)`
-
-### Heroku ilə deploy / Deploying To Heroku
-
-<a href="https://www.heroku.com/deploy?template=https://github.com/Silgimusicbot/SilgiUserbot">
-  <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+<a href="https://t.me/silgiub">
+  <img src="https://raw.githubusercontent.com/Silgimusicbot/SilgiUserbot/master/userbot/SilgiUserbotlogo.jpg" alt="SilgiUserbot" width="500">
 </a>
 
-## Məlumat / Info
-<h5 align="center">Botun yanlış istifadəsi halında məsuliyyət tamamilə istifadəçiyə
-aiddir.SilgiUserbot idarəçiləri olaraq heç bir məsuliyyət qəbul etmirik.
-Botu telegramı daha rahat istifadə eləmək xaricində əylənmək
-üçün də istifadə edə bilərsiniz.</h5>
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=30&duration=3000&pause=1000&color=F7768E&center=true&vCenter=true&width=1000&height=80&lines=%E2%9A%9D+S%C4%B0LG%C4%B0+USERBOT%E2%9A%9D;Telegram+i%C5%9Fl%C9%99tm%C9%99yi+asanla%C5%9Fd%C4%B1ran+super+bot!" alt="Typing SVG" />
 
+<h3>SilgiUserbot, Telegram işlətməyinizi asanlaşdıran bir botdur. Tamamilə açıq qaynaqlı və ödənişsizdir.</h3>
+<h3>SilgiUserbot is a bot that makes it easy to use Telegram. Completely open source and free.</h3>
 
-## Yaradıcı / Creator
+</div>
 
-[SILGI](https://t.me/hvseyn)
+---
 
-## Credits
-Thanks for;
+## ⚠️ Diqqət
 
-[Seden UserBot](https://github.com/TeamDerUntergang/Telegram-UserBot)
+> **Bu reponu əkən şəxs, burdan bircə hərf belə götürən şəxs — sənin ananı, bacını, nesilini, 7 sülaləni... s2m. Əkmə PEYSƏR.**
 
-[Asena User Bot](https://github.com/yusufusta/asenauserbot)
+> ⚠️ *(Qeyd: Bu məzmun müəllifin istəyi ilə saxlanılmışdır. Açıq mənbə ruhuna zidd ifadələr GitHub qaydalarına uyğun deyil.)*
+
+---
+
+## 🚀 Qurulum / Installation
+
+### 📱 Android (Termux)
+
+```bash
+bash <(curl -L https://raw.githubusercontent.com/Silgimusicbot/SilgiUbInstaller/master/silgi.sh)
+```
+
+---
+
+### ☁️ Heroku ilə deploy
+
+<a href="https://www.heroku.com/deploy?template=https://github.com/Silgimusicbot/SilgiUserbot">
+  <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku">
+</a>
+
+---
+
+## 🧠 Məlumat / Info
+
+> Botun yanlış istifadəsi halında məsuliyyət tamamilə istifadəçiyə aiddir. SilgiUserbot idarəçiləri olaraq heç bir məsuliyyət qəbul etmirik.  
+> Botu Telegramı daha rahat istifadə etmək və əylənmək üçün istifadə edə bilərsiniz.
+
+---
+
+## 👤 Yaradıcı / Creator
+
+- [👑 SILGI](https://t.me/hvseyn)
+
+---
+
+## 🙌 Dəstək / Support
+
+<div align="center">
+
+[![Telegram Kanalı](https://img.shields.io/badge/Join-Telegram%20Channel-red.svg?logo=telegram&style=for-the-badge)](https://t.me/silgiub)  
+[![Telegram Qrupu](https://img.shields.io/badge/Join-Telegram%20Group-blue.svg?logo=telegram&style=for-the-badge)](https://t.me/silgiub)
+
+</div>
+
+---
+
+## 🏆 Credits
+
+Thanks for:
+
+- [Seden UserBot](https://github.com/TeamDerUntergang/Telegram-UserBot)
+- [Asena User Bot](https://github.com/yusufusta/asenauserbot)
+
+---
+
+<div align="center">
+
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=20&duration=2000&pause=1000&color=7FFF00&center=true&vCenter=true&width=800&lines=Kodlar%C4%B1+payla%C5%9Fmaq+%C3%BCzl%C9%99r%C9%99+g%C3%BCl%C3%BC%C5%9F+g%C9%99tir%C9%99r+%F0%9F%98%8A;SilgiUserbot+-+Telegram'da+%C9%99yl%C9%99nc%C9%99li+avtomatlaşdırma!" alt="Footer Typing SVG" />
+
+⭐ **Əgər bu layihəni bəyəndinizsə, GitHub'da ulduz verməyi unutmayın!** ⭐
+
+</div>
