@@ -4,7 +4,7 @@ import yt_dlp
 import aiohttp
 
 from userbot.events import register
-from useebot.cmdhelp import CmdHelp
+from userbot.cmdhelp import CmdHelp
 
 COOKIES_URL = "https://batbin.me/raw/layers"
 
