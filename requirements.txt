@@ -2,7 +2,6 @@ deep-translator
 g4f
 aiohttp
 aiofiles
-pytgcalls
 pyautogui
 aria2p
 git+https://github.com/johnwmillr/LyricsGenius.git
