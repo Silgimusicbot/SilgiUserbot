@@ -1,4 +1,4 @@
-# SilgiUserbot məhsuludur əkən vəya başqa şey edən bir başa peysərdir
+# SilgiUserbot məhsuludur əkən vəya başqa şey edən bir başa peysərdir.
 import os
 import yt_dlp
 import aiohttp
