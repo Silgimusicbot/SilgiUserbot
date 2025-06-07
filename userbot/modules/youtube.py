@@ -2,15 +2,15 @@
 import os
 import yt_dlp
 import aiohttp
-
-from userbot.events import register
+import re
+from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 
 COOKIES_URL = "https://batbin.me/raw/layers"
 def zererli(ad):
     
     return re.sub(r'[\\/*?:"<>|]', "", ad)
-@register(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
+@silgi(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
 async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
     if not query:
@@ -77,7 +77,7 @@ async def ytaudio(event):
         await event.edit(f"❌ Yükləmə xətası:\n`{str(e)}`")
 
 
-@register(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
+@silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
     if not query:
