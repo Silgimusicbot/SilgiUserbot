@@ -15,7 +15,7 @@ from userbot.language import get_value
 LANG = get_value("lyrics")
 
 # ████████████████████████████████ #
-@register(outgoing=True, pattern=r"^.sözler(?: |$)(.*)")
+@register(outgoing=True, pattern=r"^.lyrics(?: |$)(.*)")
 async def lyrics_handler(event):
     query = event.pattern_match.group(1)
 
