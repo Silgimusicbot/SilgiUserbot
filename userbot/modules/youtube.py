@@ -42,15 +42,24 @@ async def ytaudio(event):
         'noplaylist': True,
         'quiet': True,
         'cookiefile': cookies_path,
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
+        'writethumbnail': True,  
+        'postprocessors': [
+            {  
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '0',
+            },
+            {  
+                'key': 'EmbedThumbnail',
+            },
+            {  
+                'key': 'FFmpegMetadata',
+            },
+        ],
+}
 
     try:
-        await event.edit("🎧 Mahnı endirilir...")
+        await event.edit(f"🎧`{title}` adlı mahnı endirilir...")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
@@ -62,7 +71,7 @@ async def ytaudio(event):
         await event.client.send_file(
             event.chat_id,
             file_path,
-            caption=f"🎶 `{title}`",
+            caption=f"🎶 `{title}`\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝",
             link_preview=False
         )
         await event.delete()
@@ -103,15 +112,16 @@ async def ytvideo(event):
     outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
     ydl_opts = {
-        'format': 'best',
+        'format': 'bv*+ba/best',
         'outtmpl': outtmpl,
         'noplaylist': True,
         'quiet': True,
         'cookiefile': cookies_path,
+        'merge_output_format': 'mp4',
     }
 
     try:
-        await event.edit("🎬 Video endirilir...")
+        await event.edit(f"🎬 `{title}` adlı video endirilir...")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
@@ -124,7 +134,7 @@ async def ytvideo(event):
         await event.client.send_file(
             event.chat_id,
             file_path,
-            caption=f"🎥 `{title}`",
+            caption=f"🎥 `{title}`\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝",
             supports_streaming=True,
             link_preview=False
         )
