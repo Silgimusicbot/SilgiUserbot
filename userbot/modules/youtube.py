@@ -16,7 +16,7 @@ async def ytaudio(event):
         await event.edit("ℹ️ Zəhmət olmasa link və ya mahnı adı yaz:\n`.ytmp3 Mahnı adı` və ya `.ytmp3 https://youtu.be/...`")
         return
 
-    await event.edit("🔄 Gözləyin, yükləmə hazırlanır...")
+    await event.edit("🔄 `Gözləyin, yükləmə hazırlanır...`")
 
     cookies_path = "cookies.txt"
     try:
@@ -51,7 +51,7 @@ async def ytaudio(event):
     }
 
     try:
-        await event.edit("🎧 Mahnı axtarılır...")
+        await event.edit("🎧 `Mahnı axtarılır...`")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
@@ -64,7 +64,7 @@ async def ytaudio(event):
         await event.client.send_file(
             event.chat_id,
             file_path,
-            caption=f"🎶 `{title}`\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝",
+            caption=f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```",
             link_preview=False
         )
         await event.delete()
@@ -83,7 +83,7 @@ async def ytvideo(event):
         await event.edit("ℹ️ Zəhmət olmasa link və ya video adı yaz:\n`.ytvideo Video adı` və ya `.ytvideo https://youtu.be/...`")
         return
 
-    await event.edit("🔄 Gözləyin, yükləmə hazırlanır...")
+    await event.edit("🔄 `Gözləyin, yükləmə hazırlanır...`")
 
     cookies_path = "cookies.txt"
     try:
@@ -113,7 +113,7 @@ async def ytvideo(event):
     }
 
     try:
-        await event.edit("🎬 Video axtarılır...")
+        await event.edit("🎬 `Video axtarılır...`")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
@@ -127,7 +127,7 @@ async def ytvideo(event):
         await event.client.send_file(
             event.chat_id,
             file_path,
-            caption=f"🎥 `{title}`\n⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝",
+            caption=f"🎥 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```",
             supports_streaming=True,
             link_preview=False
         )
