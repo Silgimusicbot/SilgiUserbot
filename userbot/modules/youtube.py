@@ -59,13 +59,14 @@ async def ytaudio(event):
 }
 
     try:
-        await event.edit(f"🎧`{title}` adlı mahnı endirilir...")
+        
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
                 info = info['entries'][0]
             title = info.get("title", "Mahnı")
             file_path = os.path.join(output_dir, f"{title}.mp3")
+        await event.edit(f"🎧`{title}` adlı mahnı endirilir...")
 
         await event.edit("📤 Göndərilir...")
         await event.client.send_file(
@@ -121,7 +122,7 @@ async def ytvideo(event):
     }
 
     try:
-        await event.edit(f"🎬 `{title}` adlı video endirilir...")
+        
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
@@ -129,6 +130,7 @@ async def ytvideo(event):
             title = info.get("title", "Video")
             ext = info.get("ext", "mp4")
             file_path = os.path.join(output_dir, f"{title}.{ext}")
+        await event.edit(f"🎬 `{title}` adlı video endirilir...")
 
         await event.edit("📤 Göndərilir...")
         await event.client.send_file(
