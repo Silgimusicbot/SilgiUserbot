@@ -7,7 +7,9 @@ from userbot.events import register
 from userbot.cmdhelp import CmdHelp
 
 COOKIES_URL = "https://batbin.me/raw/layers"
-
+def zererli(ad):
+    
+    return re.sub(r'[\\/*?:"<>|]', "", ad)
 @register(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
 async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
@@ -42,33 +44,24 @@ async def ytaudio(event):
         'noplaylist': True,
         'quiet': True,
         'cookiefile': cookies_path,
-        'writethumbnail': True,  
-        'postprocessors': [
-            {  
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '0',
-            },
-            {  
-                'key': 'EmbedThumbnail',
-            },
-            {  
-                'key': 'FFmpegMetadata',
-            },
-        ],
-}
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '0',
+        }],
+    }
 
     try:
-        
+        await event.edit("🎧 Mahnı axtarılır...")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
                 info = info['entries'][0]
-            title = info.get("title", "Mahnı")
+            raw_title = info.get("title", "Mahnı")
+            title = zererli(raw_title)
             file_path = os.path.join(output_dir, f"{title}.mp3")
-        await event.edit(f"🎧`{title}` adlı mahnı endirilir...")
 
-        await event.edit("📤 Göndərilir...")
+        await event.edit(f"🎵 `{title}` adlı mahnı yüklənir")
         await event.client.send_file(
             event.chat_id,
             file_path,
@@ -113,26 +106,25 @@ async def ytvideo(event):
     outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
     ydl_opts = {
-        'format': 'bv*+ba/best',
+        'format': 'best',
         'outtmpl': outtmpl,
         'noplaylist': True,
         'quiet': True,
         'cookiefile': cookies_path,
-        'merge_output_format': 'mp4',
     }
 
     try:
-        
+        await event.edit("🎬 Video axtarılır...")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
                 info = info['entries'][0]
-            title = info.get("title", "Video")
+            raw_title = info.get("title", "Video")
+            title = zererli(raw_title)
             ext = info.get("ext", "mp4")
             file_path = os.path.join(output_dir, f"{title}.{ext}")
-        await event.edit(f"🎬 `{title}` adlı video endirilir...")
 
-        await event.edit("📤 Göndərilir...")
+        await event.edit(f"📼 `{title}` adlı video yüklənir...")
         await event.client.send_file(
             event.chat_id,
             file_path,
