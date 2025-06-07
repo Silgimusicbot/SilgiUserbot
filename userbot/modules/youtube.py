@@ -8,7 +8,6 @@ from userbot.cmdhelp import CmdHelp
 
 COOKIES_URL = "https://batbin.me/raw/layers"
 def zererli(ad):
-    
     return re.sub(r'[\\/*?:"<>|]', "", ad)
 @silgi(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
 async def ytaudio(event):
