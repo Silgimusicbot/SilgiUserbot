@@ -108,40 +108,21 @@ async def ytvideo(event):
     os.makedirs(output_dir, exist_ok=True)
     outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
+    ydl_opts = {
+        'format': 'bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+        'outtmpl': outtmpl,
+        'noplaylist': True,
+        'quiet': True,
+        'cookiefile': cookies_path,
+        'merge_output_format': 'mp4',
+    }
+
     try:
-        await event.edit("🎬 `Video axtarılır...`")
-
-        ydl_opts_info = {
-            'quiet': True,
-            'cookiefile': cookies_path,
-        }
-        with yt_dlp.YoutubeDL(ydl_opts_info) as ydl:
-            info = ydl.extract_info(search_term, download=False)
-            if 'entries' in info:
-                info = info['entries'][0]
-
-            formats = info.get('formats', [])
-            progressive = None
-            for f in formats:
-                if f.get("vcodec", "none") != "none" and f.get("acodec", "none") != "none" and f["ext"] == "mp4":
-                    progressive = f["format_id"]
-                    break
-
-            if not progressive:
-                await event.edit("❌ `MP4 format tapılmadı.`")
-                return
-
-        ydl_opts = {
-            'format': progressive,
-            'outtmpl': outtmpl,
-            'noplaylist': True,
-            'quiet': True,
-            'cookiefile': cookies_path,
-        }
-
-   
+        await event.edit("🎬 `Video yüklənir...`")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(search_term, download=True)
+            if 'entries' in info:
+                info = info['entries'][0]
             raw_title = info.get("title", "Video")
             title = zererli(raw_title)
             ext = info.get("ext", "mp4")
@@ -156,6 +137,7 @@ async def ytvideo(event):
             link_preview=False
         )
         await event.delete()
+
         os.remove(file_path)
         os.remove(cookies_path)
 
