@@ -7,8 +7,21 @@ from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 
 COOKIES_URL = "https://batbin.me/raw/layers"
+
 def zererli(ad):
     return re.sub(r'[\\/*!?:"<>|]', "", ad)
+
+async def get_cookies_file():
+    cookies_path = "cookies.txt"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(COOKIES_URL) as resp:
+            if resp.status != 200:
+                return None, f"❌ `cookies.txt` yüklənə bilmədi. Status: {resp.status}"
+            text = await resp.text()
+            with open(cookies_path, "w", encoding="utf-8") as f:
+                f.write(text)
+    return cookies_path, None
+
 @silgi(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
 async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
@@ -18,18 +31,9 @@ async def ytaudio(event):
 
     await event.edit("🔄 `Gözləyin, yükləmə hazırlanır...`")
 
-    cookies_path = "cookies.txt"
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(COOKIES_URL) as resp:
-                if resp.status != 200:
-                    await event.edit("❌ `cookies.txt` yüklənə bilmədi.")
-                    return
-                text = await resp.text()
-                with open(cookies_path, "w", encoding="utf-8") as f:
-                    f.write(text)
-    except Exception as e:
-        await event.edit(f"⚠️ cookies yükləmə xətası:\n`{e}`")
+    cookies_path, error = await get_cookies_file()
+    if error:
+        await event.edit(error)
         return
 
     search_term = query if query.startswith("http") else f"ytsearch1:{query}"
@@ -38,7 +42,7 @@ async def ytaudio(event):
     outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
     ydl_opts = {
-        'format': 'bestaudio/best',
+        'format': 'bestaudio',
         'outtmpl': outtmpl,
         'noplaylist': True,
         'quiet': True,
@@ -46,7 +50,7 @@ async def ytaudio(event):
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
-            'preferredquality': '0',
+            'preferredquality': '192',
         }],
     }
 
@@ -68,13 +72,13 @@ async def ytaudio(event):
             link_preview=False
         )
         await event.delete()
-
-        os.remove(file_path)
-        os.remove(cookies_path)
-
     except Exception as e:
         await event.edit(f"❌ Yükləmə xətası:\n`{str(e)}`")
-
+    finally:
+        if os.path.exists(cookies_path):
+            os.remove(cookies_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
@@ -85,18 +89,9 @@ async def ytvideo(event):
 
     await event.edit("🔄 `Gözləyin, yükləmə hazırlanır...`")
 
-    cookies_path = "cookies.txt"
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(COOKIES_URL) as resp:
-                if resp.status != 200:
-                    await event.edit("❌ `cookies.txt` yüklənə bilmədi.")
-                    return
-                text = await resp.text()
-                with open(cookies_path, "w", encoding="utf-8") as f:
-                    f.write(text)
-    except Exception as e:
-        await event.edit(f"⚠️ cookies yükləmə xətası:\n`{e}`")
+    cookies_path, error = await get_cookies_file()
+    if error:
+        await event.edit(error)
         return
 
     search_term = query if query.startswith("http") else f"ytsearch1:{query}"
@@ -105,11 +100,12 @@ async def ytvideo(event):
     outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
     ydl_opts = {
-        'format': 'best',
+        'format': 'bv+ba/b',
         'outtmpl': outtmpl,
         'noplaylist': True,
         'quiet': True,
         'cookiefile': cookies_path,
+        'merge_output_format': 'mp4'
     }
 
     try:
@@ -132,12 +128,13 @@ async def ytvideo(event):
             link_preview=False
         )
         await event.delete()
-
-        os.remove(file_path)
-        os.remove(cookies_path)
-
     except Exception as e:
         await event.edit(f"❌ Yükləmə xətası:\n`{str(e)}`")
+    finally:
+        if os.path.exists(cookies_path):
+            os.remove(cookies_path)
+        if os.path.exists(file_path):
+            os.remove(file_path)
 CmdHelp("youtube").add_command(
     "ytmp3", "mahnı adı vəya link", "Youtube dən mahnı yükləyir."
 ).add_command(
