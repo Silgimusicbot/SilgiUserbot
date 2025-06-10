@@ -89,9 +89,18 @@ async def ytvideo(event):
 
     await event.edit("🔄 `Gözləyin, yükləmə hazırlanır...`")
 
-    cookies_path, error = await get_cookies_file()
-    if error:
-        await event.edit(error)
+    cookies_path = "cookies.txt"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(COOKIES_URL) as resp:
+                if resp.status != 200:
+                    await event.edit("❌ `cookies.txt` yüklənə bilmədi.")
+                    return
+                text = await resp.text()
+                with open(cookies_path, "w", encoding="utf-8") as f:
+                    f.write(text)
+    except Exception as e:
+        await event.edit(f"⚠️ cookies yükləmə xətası:\n`{e}`")
         return
 
     search_term = query if query.startswith("http") else f"ytsearch1:{query}"
@@ -99,21 +108,40 @@ async def ytvideo(event):
     os.makedirs(output_dir, exist_ok=True)
     outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
-    ydl_opts = {
-        'format': 'best[ext=mp4]/best',
-        'outtmpl': outtmpl,
-        'noplaylist': True,
-        'quiet': True,
-        'cookiefile': cookies_path,
-        'merge_output_format': 'mp4'
-    }
-
     try:
         await event.edit("🎬 `Video axtarılır...`")
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(search_term, download=True)
+
+        ydl_opts_info = {
+            'quiet': True,
+            'cookiefile': cookies_path,
+        }
+        with yt_dlp.YoutubeDL(ydl_opts_info) as ydl:
+            info = ydl.extract_info(search_term, download=False)
             if 'entries' in info:
                 info = info['entries'][0]
+
+            formats = info.get('formats', [])
+            progressive = None
+            for f in formats:
+                if f.get("vcodec", "none") != "none" and f.get("acodec", "none") != "none" and f["ext"] == "mp4":
+                    progressive = f["format_id"]
+                    break
+
+            if not progressive:
+                await event.edit("❌ `MP4 format tapılmadı.`")
+                return
+
+        ydl_opts = {
+            'format': progressive,
+            'outtmpl': outtmpl,
+            'noplaylist': True,
+            'quiet': True,
+            'cookiefile': cookies_path,
+        }
+
+   
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(search_term, download=True)
             raw_title = info.get("title", "Video")
             title = zererli(raw_title)
             ext = info.get("ext", "mp4")
@@ -128,13 +156,11 @@ async def ytvideo(event):
             link_preview=False
         )
         await event.delete()
+        os.remove(file_path)
+        os.remove(cookies_path)
+
     except Exception as e:
         await event.edit(f"❌ Yükləmə xətası:\n`{str(e)}`")
-    finally:
-        if os.path.exists(cookies_path):
-            os.remove(cookies_path)
-        if os.path.exists(file_path):
-            os.remove(file_path)
 CmdHelp("youtube").add_command(
     "ytmp3", "mahnı adı vəya link", "Youtube dən mahnı yükləyir."
 ).add_command(
