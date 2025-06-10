@@ -100,7 +100,7 @@ async def ytvideo(event):
     outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
     ydl_opts = {
-        'format': 'bv+ba/b',
+        'format': 'best[ext=mp4]/best',
         'outtmpl': outtmpl,
         'noplaylist': True,
         'quiet': True,
