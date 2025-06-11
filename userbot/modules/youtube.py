@@ -39,14 +39,13 @@ async def ytaudio(event):
     search_term = query if query.startswith("http") else f"ytsearch1:{query}"
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
-    outtmpl = os.path.join(output_dir, "%(title)s.%(ext)s")
 
     ydl_opts = {
         'format': 'bestaudio',
-        'outtmpl': outtmpl,
         'noplaylist': True,
         'quiet': True,
         'cookiefile': cookies_path,
+        'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -60,14 +59,25 @@ async def ytaudio(event):
             info = ydl.extract_info(search_term, download=True)
             if 'entries' in info:
                 info = info['entries'][0]
+
             raw_title = info.get("title", "Mahnı")
             title = zererli(raw_title)
-            file_path = os.path.join(output_dir, f"{title}.mp3")
+
+            downloaded_path = ydl.prepare_filename(info)
+            mp3_path = os.path.splitext(downloaded_path)[0] + ".mp3"
+
+            # Faylın adını təmiz adla dəyiş
+            final_path = os.path.join(output_dir, f"{title}.mp3")
+            if os.path.exists(mp3_path):
+                os.rename(mp3_path, final_path)
+            else:
+                await event.edit("❌ `MP3 faylı tapılmadı.`")
+                return
 
         await event.edit(f"🎵 `{title}` adlı mahnı yüklənir")
         await event.client.send_file(
             event.chat_id,
-            file_path,
+            final_path,
             caption=f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```",
             link_preview=False
         )
@@ -77,9 +87,8 @@ async def ytaudio(event):
     finally:
         if os.path.exists(cookies_path):
             os.remove(cookies_path)
-        if os.path.exists(file_path):
-            os.remove(file_path)
-
+        if 'final_path' in locals() and os.path.exists(final_path):
+            os.remove(final_path)
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
