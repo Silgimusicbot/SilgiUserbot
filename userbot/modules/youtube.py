@@ -65,8 +65,6 @@ async def ytaudio(event):
 
             downloaded_path = ydl.prepare_filename(info)
             mp3_path = os.path.splitext(downloaded_path)[0] + ".mp3"
-
-            # Faylın adını təmiz adla dəyiş
             final_path = os.path.join(output_dir, f"{title}.mp3")
             if os.path.exists(mp3_path):
                 os.rename(mp3_path, final_path)
