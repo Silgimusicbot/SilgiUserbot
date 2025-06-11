@@ -16,5 +16,5 @@ RUN git clone https://github.com/Silgimusicbot/SilgiUserbot /root/SilgiUserbot
 WORKDIR /root/SilgiUserbot/
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
-
+RUN python -m playwright install chromium
 CMD ["python3", "main.py"]
