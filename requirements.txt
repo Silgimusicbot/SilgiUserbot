@@ -3,6 +3,7 @@ g4f
 aiohttp
 aiofiles
 pyautogui
+playwright
 aria2p
 git+https://github.com/johnwmillr/LyricsGenius.git
 lyricsgenius
