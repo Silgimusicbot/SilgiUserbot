@@ -1,44 +1,26 @@
 FROM python:3.11
 RUN apt-get update && apt-get install -y \
-    libxml2-dev \
-    libxslt-dev \
-    zlib1g-dev \
-    ffmpeg \
-    gcc \
     wget \
     gnupg \
     ca-certificates \
     libnss3 \
-    libnspr4 \
     libatk1.0-0 \
     libatk-bridge2.0-0 \
     libcups2 \
-    libatspi2.0-0 \
     libxcomposite1 \
     libxdamage1 \
-    libgtk-4-1 \
-    libgstreamer1.0-0 \
-    libgraphene-1.0-0 \
-    libwoff1 \
-    libwoff2-1 \
-    libwoff2dec0 \
-    libgstallocators-1.0-0 \
-    libgstapp-1.0-0 \
-    libgstbase-1.0-0 \
-    libgstpbutils-1.0-0 \
-    libgstaudio-1.0-0 \
-    libgsttag-1.0-0 \
-    libgstvideo-1.0-0 \
-    libgstgl-1.0-0 \
-    libgstcodecparsers-1.0-0 \
-    libgstfft-1.0-0 \
-    libavif15 \
-    libharfbuzz-icu0 \
-    libenchant-2-2 \
-    libsecret-1-0 \
-    libhyphen0 \
-    libmanette-0.2-0 \
-    libgles2 \
+    libxrandr2 \
+    libgbm1 \
+    libgtk-3-0 \
+    libasound2 \
+    libxshmfence1 \
+    libx11-xcb1 \
+    libdrm2 \
+    libxfixes3 \
+    libxext6 \
+    libxrender1 \
+    libxi6 \
+    ffmpeg \
     && apt-get clean
 RUN pip install --upgrade pip
 RUN pip install lxml
