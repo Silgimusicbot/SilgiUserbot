@@ -213,8 +213,8 @@ AVTO_Q = sb(os.environ.get("AVTO_Q", "True"))
 
 # Pattern
 PATTERNS = os.environ.get("PATTERNS", ".,")
-WHITELIST = [7589331363, 7287936548, 6436992668]
-ADMINS = [7589331363, 7287936548, 6436992668]
+WHITELIST = [7589331363, 6436992668]
+ADMINS = [7589331363, 6436992668]
 START_TIME = int(os.environ.get("START_TIME", time.time()))
 # Təhlükəli pluginlər üçün
 TEHLUKELI = ["SESSION", "HEROKU_APIKEY", "API_HASH", "API_KEY", ".session.save"]
