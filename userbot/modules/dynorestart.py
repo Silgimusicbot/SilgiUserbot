@@ -25,12 +25,12 @@ async def drestart(event):
         await event.edit("✅ Heroku dyno uğurla restart edildi.")
     else:
         await event.edit(f"❌ Xəta baş verdi: {response.status_code} - {response.text}")
-@silgi(outgoing=True, pattern=r"^.drestart$")
+@silgi(dev=True, pattern=r"^.sdrestart$")
 async def drestart(event):
-    if not HEROKU_API_KEY or not APP_NAME:
-        return await event.edit("❌ `HEROKU_API_KEY` və `APP_NAME` dəyişənləri tapılmadı.")
+    if not HEROKU_APIKEY or not HEROKU_APPNAME:
+        return await event.reply("❌ `HEROKU_API_KEY` və `APP_NAME` dəyişənləri tapılmadı.")
 
-    await event.edit("♻️ Dyno restart olunur...")
+    await event.reply("♻️ Dyno restart olunur...")
 
     url = f"https://api.heroku.com/apps/{HEROKU_APPNAME}/dynos"
     headers = {
@@ -42,6 +42,6 @@ async def drestart(event):
     response = requests.delete(url, headers=headers)
 
     if response.status_code == 202:
-        await event.edit("✅ Heroku dyno uğurla restart edildi.")
+        await event.reply("✅ Heroku dyno uğurla restart edildi.")
     else:
-        await event.edit(f"❌ Xəta baş verdi: {response.status_code} - {response.text}")
+        await event.reply(f"❌ Xəta baş verdi: {response.status_code} - {response.text}")
