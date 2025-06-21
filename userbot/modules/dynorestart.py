@@ -7,7 +7,7 @@ from userbot import HEROKU_APIKEY, HEROKU_APPNAME
 
 @silgi(outgoing=True, pattern=r"^.drestart$")
 async def drestart(event):
-    if not HEROKU_API_KEY or not APP_NAME:
+    if not HEROKU_APIKEY or not HEROKU_APPNAME:
         return await event.edit("❌ `HEROKU_API_KEY` və `APP_NAME` dəyişənləri tapılmadı.")
 
     await event.edit("♻️ Dyno restart olunur...")
