@@ -2,6 +2,7 @@ deep-translator
 g4f
 aiohttp
 aiofiles
+moviepy
 pyautogui
 playwright
 aria2p
