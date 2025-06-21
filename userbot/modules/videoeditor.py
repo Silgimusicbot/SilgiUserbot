@@ -1,6 +1,6 @@
 from userbot.events import register
 from userbot.cmdhelp import CmdHelp
-from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip, ColorClip
+from moviepy import VideoFileClip, TextClip, CompositeVideoClip, ColorClip
 import os
 
 @register(outgoing=True, pattern=r"^.captionvideo (.+)")
