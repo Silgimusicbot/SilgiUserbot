@@ -42,6 +42,6 @@ async def drestart(event):
     response = requests.delete(url, headers=headers)
 
     if response.status_code == 202:
-        await event.reply("✅ Heroku dyno uğurla restart edildi.")
+        await event.edit("✅ Heroku dyno uğurla restart edildi.")
     else:
-        await event.reply(f"❌ Xəta baş verdi: {response.status_code} - {response.text}")
+        await event.edit(f"❌ Xəta baş verdi: {response.status_code} - {response.text}")
