@@ -10,7 +10,7 @@ async def captionvideo(event):
         return await event.edit("❌ Zəhmət olmasa, videoya cavab verərək `.captionvideo <yazı>` yazın.")
 
     video_path = await reply.download_media()
-    if not video_path.endswith(('.mp4', '.mkv', '.mov')):
+    if not reply.document and not reply.video:
         return await event.edit("❌ Cavab verilən fayl video olmalıdır!")
 
     text = event.pattern_match.group(1).strip()
@@ -54,9 +54,8 @@ async def cutvideo(event):
     end_time = int(event.pattern_match.group(2))
 
     video_path = await reply.download_media()
-    if not video_path.endswith(('.mp4', '.mkv', '.mov')):
+    if not reply.document and not reply.video:
         return await event.edit("❌ Cavab verilən fayl video olmalıdır!")
-
     await event.edit("✂️ Video kəsilir...")
 
     try:
