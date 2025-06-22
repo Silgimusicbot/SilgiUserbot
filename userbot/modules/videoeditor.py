@@ -45,7 +45,7 @@ async def captionvideo(event):
         if output_path and os.path.exists(output_path):
             os.remove(output_path)
 
-@register(outgoing=True, pattern=r"^.cutvideo (\d+) (\d+)")
+@silgi(outgoing=True, pattern=r"^.cutvideo (\d+) (\d+)")
 async def cutvideo(event):
     reply = await event.get_reply_message()
     if not reply or not reply.media:
