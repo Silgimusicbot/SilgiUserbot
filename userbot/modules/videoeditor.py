@@ -1,9 +1,9 @@
-from userbot.events import register
+from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 from moviepy import VideoFileClip, TextClip, CompositeVideoClip, ColorClip
 import os
 
-@register(outgoing=True, pattern=r"^.captionvideo (.+)")
+@silgi(outgoing=True, pattern=r"^.captionvideo (.+)")
 async def captionvideo(event):
     reply = await event.get_reply_message()
     if not reply or not reply.media:
@@ -16,10 +16,12 @@ async def captionvideo(event):
     text = event.pattern_match.group(1).strip()
     await event.edit("🎬 Video üzərinə yazı əlavə olunur...")
 
+    output_path = None  
+
     try:
         videoclip = VideoFileClip(video_path)
 
-        txt_clip = (TextClip(text, fontsize=40, color='white', font='Arial-Bold', stroke_color='black', stroke_width=2)
+        txt_clip = (TextClip(text, fontsize=40, color='white', stroke_color='black', stroke_width=2)
                     .set_position('center')
                     .set_duration(videoclip.duration))
 
@@ -40,9 +42,8 @@ async def captionvideo(event):
     finally:
         if os.path.exists(video_path):
             os.remove(video_path)
-        if os.path.exists(output_path):
+        if output_path and os.path.exists(output_path):
             os.remove(output_path)
-
 
 @register(outgoing=True, pattern=r"^.cutvideo (\d+) (\d+)")
 async def cutvideo(event):
