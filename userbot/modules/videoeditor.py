@@ -16,12 +16,12 @@ async def captionvideo(event):
     text = event.pattern_match.group(1).strip()
     await event.edit("🎬 Video üzərinə yazı əlavə olunur...")
 
-    output_path = None  
+    output_path = None
 
     try:
         videoclip = VideoFileClip(video_path)
 
-        txt_clip = (TextClip(text, fontsize=40, color='white', stroke_color='black', stroke_width=2)
+        txt_clip = (TextClip(text, fontsize=40, color='white', method="caption")
                     .set_position('center')
                     .set_duration(videoclip.duration))
 
@@ -37,6 +37,7 @@ async def captionvideo(event):
 
         await event.client.send_file(event.chat_id, output_path, reply_to=reply.id)
         await event.delete()
+
     except Exception as e:
         await event.edit(f"❌ Xəta baş verdi: {str(e)}")
     finally:
