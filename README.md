@@ -5,7 +5,7 @@
   <img src="https://raw.githubusercontent.com/Silgimusicbot/SilgiUserbot/master/userbot/SilgiUserbotlogo.jpg" alt="SilgiUserbot" width="500">
 </a>
 
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=60&duration=3000&pause=1000&color=F7768E&center=true&vCenter=true&width=1000&height=80&lines=%E2%9A%9D+S%C4%B0LG%C4%B0+USERBOT%E2%9A%9D;Telegram+i%C5%9Fl%C9%99tm%C9%99yi+asanla%C5%9Fd%C4%B1ran+super+bot!" alt="Typing SVG" />
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=40&duration=3000&pause=1000&color=F7768E&center=true&vCenter=true&width=1000&height=80&lines=%E2%9A%9D+S%C4%B0LG%C4%B0+USERBOT%E2%9A%9D;Telegram+i%C5%9Fl%C9%99tm%C9%99yi+asanla%C5%9Fd%C4%B1ran+super+bot!" alt="Typing SVG" />
 
 <h3>SilgiUserbot, Telegram işlətməyinizi asanlaşdıran bir botdur. Tamamilə açıq qaynaqlı və ödənişsizdir.</h3>
 <h3>SilgiUserbot is a bot that makes it easy to use Telegram. Completely open source and free.</h3>
