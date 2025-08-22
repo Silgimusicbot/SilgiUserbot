@@ -6,7 +6,7 @@ import re
 from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 
-COOKIES_URL = "https://batbin.me/raw/platydolichocephalic"
+COOKIES_URL = "https://batbin.me/raw/toggle"
 
 def zererli(ad):
     return re.sub(r'[\\/*!?:"<>|]', "", ad)
