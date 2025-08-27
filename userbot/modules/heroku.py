@@ -91,49 +91,15 @@ async def variable(var):
             return True
 
 @register(outgoing=True,
-          pattern=r"^.(get|del) var(?: |$)(\w*)")
+          pattern=r"^.del var(?: |$)(\w*)")
 async def variable(var):
     exe = var.pattern_match.group(1)
     if app is None:
         await var.edit("`[HEROKU]"
                        "\n**HEROKU_APPNAME** quraşdırın.")
         return False
-    if exe == "get":
-        await var.edit("`Məlumatlar gətiririlir..`")
-        variable = var.pattern_match.group(2)
-        if variable != '':
-            if variable in heroku_var:
-                if BOTLOG:
-                    await var.client.send_message(
-                        BOTLOG_CHATID, "#CONFIGVAR\n\n"
-                        "**ConfigVar**:\n"
-                        f"`{variable}` = `{heroku_var[variable]}`\n"
-                    )
-                    await var.edit("`BOTLOG qrupuna göndərildi...`")
-                    return True
-                else:
-                    await var.edit("`Zəhmət olmasa BOTLOG 'u True olaraq təyin edin...`")
-                    return False
-            else:
-                await var.edit("`Məlumatlar yoxdu...`")
-                return True
-        else:
-            configvars = heroku_var.to_dict()
-            if BOTLOG:
-                msg = ''
-                for item in configvars:
-                    msg += f"`{item}` = `{configvars[item]}`\n"
-                await var.client.send_message(
-                    BOTLOG_CHATID, "#CONFIGVARS\n\n"
-                    "**ConfigVars**:\n"
-                    f"{msg}"
-                )
-                await var.edit("`BOTLOG_CHATID alındı...`")
-                return True
-            else:
-                await var.edit("`Zəhmət olmasa BOTLOG 'u True olaraq təyin edin`")
-                return False
-    elif exe == "del":
+   
+    if exe == "del":
         await var.edit("`Məlumatlar silinir...`")
         variable = var.pattern_match.group(2)
         if variable == '':
