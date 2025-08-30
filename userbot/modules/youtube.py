@@ -46,7 +46,7 @@ async def ytaudio(event):
         "noplaylist": True,
         "cookiefile": cookies_path,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "writethumbnail": True,      # thumbnail endir
+        "writethumbnail": True,    
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -54,7 +54,7 @@ async def ytaudio(event):
                 "preferredquality": "192",
             },
             {"key": "FFmpegMetadata"},
-            {"key": "EmbedThumbnail"},   # thumbnail avtomatik mp3-ə əlavə olunur
+            {"key": "EmbedThumbnail"},  
         ],
         "postprocessor_args": ["-id3v2_version", "3"],
         "quiet": True,
