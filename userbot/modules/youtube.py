@@ -4,6 +4,7 @@ import yt_dlp
 import aiohttp
 import re
 import asyncio
+import subprocess
 from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 
@@ -46,9 +47,8 @@ async def ytaudio(event):
         'noplaylist': True,
         'cookiefile': cookies_path,
         'outtmpl': os.path.join(output_dir, '%(title).50s.%(ext)s'),
-        'writethumbnail': True,          # thumbnail yüklə
-        'embedthumbnail': True,          # mp3-ə əlavə et
-        'prefer_ffmpeg': True,
+        'writethumbnail': True,   # thumbnail endir
+        'quiet': True,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
@@ -56,16 +56,13 @@ async def ytaudio(event):
                 'preferredquality': '192',
             },
             {
-                'key': 'EmbedThumbnail',  # qapaq fotonu əlavə et
-            },
-            {
-                'key': 'FFmpegMetadata',  # metadata yaz
+                'key': 'FFmpegMetadata',
             },
         ],
-        'quiet': True,
     }
 
     mp3_path = None
+    thumb_path = None
     try:
         await event.edit("🎧 `Mahnı axtarılır...`")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -78,12 +75,30 @@ async def ytaudio(event):
 
             downloaded_path = ydl.prepare_filename(info)
             mp3_path = os.path.splitext(downloaded_path)[0] + ".mp3"
+            thumb_path = os.path.splitext(downloaded_path)[0] + ".webp"
 
             if not os.path.exists(mp3_path):
                 await event.edit("❌ `MP3 faylı tapılmadı.`")
                 return
 
-        await event.edit(f"🎵 `{title}` adlı mahnı göndərilir (qapaq fotosu ilə)...")
+            # Thumbnail varsa webp → jpg konvert et
+            if os.path.exists(thumb_path):
+                jpg_path = os.path.splitext(thumb_path)[0] + ".jpg"
+                subprocess.run(["ffmpeg", "-y", "-i", thumb_path, jpg_path],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                if os.path.exists(jpg_path):
+                    # mp3 faylına cover əlavə et
+                    subprocess.run([
+                        "ffmpeg", "-y", "-i", mp3_path, "-i", jpg_path,
+                        "-map", "0", "-map", "1", "-c", "copy",
+                        "-id3v2_version", "3",
+                        "-metadata:s:v", "title=Album cover",
+                        "-metadata:s:v", "comment=Cover (front)",
+                        mp3_path + ".tmp"
+                    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    os.replace(mp3_path + ".tmp", mp3_path)
+
+        await event.edit(f"🎵 `{title}` adlı mahnı göndərilir...")
         await event.client.send_file(
             event.chat_id,
             mp3_path,
@@ -100,6 +115,9 @@ async def ytaudio(event):
             os.remove(cookies_path)
         if mp3_path and os.path.exists(mp3_path):
             os.remove(mp3_path)
+        if thumb_path and os.path.exists(thumb_path):
+            os.remove(thumb_path)
+
 
 
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
