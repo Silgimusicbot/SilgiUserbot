@@ -5,7 +5,6 @@ import aiohttp
 import re
 import asyncio
 from userbot.events import register as silgi
-from userbot.cmdhelp import CmdHelp
 
 COOKIES_URL = "https://batbin.me/raw/toggle"
 
@@ -46,6 +45,9 @@ async def ytaudio(event):
         'noplaylist': True,
         'cookiefile': cookies_path,
         'outtmpl': os.path.join(output_dir, '%(title).50s.%(ext)s'),
+        'writethumbnail': True,          # thumbnail yüklə
+        'embedthumbnail': True,          # mp3-ə əlavə et
+        'prefer_ffmpeg': True,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
@@ -53,13 +55,12 @@ async def ytaudio(event):
                 'preferredquality': '192',
             },
             {
-                'key': 'EmbedThumbnail',
+                'key': 'EmbedThumbnail',  # qapaq fotonu əlavə et
             },
             {
-                'key': 'FFmpegMetadata',
+                'key': 'FFmpegMetadata',  # metadata yaz
             },
         ],
-        'writethumbnail': True,
         'quiet': True,
     }
 
@@ -81,7 +82,7 @@ async def ytaudio(event):
                 await event.edit("❌ `MP3 faylı tapılmadı.`")
                 return
 
-        await event.edit(f"🎵 `{title}` adlı mahnı göndərilir...")
+        await event.edit(f"🎵 `{title}` adlı mahnı göndərilir (qapaq fotosu ilə)...")
         await event.client.send_file(
             event.chat_id,
             mp3_path,
@@ -98,6 +99,7 @@ async def ytaudio(event):
             os.remove(cookies_path)
         if mp3_path and os.path.exists(mp3_path):
             os.remove(mp3_path)
+
 
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
