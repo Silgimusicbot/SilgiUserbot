@@ -3,6 +3,7 @@ g4f
 aiohttp
 aiofiles
 moviepy
+mutagen
 pyautogui
 playwright
 aria2p
