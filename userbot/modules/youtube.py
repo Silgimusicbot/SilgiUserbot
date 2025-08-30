@@ -3,13 +3,14 @@ import os
 import yt_dlp
 import aiohttp
 import re
+import asyncio
 from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 
 COOKIES_URL = "https://batbin.me/raw/toggle"
 
 def zererli(ad):
-    return re.sub(r'[\\/*!?:"<>|]', "", ad)
+    return re.sub(r'[\\/*?:"<>|]', "", ad)
 
 async def get_cookies_file():
     cookies_path = "cookies.txt"
@@ -43,20 +44,30 @@ async def ytaudio(event):
     ydl_opts = {
         'format': 'bestaudio',
         'noplaylist': True,
-        'quiet': True,
         'cookiefile': cookies_path,
-        'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
+        'outtmpl': os.path.join(output_dir, '%(title).50s.%(ext)s'),
+        'postprocessors': [
+            {
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            },
+            {
+                'key': 'EmbedThumbnail',
+            },
+            {
+                'key': 'FFmpegMetadata',
+            },
+        ],
+        'writethumbnail': True,
+        'quiet': True,
     }
 
+    mp3_path = None
     try:
         await event.edit("🎧 `Mahnı axtarılır...`")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(search_term, download=True)
+            info = await asyncio.to_thread(ydl.extract_info, search_term, download=True)
             if 'entries' in info:
                 info = info['entries'][0]
 
@@ -65,28 +76,29 @@ async def ytaudio(event):
 
             downloaded_path = ydl.prepare_filename(info)
             mp3_path = os.path.splitext(downloaded_path)[0] + ".mp3"
-            final_path = os.path.join(output_dir, f"{title}.mp3")
-            if os.path.exists(mp3_path):
-                os.rename(mp3_path, final_path)
-            else:
+
+            if not os.path.exists(mp3_path):
                 await event.edit("❌ `MP3 faylı tapılmadı.`")
                 return
 
-        await event.edit(f"🎵 `{title}` adlı mahnı yüklənir")
+        await event.edit(f"🎵 `{title}` adlı mahnı göndərilir...")
         await event.client.send_file(
             event.chat_id,
-            final_path,
+            mp3_path,
             caption=f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```",
             link_preview=False
         )
         await event.delete()
+
     except Exception as e:
         await event.edit(f"❌ Yükləmə xətası:\n`{str(e)}`")
+
     finally:
         if os.path.exists(cookies_path):
             os.remove(cookies_path)
-        if 'final_path' in locals() and os.path.exists(final_path):
-            os.remove(final_path)
+        if mp3_path and os.path.exists(mp3_path):
+            os.remove(mp3_path)
+
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
