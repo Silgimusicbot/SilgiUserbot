@@ -24,14 +24,14 @@ async def magaza(event):
     split = plugin.split()
     if plugin == '':
         plugin = 'Son yüklənən'
-        plugins = await event.client.get_messages('@silgiubplugin', limit=15, filter=InputMessagesFilterDocument)
+        plugins = await event.client.get_messages('@silgiuserbotplugin', limit=15, filter=InputMessagesFilterDocument)
     elif len(split) >= 1 and (split[0] == 'random' or split[0] == 'rastgele'):
         plugin = 'Təsadufi'
-        plugins = await event.client.get_messages('@silgiubplugin', limit=None, filter=InputMessagesFilterDocument)
+        plugins = await event.client.get_messages('@silgiuserbotplugin', limit=None, filter=InputMessagesFilterDocument)
         plugins = sample(plugins, int(split[1]) if len(split) == 2 else 5)
     else:
-        plugins = await event.client.get_messages('@silgiubplugin', limit=None, search=plugin, filter=InputMessagesFilterDocument)
-        random = await event.client.get_messages('@silgiubplugin', limit=None, filter=InputMessagesFilterDocument)
+        plugins = await event.client.get_messages('@silgiuserbotplugin', limit=None, search=plugin, filter=InputMessagesFilterDocument)
+        random = await event.client.get_messages('@silgiuserbotplugin', limit=None, filter=InputMessagesFilterDocument)
         random = choice(random)
         random_file = random.file.name
 
@@ -65,7 +65,7 @@ async def sinstall(event):
         return await event.edit('**[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](@silgiub) Plugin Mağazası**\n__Versiya 2.3__\n\n**⚠️ Xəta:** `Xaiş sadəcə rəqəm yazın. Əgəe Plugin axtarmaq istəyirsizsə .store əmrini işlədin.`')
     
     await event.edit('**[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](@silgiub) Plugin Mağazası**\n\n`🔎 Plugin\'i gətirirəm... Xaiş biraz gözlə.`')
-    plugin = await event.client.get_messages('@silgiubplugin', ids=plugin)
+    plugin = await event.client.get_messages('@silgiuserbotplugin', ids=plugin)
     await event.edit(f'**[⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝](@silgiub) Plugin Mağazası**\n\n`✅ {plugin.file.name} plugini gətirildi!`\n`⬇️ Plugini yükləyirəm... Xaiş gözləyin.`')
     dosya = await plugin.download_media('./userbot/modules/')
     await event.client.send_file("me", dosya)
