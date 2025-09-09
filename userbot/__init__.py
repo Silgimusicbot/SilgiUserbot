@@ -317,7 +317,7 @@ with bot:
             bot(JoinChannelRequest("@silgiub"))
             bot(JoinChannelRequest("@silgiuserbots"))
             bot(JoinChannelRequest("@silgiuserbotchat"))
-            bot(JoinChannelRequest("@silgiubplugin"))
+            bot(JoinChannelRequest("@silgiuserbotplugin"))
             
             
         except:
