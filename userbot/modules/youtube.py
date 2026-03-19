@@ -73,7 +73,7 @@ def build_common_ydl_opts(output_dir: str, cookies_path: str | None):
 
     return opts
 
-@silgi(outgoing=True, pattern=r"\\.ytmp3(?: |$)(.*)")
+@silgi(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
 async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
     if not query:
@@ -127,7 +127,7 @@ async def ytaudio(event):
         if file_path and os.path.exists(file_path):
             os.remove(file_path)
 
-@silgi(outgoing=True, pattern=r"\\.ytvideo(?: |$)(.*)")
+@silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
     if not query:
