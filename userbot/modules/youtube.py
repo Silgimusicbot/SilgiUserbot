@@ -1,15 +1,38 @@
-    ytaudio = { 'format': 'ba/b', ... }  # Change ytaudio ydl_opts format
-    # other existing lines
+import yt_dlp
 
-    extractor_args = {'youtube': {'player_client': ['web']}}  # Change extractor_args youtube player_client
-    # other existing lines
+class YouTubeDownloader:
+    def __init__(self):
+        self.ydl_opts_ytaudio = {
+            'format': 'ba/b',
+        }
+        self.extractor_args = {
+            'player_client': ['web'],
+            'player_skip': True
+        }
+        self.ydl_opts_ytvideo = {
+            'format': 'bv*+ba/b',
+            'merge_output_format': 'mp4',
+        }
 
-    ytvideo = { 'format': 'bv*+ba/b', ... }  # Change ytvideo ydl_opts format
-    # other existing lines
+    def download_audio(self, url):
+        try:
+            with yt_dlp.YoutubeDL(self.ydl_opts_ytaudio) as ydl:
+                ydl.download([url])
+        except Exception as e:
+            if 'Requested format is not available' in str(e):
+                raise Exception('The requested audio format is not available. Please check the availability of the requested format.')
+            raise
 
-    try:
-        # existing code
-    except Exception as e:
-        if 'Requested format is not available' in str(e):
-            # existing exception handling
-            print('Başqa bir bağlantı ya da axtarış etməyə çalışın.');  # Append Azerbaijani hint
+    def download_video(self, url):
+        try:
+            with yt_dlp.YoutubeDL(self.ydl_opts_ytvideo) as ydl:
+                ydl.download([url])
+        except Exception as e:
+            if 'Requested format is not available' in str(e):
+                raise Exception('The requested video format is not available. Please check the availability of the requested format.')
+            raise
+
+# Example usage:
+# downloader = YouTubeDownloader()
+# downloader.download_audio('video_url')
+# downloader.download_video('video_url')
