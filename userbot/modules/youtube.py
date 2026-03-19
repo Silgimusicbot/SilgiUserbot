@@ -1,21 +1,11 @@
 import os
 import asyncio
 import tempfile
-import requests
 from mutagen.id3 import ID3, APIC, TIT2
 from mutagen.mp3 import MP3
 from yt_dlp import YoutubeDL
 from userbot.events import register as silgi
-from userbot import shirniyat
 from userbot.cmdhelp import CmdHelp
-
-
-async def _get_cookies_file():
-    response = requests.get(shirniyat)
-    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".txt", mode="w", encoding="utf-8")
-    tmp.write(response.text)
-    tmp.close()
-    return tmp.name
 
 
 @silgi(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
@@ -25,11 +15,10 @@ async def ytmp3_handler(event):
         await event.edit("❌ Ad və ya link daxil edin.")
         return
     await event.edit("⏳ MP3 yüklənir...")
-    cookies_file = await _get_cookies_file()
     try:
         with tempfile.TemporaryDirectory() as tmpdir:
             ydl_opts = {
-                "format": "bestaudio/best",
+                "format": "bestaudio[ext=m4a]/bestaudio/best",
                 "outtmpl": os.path.join(tmpdir, "%(title)s.%(ext)s"),
                 "postprocessors": [
                     {
@@ -39,11 +28,10 @@ async def ytmp3_handler(event):
                     }
                 ],
                 "writethumbnail": True,
-                "cookiefile": cookies_file,
                 "default_search": "ytsearch",
                 "noplaylist": True,
                 "quiet": True,
-                "extractor_args": {"youtube": {"player_client": ["tv_embedded", "ios"]}},
+                "extractor_args": {"youtube": {"player_client": ["mweb"]}},
             }
             loop = asyncio.get_event_loop()
             info = await loop.run_in_executor(None, lambda: _ydl_extract(ydl_opts, query))
@@ -88,8 +76,6 @@ async def ytmp3_handler(event):
             await event.delete()
     except Exception as e:
         await event.edit(f"❌ Xəta: `{e}`")
-    finally:
-        os.unlink(cookies_file)
 
 
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
@@ -99,18 +85,16 @@ async def ytvideo_handler(event):
         await event.edit("❌ Ad və ya link daxil edin.")
         return
     await event.edit("⏳ Video yüklənir...")
-    cookies_file = await _get_cookies_file()
     try:
         with tempfile.TemporaryDirectory() as tmpdir:
             ydl_opts = {
                 "format": "best[ext=mp4]/bestvideo[ext=mp4]+bestaudio[ext=m4a]/best",
                 "outtmpl": os.path.join(tmpdir, "%(title)s.%(ext)s"),
                 "merge_output_format": "mp4",
-                "cookiefile": cookies_file,
                 "default_search": "ytsearch",
                 "noplaylist": True,
                 "quiet": True,
-                "extractor_args": {"youtube": {"player_client": ["tv_embedded", "ios"]}},
+                "extractor_args": {"youtube": {"player_client": ["mweb"]}},
             }
             loop = asyncio.get_event_loop()
             info = await loop.run_in_executor(None, lambda: _ydl_extract(ydl_opts, query))
@@ -133,8 +117,6 @@ async def ytvideo_handler(event):
             await event.delete()
     except Exception as e:
         await event.edit(f"❌ Xəta: `{e}`")
-    finally:
-        os.unlink(cookies_file)
 
 
 def _ydl_extract(opts, query):
