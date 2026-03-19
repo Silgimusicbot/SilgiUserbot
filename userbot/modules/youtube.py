@@ -33,7 +33,7 @@ async def ytaudio(event):
         await event.edit("ℹ️ Mahnı adı və ya link yazın.")
         return
 
-    await event.edit("🔄 `Mahnı axtarılır...`")
+    await event.edit("🔄 `Mahnı emal olunur...`")
     cookies = await get_cookies_file()
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
@@ -43,11 +43,11 @@ async def ytaudio(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
         "extractor_args": {
             "youtube": {
-                "player_client": ["web", "mweb", "web_creator"],
-                "player_skip": ["configs", "webpage"]
+                "player_client": ["ios"],
+                "player_skip": ["webpage", "configs", "js"]
             }
         },
         "postprocessors": [{
@@ -57,7 +57,7 @@ async def ytaudio(event):
         }, {"key": "FFmpegMetadata"}],
         "quiet": True,
         "nocheckcertificate": True,
-        "ignoreerrors": True
+        "external_downloader": "aria2c" if os.path.exists("/usr/bin/aria2c") else None
     }
 
     try:
@@ -65,7 +65,7 @@ async def ytaudio(event):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
             if info is None:
-                await event.edit("❌ Video tapılmadı və ya YouTube blokladı.")
+                await event.edit("❌ YouTube bu videonu blokladı.")
                 return
             if "entries" in info: info = info["entries"][0]
             
@@ -88,7 +88,7 @@ async def ytvideo(event):
         await event.edit("ℹ️ Video adı və ya link yazın.")
         return
 
-    await event.edit("🔄 `Video hazırlanır...`")
+    await event.edit("🔄 `Video emal olunur...`")
     cookies = await get_cookies_file()
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
@@ -98,17 +98,16 @@ async def ytvideo(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
         "extractor_args": {
             "youtube": {
-                "player_client": ["web", "mweb", "web_creator"],
-                "player_skip": ["configs", "webpage"]
+                "player_client": ["ios"],
+                "player_skip": ["webpage", "configs", "js"]
             }
         },
         "merge_output_format": "mp4",
         "quiet": True,
-        "nocheckcertificate": True,
-        "ignoreerrors": True
+        "nocheckcertificate": True
     }
 
     try:
@@ -116,7 +115,7 @@ async def ytvideo(event):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
             if info is None:
-                await event.edit("❌ Video tapılmadı və ya YouTube blokladı.")
+                await event.edit("❌ YouTube bu videonu blokladı.")
                 return
             if "entries" in info: info = info["entries"][0]
             
