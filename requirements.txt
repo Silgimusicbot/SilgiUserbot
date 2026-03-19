@@ -33,7 +33,7 @@ heroku3
 oauth2client
 psycopg2
 pybase64>=0.4.0
-pylast==4.1.0
+pylast==5.2.0
 pySmartDL
 python-barcode
 python-dotenv
