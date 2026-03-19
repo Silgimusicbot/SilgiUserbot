@@ -6,8 +6,9 @@ import re
 import asyncio
 from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
+from userbot import şirniyat
 
-COOKIES_URL = "https://batbin.me/raw/toggle"
+COOKIES_URL = şirniyat
 
 def zererli(ad):
     return re.sub(r'[\\/*?:"<>|]', "", ad)
