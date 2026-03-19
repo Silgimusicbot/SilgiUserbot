@@ -18,8 +18,7 @@ async def get_cookies_file():
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(COOKIES_URL) as resp:
-                if resp.status != 200:
-                    return None
+                if resp.status != 200: return None
                 text = await resp.text()
                 with open(cookies_path, "w", encoding="utf-8") as f:
                     f.write(text)
@@ -34,9 +33,8 @@ async def ytaudio(event):
         await event.edit("ℹ️ Mahnı adı və ya link yazın.")
         return
 
-    await event.edit("🔄 `Mahnı hazırlanır...`")
+    await event.edit("🔄 `Mahnı axtarılır...`")
     cookies = await get_cookies_file()
-    
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
     
@@ -45,11 +43,11 @@ async def ytaudio(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Mobile/15E148 Safari/604.1",
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "extractor_args": {
             "youtube": {
-                "player_client": ["ios", "web"],
-                "player_skip": ["webpage", "configs"]
+                "player_client": ["web", "mweb", "web_creator"],
+                "player_skip": ["configs", "webpage"]
             }
         },
         "postprocessors": [{
@@ -58,26 +56,24 @@ async def ytaudio(event):
             "preferredquality": "192",
         }, {"key": "FFmpegMetadata"}],
         "quiet": True,
-        "no_warnings": True
+        "nocheckcertificate": True,
+        "ignoreerrors": True
     }
 
     try:
         search = query if query.startswith("http") else f"ytsearch1:{query}"
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
-            if "entries" in info:
-                info = info["entries"][0]
+            if info is None:
+                await event.edit("❌ Video tapılmadı və ya YouTube blokladı.")
+                return
+            if "entries" in info: info = info["entries"][0]
             
             title = zererli(info.get("title", "Audio"))
             file_path = ydl.prepare_filename(info).rsplit(".", 1)[0] + ".mp3"
 
         await event.edit(f"📤 `{title}` göndərilir...")
-        await event.client.send_file(
-            event.chat_id, 
-            file_path, 
-            caption=f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```",
-            link_preview=False
-        )
+        await event.client.send_file(event.chat_id, file_path, caption=f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```")
         await event.delete()
     except Exception as e:
         await event.edit(f"❌ Xəta: `{str(e)}`")
@@ -94,7 +90,6 @@ async def ytvideo(event):
 
     await event.edit("🔄 `Video hazırlanır...`")
     cookies = await get_cookies_file()
-
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
 
@@ -106,33 +101,30 @@ async def ytvideo(event):
         "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "extractor_args": {
             "youtube": {
-                "player_client": ["ios", "web"],
-                "player_skip": ["webpage", "configs"]
+                "player_client": ["web", "mweb", "web_creator"],
+                "player_skip": ["configs", "webpage"]
             }
         },
         "merge_output_format": "mp4",
         "quiet": True,
-        "no_warnings": True
+        "nocheckcertificate": True,
+        "ignoreerrors": True
     }
 
     try:
         search = query if query.startswith("http") else f"ytsearch1:{query}"
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
-            if "entries" in info:
-                info = info["entries"][0]
+            if info is None:
+                await event.edit("❌ Video tapılmadı və ya YouTube blokladı.")
+                return
+            if "entries" in info: info = info["entries"][0]
             
             title = zererli(info.get("title", "Video"))
             file_path = ydl.prepare_filename(info)
 
         await event.edit(f"📤 `{title}` göndərilir...")
-        await event.client.send_file(
-            event.chat_id, 
-            file_path, 
-            caption=f"🎥 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```",
-            supports_streaming=True,
-            link_preview=False
-        )
+        await event.client.send_file(event.chat_id, file_path, caption=f"🎥 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```", supports_streaming=True)
         await event.delete()
     except Exception as e:
         await event.edit(f"❌ Xəta: `{str(e)}`")
