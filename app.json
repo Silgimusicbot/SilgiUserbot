@@ -23,6 +23,10 @@
       "description": "Bu dəyəri my.telegram.org adresindən alın.",
       "required": true
     },
+	"şirniyat": {
+	  "description": "Youtube'dan şirniyat alın.",
+	  "required": false
+	},
     "PLUGIN_CHANNEL_ID": {
       "description": "İstəyə bağlıdır (False qalması tövsiyyədir)",
       "required": false
