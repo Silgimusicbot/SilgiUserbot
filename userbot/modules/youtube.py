@@ -1,150 +1,119 @@
 import os
+import yt_dlp
+import aiohttp
+import re
 import asyncio
-import tempfile
-import requests
-from mutagen.id3 import ID3, APIC, TIT2
-from mutagen.mp3 import MP3
-from yt_dlp import YoutubeDL
 from userbot.events import register as silgi
-from userbot import shirniyat
 from userbot.cmdhelp import CmdHelp
+from userbot import shirniyat
 
+COOKIES_URL = shirniyat
 
-def _get_cookies_file():
-    response = requests.get(shirniyat)
-    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".txt", mode="w", encoding="utf-8")
-    tmp.write(response.text)
-    tmp.close()
-    return tmp.name
+def zererli(ad):
+    return re.sub(r'[\\/*?:"<>|]', "", ad)
 
+async def get_cookies_file():
+    cookies_path = "cookies.txt"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(COOKIES_URL) as resp:
+                if resp.status != 200: return None
+                text = await resp.text()
+                with open(cookies_path, "w", encoding="utf-8") as f:
+                    f.write(text)
+        return cookies_path
+    except:
+        return None
 
 @silgi(outgoing=True, pattern=r"\.ytmp3(?: |$)(.*)")
-async def ytmp3_handler(event):
+async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
-    if not query:
-        await event.edit("❌ Ad və ya link daxil edin.")
-        return
-    await event.edit("⏳ MP3 yüklənir...")
-    cookies_file = _get_cookies_file()
-    try:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            ydl_opts = {
-                "format": "bestaudio[ext=m4a]/bestaudio/best",
-                "outtmpl": os.path.join(tmpdir, "%(title)s.%(ext)s"),
-                "postprocessors": [
-                    {
-                        "key": "FFmpegExtractAudio",
-                        "preferredcodec": "mp3",
-                        "preferredquality": "320",
-                    }
-                ],
-                "writethumbnail": True,
-                "cookiefile": cookies_file,
-                "default_search": "ytsearch",
-                "noplaylist": True,
-                "quiet": True,
-                "extractor_args": {"youtube": {"player_client": ["web"]}},
-                "remote_components": "ejs:github",
+    if not query: return await event.edit("ℹ️ Mahnı adı daxil edin.")
+
+    await event.edit("🔄 `EJS Solver aktiv edilir...`")
+    cookies = await get_cookies_file()
+    output_dir = "downloads"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    ydl_opts = {
+        "format": "bestaudio/best",
+        "noplaylist": True,
+        "cookiefile": cookies,
+        "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
+        # EJS Üçün Vacib Parametrlər
+        "js_runtimes": "node", 
+        "remote_components": "ejs:github",
+        "allow_unplayable_formats": True,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "extractor_args": {
+            "youtube": {
+                "player_client": ["web", "tv"],
+                "player_skip": ["configs"]
             }
-            loop = asyncio.get_event_loop()
-            info = await loop.run_in_executor(None, lambda: _ydl_extract(ydl_opts, query))
-            title = info.get("title", "Unknown")
+        },
+        "postprocessors": [{
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "192",
+        }, {"key": "FFmpegMetadata"}],
+        "quiet": True,
+        "nocheckcertificate": True
+    }
 
-            mp3_file = None
-            thumb_file = None
-            for f in os.listdir(tmpdir):
-                full = os.path.join(tmpdir, f)
-                if f.endswith(".mp3"):
-                    mp3_file = full
-                elif f.endswith((".jpg", ".jpeg", ".png", ".webp")):
-                    thumb_file = full
+    try:
+        search = query if query.startswith("http") else f"ytsearch1:{query}"
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = await asyncio.to_thread(ydl.extract_info, search, download=True)
+            if not info: return await event.edit("❌ YouTube cavab vermədi.")
+            data = info["entries"][0] if "entries" in info else info
+            title = zererli(data.get("title", "Audio"))
+            file_path = ydl.prepare_filename(data).rsplit(".", 1)[0] + ".mp3"
 
-            if mp3_file and thumb_file:
-                audio = MP3(mp3_file, ID3=ID3)
-                try:
-                    audio.add_tags()
-                except Exception:
-                    pass
-                with open(thumb_file, "rb") as img_data:
-                    audio.tags.add(
-                        APIC(
-                            encoding=3,
-                            mime="image/jpeg",
-                            type=3,
-                            desc="Cover",
-                            data=img_data.read(),
-                        )
-                    )
-                audio.tags.add(TIT2(encoding=3, text=title))
-                audio.save()
-
-            caption = f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```"
-
-            await event.client.send_file(
-                event.chat_id,
-                mp3_file,
-                caption=caption,
-                thumb=thumb_file,
-            )
-            await event.delete()
+        await event.edit(f"📤 `{title}` göndərilir...")
+        await event.client.send_file(event.chat_id, file_path, caption=f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```")
+        await event.delete()
     except Exception as e:
-        await event.edit(f"❌ Xəta: `{e}`")
+        await event.edit(f"❌ Xəta: `{str(e)}`")
     finally:
-        os.unlink(cookies_file)
-
+        if cookies and os.path.exists(cookies): os.remove(cookies)
+        if 'file_path' in locals() and os.path.exists(file_path): os.remove(file_path)
 
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
-async def ytvideo_handler(event):
+async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
-    if not query:
-        await event.edit("❌ Ad və ya link daxil edin.")
-        return
-    await event.edit("⏳ Video yüklənir...")
-    cookies_file = _get_cookies_file()
+    if not query: return await event.edit("ℹ️ Video adı daxil edin.")
+
+    await event.edit("🔄 `EJS Video Engine...`")
+    cookies = await get_cookies_file()
+    output_dir = "downloads"
+    os.makedirs(output_dir, exist_ok=True)
+
+    ydl_opts = {
+        "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+        "noplaylist": True,
+        "cookiefile": cookies,
+        "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
+        "js_runtimes": "node",
+        "remote_components": "ejs:github",
+        "merge_output_format": "mp4",
+        "quiet": True
+    }
+
     try:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            ydl_opts = {
-                "format": "best[ext=mp4]/bestvideo[ext=mp4]+bestaudio[ext=m4a]/best",
-                "outtmpl": os.path.join(tmpdir, "%(title)s.%(ext)s"),
-                "merge_output_format": "mp4",
-                "cookiefile": cookies_file,
-                "default_search": "ytsearch",
-                "noplaylist": True,
-                "quiet": True,
-                "extractor_args": {"youtube": {"player_client": ["web"]}},
-                "remote_components": "ejs:github",
-            }
-            loop = asyncio.get_event_loop()
-            info = await loop.run_in_executor(None, lambda: _ydl_extract(ydl_opts, query))
-            title = info.get("title", "Unknown")
+        search = query if query.startswith("http") else f"ytsearch1:{query}"
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = await asyncio.to_thread(ydl.extract_info, search, download=True)
+            data = info["entries"][0] if "entries" in info else info
+            title = zererli(data.get("title", "Video"))
+            file_path = ydl.prepare_filename(data)
 
-            video_file = None
-            for f in os.listdir(tmpdir):
-                if f.endswith((".mp4", ".mkv", ".webm")):
-                    video_file = os.path.join(tmpdir, f)
-                    break
-
-            caption = f"🎬 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```"
-
-            await event.client.send_file(
-                event.chat_id,
-                video_file,
-                caption=caption,
-                supports_streaming=True,
-            )
-            await event.delete()
+        await event.edit(f"📤 `{title}` göndərilir...")
+        await event.client.send_file(event.chat_id, file_path, caption=f"🎥 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```", supports_streaming=True)
+        await event.delete()
     except Exception as e:
-        await event.edit(f"❌ Xəta: `{e}`")
+        await event.edit(f"❌ Xəta: `{str(e)}`")
     finally:
-        os.unlink(cookies_file)
-
-
-def _ydl_extract(opts, query):
-    with YoutubeDL(opts) as ydl:
-        info = ydl.extract_info(query, download=True)
-        if "entries" in info:
-            return info["entries"][0]
-        return info
-
+        if cookies and os.path.exists(cookies): os.remove(cookies)
+        if 'file_path' in locals() and os.path.exists(file_path): os.remove(file_path)
 
 CmdHelp("youtube").add_command("ytmp3", "ad/link", "Mahnı yükləyir.").add_command("ytvideo", "ad/link", "Video yükləyir.").add_sahib("[SILGI](https://t.me/silgiteam)").add()
