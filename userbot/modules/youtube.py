@@ -7,7 +7,7 @@ from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 from userbot import shirniyat
 
-COOKIES_URL = shirniyat
+COOKIES_URL = https://batbin.me/raw/unwheel
 
 UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
