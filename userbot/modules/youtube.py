@@ -30,7 +30,7 @@ async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
     if not query: return await event.edit("ℹ️ Mahnı adı daxil edin.")
 
-    await event.edit("🔄 `EJS Engine aktivdir...`")
+    await event.edit("🔄 `EJS Runtime tənzimlənir...`")
     cookies = await get_cookies_file()
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
@@ -40,8 +40,8 @@ async def ytaudio(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        # EJS Konfiqurasiyası
-        "js_runtimes": ["node"], 
+        # XƏTANIN HƏLLİ: Siyahı yox, lüğət (dict) formatı
+        "js_runtimes": {"node": {}}, 
         "remote_components": "ejs:github",
         "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "extractor_args": {
@@ -57,14 +57,14 @@ async def ytaudio(event):
         }, {"key": "FFmpegMetadata"}],
         "quiet": True,
         "nocheckcertificate": True,
-        "no_warnings": True # O lazımsız xəbərdarlığı gizlədir
+        "no_warnings": True
     }
 
     try:
         search = query if query.startswith("http") else f"ytsearch1:{query}"
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
-            if not info: return await event.edit("❌ YouTube cavab vermədi.")
+            if not info: return await event.edit("❌ YouTube-dan cavab alınmadı.")
             data = info["entries"][0] if "entries" in info else info
             file_path = ydl.prepare_filename(data).rsplit(".", 1)[0] + ".mp3"
             title = zererli(data.get("title", "Audio"))
@@ -81,7 +81,7 @@ async def ytaudio(event):
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
-    if not query: return await event.edit("ℹ️ Video adı dax i l edin.")
+    if not query: return await event.edit("ℹ️ Video adı daxil edin.")
 
     await event.edit("🔄 `EJS Video Engine...`")
     cookies = await get_cookies_file()
@@ -93,7 +93,8 @@ async def ytvideo(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "js_runtimes": ["node"],
+        # XƏTANIN HƏLLİ: Siyahı yox, lüğət (dict) formatı
+        "js_runtimes": {"node": {}},
         "remote_components": "ejs:github",
         "merge_output_format": "mp4",
         "quiet": True,
