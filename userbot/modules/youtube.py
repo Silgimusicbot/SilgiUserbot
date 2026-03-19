@@ -44,6 +44,7 @@ async def ytmp3_handler(event):
                 "noplaylist": True,
                 "quiet": True,
                 "extractor_args": {"youtube": {"player_client": ["web"]}},
+                "remote_components": "ejs:github",
             }
             loop = asyncio.get_event_loop()
             info = await loop.run_in_executor(None, lambda: _ydl_extract(ydl_opts, query))
@@ -111,6 +112,7 @@ async def ytvideo_handler(event):
                 "noplaylist": True,
                 "quiet": True,
                 "extractor_args": {"youtube": {"player_client": ["web"]}},
+                "remote_components": "ejs:github",
             }
             loop = asyncio.get_event_loop()
             info = await loop.run_in_executor(None, lambda: _ydl_extract(ydl_opts, query))
