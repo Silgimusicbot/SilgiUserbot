@@ -23,7 +23,7 @@
       "description": "Bu dəyəri my.telegram.org adresindən alın.",
       "required": true
     },
-	"şirniyat": {
+	"shirniyat": {
 	  "description": "Youtube'dan şirniyat alın.",
 	  "required": false
 	},
