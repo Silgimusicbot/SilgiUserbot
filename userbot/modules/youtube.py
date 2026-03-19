@@ -30,7 +30,7 @@ async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
     if not query: return await event.edit("ℹ️ Mahnı adı daxil edin.")
 
-    await event.edit("🔄 `EJS Solver aktiv edilir...`")
+    await event.edit("🔄 `EJS Engine aktivdir...`")
     cookies = await get_cookies_file()
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
@@ -40,15 +40,14 @@ async def ytaudio(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        # EJS Üçün Vacib Parametrlər
-        "js_runtimes": "node", 
+        # EJS Konfiqurasiyası
+        "js_runtimes": ["node"], 
         "remote_components": "ejs:github",
-        "allow_unplayable_formats": True,
         "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "extractor_args": {
             "youtube": {
                 "player_client": ["web", "tv"],
-                "player_skip": ["configs"]
+                "player_skip": ["configs", "webpage"]
             }
         },
         "postprocessors": [{
@@ -57,7 +56,8 @@ async def ytaudio(event):
             "preferredquality": "192",
         }, {"key": "FFmpegMetadata"}],
         "quiet": True,
-        "nocheckcertificate": True
+        "nocheckcertificate": True,
+        "no_warnings": True # O lazımsız xəbərdarlığı gizlədir
     }
 
     try:
@@ -66,8 +66,8 @@ async def ytaudio(event):
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
             if not info: return await event.edit("❌ YouTube cavab vermədi.")
             data = info["entries"][0] if "entries" in info else info
-            title = zererli(data.get("title", "Audio"))
             file_path = ydl.prepare_filename(data).rsplit(".", 1)[0] + ".mp3"
+            title = zererli(data.get("title", "Audio"))
 
         await event.edit(f"📤 `{title}` göndərilir...")
         await event.client.send_file(event.chat_id, file_path, caption=f"🎶 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```")
@@ -81,7 +81,7 @@ async def ytaudio(event):
 @silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
-    if not query: return await event.edit("ℹ️ Video adı daxil edin.")
+    if not query: return await event.edit("ℹ️ Video adı dax i l edin.")
 
     await event.edit("🔄 `EJS Video Engine...`")
     cookies = await get_cookies_file()
@@ -93,10 +93,11 @@ async def ytvideo(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "js_runtimes": "node",
+        "js_runtimes": ["node"],
         "remote_components": "ejs:github",
         "merge_output_format": "mp4",
-        "quiet": True
+        "quiet": True,
+        "no_warnings": True
     }
 
     try:
@@ -104,8 +105,8 @@ async def ytvideo(event):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
             data = info["entries"][0] if "entries" in info else info
-            title = zererli(data.get("title", "Video"))
             file_path = ydl.prepare_filename(data)
+            title = zererli(data.get("title", "Video"))
 
         await event.edit(f"📤 `{title}` göndərilir...")
         await event.client.send_file(event.chat_id, file_path, caption=f"🎥 `{title}`\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```", supports_streaming=True)
