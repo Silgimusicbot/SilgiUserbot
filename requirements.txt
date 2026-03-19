@@ -12,6 +12,7 @@ git+https://github.com/johnwmillr/LyricsGenius.git
 lyricsgenius
 async_generator
 bs4
+youtube-dl
 beautifulsoup4>=4.8.1
 cowpy
 cryptg
