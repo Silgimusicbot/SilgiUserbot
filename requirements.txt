@@ -1,5 +1,6 @@
 deep-translator
 g4f
+setuptools
 aiohttp
 aiofiles
 moviepy
