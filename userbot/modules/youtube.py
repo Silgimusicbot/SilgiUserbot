@@ -6,9 +6,9 @@ import re
 import asyncio
 from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
-from userbot import şirniyat
+from userbot import shirniyat
 
-COOKIES_URL = şirniyat
+COOKIES_URL = shirniyat
 
 def zererli(ad):
     return re.sub(r'[\\/*?:"<>|]', "", ad)
