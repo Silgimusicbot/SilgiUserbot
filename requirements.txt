@@ -1,6 +1,7 @@
 deep-translator
 g4f
 setuptools
+pytubefix
 aiohttp
 aiofiles
 moviepy
