@@ -23,6 +23,7 @@ google-auth-oauthlib
 googletrans==4.0.0rc1
 google-trans-new
 langdetect
+yt-dlp
 google_images_download>=2.7.1
 gTTS>=2.1.1
 gTTS-token>=1.1.3
