@@ -30,10 +30,10 @@ async def get_cookies_file():
 async def ytaudio(event):
     query = event.pattern_match.group(1).strip()
     if not query:
-        await event.edit("ℹ️ Mahnı adı və ya link yazın.")
+        await event.edit("ℹ️ Mahnı adı daxil edin.")
         return
 
-    await event.edit("🔄 `Mahnı emal olunur...`")
+    await event.edit("🔄 `Mahnı emal edilir...`")
     cookies = await get_cookies_file()
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
@@ -43,11 +43,11 @@ async def ytaudio(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "extractor_args": {
             "youtube": {
-                "player_client": ["ios"],
-                "player_skip": ["webpage", "configs", "js"]
+                "player_client": ["tv", "web"],
+                "player_skip": ["configs", "webpage"]
             }
         },
         "postprocessors": [{
@@ -56,17 +56,17 @@ async def ytaudio(event):
             "preferredquality": "192",
         }, {"key": "FFmpegMetadata"}],
         "quiet": True,
+        "no_warnings": True,
         "nocheckcertificate": True,
-        "external_downloader": "aria2c" if os.path.exists("/usr/bin/aria2c") else None
+        "ignoreerrors": "only_download"
     }
 
     try:
         search = query if query.startswith("http") else f"ytsearch1:{query}"
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
-            if info is None:
-                await event.edit("❌ YouTube bu videonu blokladı.")
-                return
+            if not info:
+                return await event.edit("❌ YouTube formatları vermədi.")
             if "entries" in info: info = info["entries"][0]
             
             title = zererli(info.get("title", "Audio"))
@@ -85,10 +85,10 @@ async def ytaudio(event):
 async def ytvideo(event):
     query = event.pattern_match.group(1).strip()
     if not query:
-        await event.edit("ℹ️ Video adı və ya link yazın.")
+        await event.edit("ℹ️ Video adı daxil edin.")
         return
 
-    await event.edit("🔄 `Video emal olunur...`")
+    await event.edit("🔄 `Video emal edilir...`")
     cookies = await get_cookies_file()
     output_dir = "downloads"
     os.makedirs(output_dir, exist_ok=True)
@@ -98,15 +98,16 @@ async def ytvideo(event):
         "noplaylist": True,
         "cookiefile": cookies,
         "outtmpl": os.path.join(output_dir, "%(title).50s.%(ext)s"),
-        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "extractor_args": {
             "youtube": {
-                "player_client": ["ios"],
-                "player_skip": ["webpage", "configs", "js"]
+                "player_client": ["tv", "web"],
+                "player_skip": ["configs", "webpage"]
             }
         },
         "merge_output_format": "mp4",
         "quiet": True,
+        "no_warnings": True,
         "nocheckcertificate": True
     }
 
@@ -114,9 +115,8 @@ async def ytvideo(event):
         search = query if query.startswith("http") else f"ytsearch1:{query}"
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = await asyncio.to_thread(ydl.extract_info, search, download=True)
-            if info is None:
-                await event.edit("❌ YouTube bu videonu blokladı.")
-                return
+            if not info:
+                return await event.edit("❌ Video məlumatları alınmadı.")
             if "entries" in info: info = info["entries"][0]
             
             title = zererli(info.get("title", "Video"))
