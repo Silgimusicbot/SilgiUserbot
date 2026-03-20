@@ -1,121 +1,48 @@
-import os
-import lyricsgenius
-import asyncio
-import time
 import requests
-from bs4 import BeautifulSoup
-from userbot.events import register
-from userbot import CMD_HELP, GENIUS
+import io
+from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
-import aiohttp
 
-# ██████ LANGUAGE CONSTANTS ██████ #
 
-from userbot.language import get_value
-LANG = get_value("lyrics")
-
-# ████████████████████████████████ #
-@register(outgoing=True, pattern=r"^.lyrics(?: |$)(.*)")
-async def lyrics_handler(event):
+@silgi(outgoing=True, pattern=r"^\.lyrics (.*)")
+async def lrclib_soz(event):
     query = event.pattern_match.group(1)
-
-    if '-' not in query:
-        await event.reply(LANG['WRONG_TYPE'])
-        return
-
-    artist, title = [x.strip() for x in query.split('-', 1)]
-    await event.reply(LANG['SEARCHING'].format(artist, title), parse_mode='html')
-
+    if not query:
+        return await event.edit("`Zəhmət olmasa bir mahnı adı qeyd edin!`")
+    await event.edit(f"🔍 **'{query}'** axtarılır...")
     try:
-        async with aiohttp.ClientSession() as session:
-            url = f"https://api.lyrics.ovh/v1/{artist}/{title}"
-            async with session.get(url) as resp:
-                if resp.status != 200:
-                    await event.reply(LANG['NOT_FOUND'].format(artist, title))
-                    return
-
-                data = await resp.json()
-                lyrics = data.get("lyrics")
-
-                if not lyrics:
-                    await event.reply(LANG['NOT_FOUND'].format(artist, title))
-                    return
-
-                if len(lyrics) > 4096:
-                    await event.respond(LANG['TOO_LONG'])
-                    with open("lyrics.txt", "w", encoding="utf-8") as f:
-                        f.write(f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n{lyrics}")
-                    await event.client.send_file(
-                        event.chat_id,
-                        "lyrics.txt",
-                        reply_to=event.id,
-                    )
-                    os.remove("lyrics.txt")
-                else:
-                    header = f"⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝\n{artist} - {title}\n\n"
-                    formatted_lyrics = f"```{lyrics}```"
-                    await event.respond(header + formatted_lyrics, parse_mode="Markdown")
-
+        response = requests.get(f"https://lrclib.net/api/search?q={query}")
+        data = response.json()
+        if not data:
+            return await event.edit("❌ **Mahnı sözləri tapılmadı.**")
+        track = data[0]
+        artist = track.get("artistName", "Naməlum")
+        title = track.get("trackName", "Adsız")
+        lyrics = track.get("plainLyrics")
+        if not lyrics:
+            return await event.edit(f"❌ **{artist} - {title}** üçün sözlər yoxdur.")
+        son_mesaj = f"🎵 **{title}** - __{artist}__\n\n```{lyrics}```\n\n```⚝ 𝑺𝑰𝑳𝑮I 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```"
+        if len(son_mesaj) > 4096:
+            await event.edit("📝 **Sözlər çox uzun olduğu üçün fayl hazırlanır...**")
+            file_content = f"Mahnı: {title}\nİfaçı: {artist}\n\n{lyrics}\n\n⚝ 𝑺𝑰𝑳𝑮I 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝"
+            file = io.BytesIO(file_content.encode('utf-8'))
+            file.name = f"{artist}_{title}_lyrics.txt"
+            await event.client.send_file(
+                event.chat_id,
+                file,
+                caption=f"🎵 **{title}** - __{artist}__\n\n`⚝ 𝑺𝑰𝑳𝑮I 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝`",
+                reply_to=event.reply_to_msg_id
+            )
+            await event.delete()
+        else:
+            await event.edit(son_mesaj)
     except Exception as e:
-        await event.reply(f"Xəta:\n<code>{str(e)}</code>", parse_mode="html")
-@register(outgoing=True, pattern="^.singer(?: |$)(.*)")
-async def singer(lyric):
-    if r"-" in lyric.text:
-        pass
-    else:
-        await lyric.edit(LANG['WRONG_TYPE'])
-        return
+        await event.edit(f"⚠️ **Xəta:** `{str(e)}`")
 
-    if GENIUS is None:
-        await lyric.edit(
-            LANG['GENIUS_NOT_FOUND'])
-        return
-    else:
-        genius = lyricsgenius.Genius("FdiG8NMlpEVOW3fJnaJqW7Vom-8p9lUauP_jNuA5PLbX3L-kDznZlIghV2Opiooz")
-        try:
-            args = lyric.text.split('.singer')[1].split('-')
-            artist = args[0].strip(' ')
-            song = args[1].strip(' ')
-        except:
-            await lyric.edit(LANG['GIVE_INFO'])
-            return
-
-    if len(args) < 1:
-        await lyric.edit(LANG['GIVE_INFO'])
-        return
-
-    await lyric.edit(LANG['SEARCHING'].format(artist, song))
-
-    try:
-        songs = genius.search_song(song, artist)
-    except TypeError:
-        songs = None
-
-    if songs is None:
-        await lyric.edit(LANG['NOT_FOUND'].format(artist, song))
-        return
-    await lyric.edit(LANG['SINGER_LYRICS'].format(artist, song))
-    await asyncio.sleep(1)
-
-    split = songs.lyrics.splitlines()
-    i = 0
-    while i < len(split):
-        try:
-            if split[i] != None:
-                await lyric.edit(split[i])
-                await asyncio.sleep(2)
-            i += 1
-        except:
-            i += 1
-    await lyric.edit(LANG['SINGER_ENDED'])
-
-    return
-
-            
-CmdHelp('lyrics').add_command(
-    'lyrics', (LANG['LY1']), (LANG['LY2']), (LANG['LY3'])
-).add_command(
-    'singer', (LANG['SG1']), (LANG['SG2']), (LANG['SG3'])
+CmdHelp("lyrics").add_command(
+    "lyrics", 
+    "mahnı adı", 
+    "Mahnı sözləri tapır."
 ).add_sahib(
-    "[SILGI](t.me/silgiteam) tərəfindən hazırlanmışdır"
+    "[SILGI](https://t.me/silgiteam)"
 ).add()
