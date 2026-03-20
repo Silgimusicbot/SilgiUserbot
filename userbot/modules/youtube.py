@@ -7,7 +7,7 @@ def ad_normal(s):
     if not s: return "Audio"
     return re.sub(r'[\\/*?:"<>|]', "", s).strip()
 
-@silgi(outgoing=True, pattern=r"\.scmp3(?: |$)(.*)")
+@silgi(outgoing=True, pattern=r"\.mp3(?: |$)(.*)")
 async def scaudio(event):
     query = event.pattern_match.group(1).strip()
     if not query: return await event.edit("ℹ️ Mahnı adı daxil edin.")
@@ -60,7 +60,5 @@ async def scaudio(event):
                 if f.startswith(fid):
                     try: os.remove(os.path.join(out_dir, f))
                     except: pass
-
-CmdHelp("soundcloud").add_command("scmp3", "ad", "Artist brendli yükləmə.").add()
 
 CmdHelp("musicdownloader").add_command("mp3", "ad", "Mahnı yükləyir sadəcə mahnı adını yazın").add_sahib("[SILGI](https://t.me/silgiteam)").add()
