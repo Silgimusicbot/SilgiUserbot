@@ -215,8 +215,8 @@ AVTO_Q = sb(os.environ.get("AVTO_Q", "True"))
 
 # Pattern
 PATTERNS = os.environ.get("PATTERNS", ".,")
-WHITELIST = [7589331363, 6436992668]
-ADMINS = [7589331363, 6436992668]
+WHITELIST = [7589331363, 6436992668, 8305996237]
+ADMINS = [7589331363, 6436992668, 8305996237]
 START_TIME = int(os.environ.get("START_TIME", time.time()))
 # Təhlükəli pluginlər üçün
 TEHLUKELI = ["SESSION", "HEROKU_APIKEY", "API_HASH", "API_KEY", ".session.save"]
@@ -552,7 +552,7 @@ Hesabınızı bot'a çevirə bilərsiz və bunları işlədə bilərsiz. Unutmay
 SON_GORULME = 0
 COUNT_MSG = 0
 USERS = {}
-BRAIN_CHECKER = [7589331363, 6436992668]
+BRAIN_CHECKER = [7589331363, 6436992668, 8305996237]
 COUNT_PM = {}
 LASTMSG = {}
 ENABLE_KILLME = True
