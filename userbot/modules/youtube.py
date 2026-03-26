@@ -6,7 +6,6 @@ from telethon.tl.types import DocumentAttributeAudio
 def ad_normal(s):
     if not s: return "Audio"
     return re.sub(r'[\\/*?:"<>|]', "", s).strip()
-
 @silgi(outgoing=True, pattern=r"\.mp3(?: |$)(.*)")
 async def scaudio(event):
     query = event.pattern_match.group(1).strip()
@@ -21,7 +20,6 @@ async def scaudio(event):
         "postprocessors": [
             {"key": "FFmpegExtractAudio", "preferredcodec": "mp3", "preferredquality": "192"},
             {"key": "FFmpegThumbnailsConvertor", "format": "jpg"},
-            {"key": "EmbedThumbnail"},
             {"key": "FFmpegMetadata"}
         ],
         "quiet": True,
@@ -40,10 +38,14 @@ async def scaudio(event):
             await asyncio.to_thread(ydl.process_info, data)
             fid = data.get("id")
             mp3, thumb = f"{out_dir}/{fid}.mp3", f"{out_dir}/{fid}.jpg"
-            if not os.path.exists(thumb): thumb = None
+            if not os.path.exists(thumb): 
+                thumb = None
         await event.edit(f"```🔍 Mahnı axtarılır...\n📥 {title} yüklənir...\n📤 Göndərilir...```")
+        
         await event.client.send_file(
-            event.chat_id, mp3, thumb=thumb,
+            event.chat_id, 
+            mp3, 
+            thumb=thumb,
             caption=f"🎵 **{title}**\n```⚝ 𝑺𝑰𝑳𝑮𝑰 𝑼𝑺𝑬𝑹𝑩𝑶𝑻 ⚝```",
             attributes=[DocumentAttributeAudio(
                 duration=int(data.get("duration", 0)),
@@ -51,7 +53,7 @@ async def scaudio(event):
                 performer=bot_brand
             )]
         )
-        await event.delete()
+        await event.delete()  
     except Exception as e:
         await event.edit(f"❌ Xəta: `{str(e)}`")
     finally:
