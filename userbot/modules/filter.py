@@ -212,7 +212,7 @@ async def remove_a_filter(r_handler):
     else:
         filt = mesj
 
-    if not remove_filter(r_handler.chat_id, re.escape(filt)):  # 🔹 re.escape() 
+    if not remove_filter(r_handler.chat_id, filt):
         await r_handler.edit(" **{}** `{}`".format(filt, LANG['NOT_FOUND']))
     else:
         await r_handler.edit("**{}** `{}`".format(filt, LANG['DELETED']))
@@ -232,7 +232,7 @@ async def remove_a_genel(r_handler):
     else:
         filt = mesj
 
-    if not remove_filter("GENEL", re.escape(filt)):  # 🔹 re.escape() 
+    if not remove_filter("GENEL", filt):  
         await r_handler.edit(" **{}** `{}`".format(filt, LANG['NOT_FOUND']))
     else:
         await r_handler.edit("**{}** `{}`".format(filt, LANG['DELETED']))
