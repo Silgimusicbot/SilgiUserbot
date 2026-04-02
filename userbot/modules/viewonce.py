@@ -1,14 +1,14 @@
 # SilgiUserbot a aiddir. Bunu əkən sənin lişni varını yoxunu 7 cəddini sikim
 from telethon import events
 from telethon.tl.types import DocumentAttributeFilename
-from userbot.events import register
+from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 import os
 from datetime import datetime
 
 uid = None
 
-@register(outgoing=True, pattern=r"^\.vw$")
+@silgi(outgoing=True, pattern=r"^\.vw$")
 async def save_media(event):
     global uid
 
