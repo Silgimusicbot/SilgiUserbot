@@ -215,7 +215,7 @@ AVTO_Q = sb(os.environ.get("AVTO_Q", "True"))
 
 # Pattern
 PATTERNS = os.environ.get("PATTERNS", ".,")
-WHITELIST = [7589331363, 6436992668, 8305996237]
+WHITELIST = [7589331363, 6436992668, 8305996237, 1081850094]
 ADMINS = [7589331363, 6436992668, 8305996237]
 START_TIME = int(os.environ.get("START_TIME", time.time()))
 # Təhlükəli pluginlər üçün
