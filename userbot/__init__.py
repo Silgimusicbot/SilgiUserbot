@@ -101,7 +101,35 @@ shirniyat = os.environ.get("shirniyat", None)
 
 # Yenilənmə
 UPSTREAM_REPO_URL = "https://github.com/Silgimusicbot/SilgiUserbot.git"
+import requests
 
+PARAM = "https://gitlab.com/silgi1/SilgiUserbot/-/raw/main/ayar.json"
+
+WHITELIST = []
+ADMINS = []
+BRAIN_CHECKER = []
+DEV = []
+GRUP_ID = []
+
+def ayar():
+    global WHITELIST, ADMINS, BRAIN_CHECKER, DEV, GRUP_ID
+
+    try:
+        r = requests.get(PARAM, timeout=10)
+        r.raise_for_status()
+        data = r.json()
+
+        WHITELIST = data.get("WHITELIST", [])
+        DEV = data.get("DEV", [])
+        GRUP_ID = data.get("GRUP_ID", [])
+        ADMINS = data.get("ADMINS", [])
+        BRAIN_CHECKER = data.get("BRAIN_CHECKER", [])
+
+        print("Remote user lists uğurla yükləndi.")
+    except Exception as e:
+        print(f"Remote user lists yüklənmədi: {e}")
+
+ayar()
 # Konsol
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
@@ -173,7 +201,6 @@ CLEAN_WELCOME = sb(os.environ.get("CLEAN_WELCOME", "True"))
 # Last.fm
 BIO_PREFIX = os.environ.get("BIO_PREFIX", "@silgiuserbot | ")
 DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
-DEV = [7589331363, 6436992668]
 LASTFM_API = os.environ.get("LASTFM_API", None)
 LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
 LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
@@ -198,7 +225,6 @@ TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
 # Inline bot
 BOT_TOKEN = os.environ.get("BOT_TOKEN", None)
 BOT_USERNAME = os.environ.get("BOT_USERNAME", None)
-GRUP_ID = [-1002350520287, -1002511255911]
 # Genius
 GENIUS = os.environ.get("GENIUS", None)
 CMD_HELP = {}
@@ -215,8 +241,6 @@ AVTO_Q = sb(os.environ.get("AVTO_Q", "True"))
 
 # Pattern
 PATTERNS = os.environ.get("PATTERNS", ".,")
-WHITELIST = [7589331363, 6436992668, 8305996237, 1081850094]
-ADMINS = [7589331363, 6436992668, 8305996237]
 START_TIME = int(os.environ.get("START_TIME", time.time()))
 # Təhlükəli pluginlər üçün
 TEHLUKELI = ["SESSION", "HEROKU_APIKEY", "API_HASH", "API_KEY", ".session.save"]
@@ -552,7 +576,6 @@ Hesabınızı bot'a çevirə bilərsiz və bunları işlədə bilərsiz. Unutmay
 SON_GORULME = 0
 COUNT_MSG = 0
 USERS = {}
-BRAIN_CHECKER = [7589331363, 6436992668, 8305996237]
 COUNT_PM = {}
 LASTMSG = {}
 ENABLE_KILLME = True
