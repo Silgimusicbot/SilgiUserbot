@@ -105,31 +105,11 @@ import requests
 
 PARAM = "https://gitlab.com/silgi1/SilgiUserbot/-/raw/main/ayar.json"
 
-WHITELIST = []
-ADMINS = []
-BRAIN_CHECKER = []
-DEV = []
-GRUP_ID = []
-
-def ayar():
-    global WHITELIST, ADMINS, BRAIN_CHECKER, DEV, GRUP_ID
-
-    try:
-        r = requests.get(PARAM, timeout=10)
-        r.raise_for_status()
-        data = r.json()
-
-        WHITELIST = data.get("WHITELIST", [])
-        DEV = data.get("DEV", [])
-        GRUP_ID = data.get("GRUP_ID", [])
-        ADMINS = data.get("ADMINS", [])
-        BRAIN_CHECKER = data.get("BRAIN_CHECKER", [])
-
-        print("Remote user lists uğurla yükləndi.")
-    except Exception as e:
-        print(f"Remote user lists yüklənmədi: {e}")
-
-ayar()
+WHITELIST = get("https://gitlab.com/silgi1/SilgiUserbot/-/raw/main/white.json").json()
+ADMINS = get("https://gitlab.com/silgi1/SilgiUserbot/-/raw/main/admin.json").json()
+BRAIN_CHECKER = get("https://gitlab.com/silgi1/SilgiUserbot/-/raw/main/brain.json").json()
+DEV = get("https://gitlab.com/silgi1/SilgiUserbot/-/raw/main/dev.json").json()
+GRUP_ID = get("https://gitlab.com/silgi1/SilgiUserbot/-/raw/main/qrup.json").json()
 # Konsol
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
 
