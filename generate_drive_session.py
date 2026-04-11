@@ -3,7 +3,7 @@ from pydrive.auth import GoogleAuth
 
 def main():
     gauth = GoogleAuth()
-    # Qeydli
+
     gauth.LoadCredentialsFile("secret.json")
     if gauth.credentials is None:
         # Doğrulama
