@@ -239,6 +239,9 @@
     {
       "url": "heroku/nodejs"
     },
+	{
+      "url": "https://github.com/chibat/heroku-buildpack-deno"
+    },
     {
       "url": "heroku/python"
     },
