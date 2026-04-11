@@ -24,6 +24,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 RUN pip install --upgrade pip
 RUN pip install -U "yt-dlp[default]"
+RUN curl -fsSL https://deno.land/install.sh | sh
+ENV PATH="/root/.deno/bin:$PATH"
 RUN pip install lxml
 RUN pip install wheel
 RUN pip install --upgrade pip setuptools
