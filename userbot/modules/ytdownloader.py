@@ -343,7 +343,7 @@ async def mahnini_yukle(hadise):
         fayllari_temizle(sirniyatresepti, mp3_yolu, sekil_yolu)
 
 
-@silgi(outgoing=True, pattern=r"\.dalin(?: |$)(.*)")
+@silgi(outgoing=True, pattern=r"\.ytvideo(?: |$)(.*)")
 async def videonu_yukle(hadise):
     sorgu = hadise.pattern_match.group(1).strip()
     if not sorgu:
