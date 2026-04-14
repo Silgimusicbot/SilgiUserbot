@@ -31,7 +31,8 @@
             "BOT": "Qurulum botu",
             "BACKK": "◀️ Geri",
             "NEXT": "▶️İrəli",
-            "VEDIT": "🔧 **{key}** dəyişdirilməsi\n\n🔹 Mövcud dəyər: `{current_value}`\n\n✏️ Dəyəri dəyişmək üçün:\n`.set var {key} yeni_dəyər`"
+            "VEDIT": "🔧 **{key}** dəyişdirilməsi\n\n🔹 Mövcud dəyər: `{current_value}`\n\n✏️ Dəyəri dəyişmək üçün:\n`.set var {key} yeni_dəyər`",
+            "OFFIC": "⬇️ **Rəsmi:** "
         },
         "errors": {
             "CMD": "⌨️ **Əmr:** {silgitext}\n\n",
