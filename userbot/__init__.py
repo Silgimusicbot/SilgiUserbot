@@ -496,10 +496,7 @@ with bot:
 
             await event.answer(basi("CLIST"), cache_time=1)
             try:
-                try:
                 await event.edit(text, buttons=buttons, link_preview=False)
-            except MessageNotModifiedError:
-                pass
             except MessageNotModifiedError:
                 pass
 
