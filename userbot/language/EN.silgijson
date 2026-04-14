@@ -32,7 +32,7 @@
             "BACKK": "◀️ Back",
             "NEXT": "▶️Next",
             "VEDIT": "🔧 **{key}** edit\n\n🔹 Current value: `{current_value}`\n\n✏️ To change the value: `.set var {key} new_value`",
-            "OFFIC": "⬇️ **Official:** "
+            "OFFIC": "⬇️ **Official:** ",
             "OWN": "**👤 Owner:** ",
             "WRN": "**⚠️ Warning:** "
         },
