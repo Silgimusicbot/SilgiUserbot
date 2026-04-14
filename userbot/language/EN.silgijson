@@ -31,7 +31,8 @@
             "BOT": "Setup bot",
             "BACKK": "◀️ Back",
             "NEXT": "▶️Next",
-            "VEDIT": "🔧 **{key}** edit\n\n🔹 Current value: `{current_value}`\n\n✏️ To change the value: `.set var {key} new_value`"
+            "VEDIT": "🔧 **{key}** edit\n\n🔹 Current value: `{current_value}`\n\n✏️ To change the value: `.set var {key} new_value`",
+            "OFFIC": "⬇️ **Official:** "
         },
         "errors": {
             "CMD": "⌨️ **Command:** {silgitext}\n\n",
