@@ -341,7 +341,7 @@ def butonlastir(sayfa, moduller):
     geri = (max_pages - 1) if sayfa == 0 else (sayfa - 1)
     ileri = 0 if sayfa == (max_pages - 1) else sayfa + 1
     butonlar.append([custom.Button.inline(basi("BACKK"), data=f"sayfa({geri})"), custom.Button.inline(basi("NEXT"), data=f"sayfa({ileri})")])
-    butonlar.append([custom.Button.inline("📂Menyu", data="evvel")])
+    butonlar.append([custom.Button.inline("📂Menu", data="evvel")])
     return [max_pages, butonlar]
 
 
@@ -489,7 +489,7 @@ with bot:
                 text += f"**{index}.** `{key}`\n"
                 buttons.append(Button.inline(f"🔢 {index}", data=f"config_edit:{key}"))
 
-            buttons.append(Button.inline("📂Menyu", data="evvel"))
+            buttons.append(Button.inline("📂Menu", data="evvel"))
             if buttons:
                 buttons = list(itertools.zip_longest(*[iter(buttons)] * 3))
                 buttons = [list(filter(None, row)) for row in buttons]
@@ -557,18 +557,18 @@ with bot:
 
             result = basi("FULL") + f"`{cmd}`\n"
             if "sahib" in CMD_HELP_BOT[cmd]["info"] and CMD_HELP_BOT[cmd]["info"]["sahib"]:
-                result += f"**👤 Sahib:** {CMD_HELP_BOT[cmd]['info']['sahib']}\n"
+                result += basi("OWN") + f"{CMD_HELP_BOT[cmd]['info']['sahib']}\n"
 
             if CMD_HELP_BOT[cmd]["info"]["info"] == "":
                 if CMD_HELP_BOT[cmd]["info"]["warning"] != "":
-                    result += f"**⬇️ Rəsmi:** {'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n"
-                    result += f"**⚠️ Xəbərdarlıq:** {CMD_HELP_BOT[cmd]['info']['warning']}\n\n"
+                    result += basi("OFFIC") + f"{'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n"
+                    result += basi("WRN") + f"{CMD_HELP_BOT[cmd]['info']['warning']}\n\n"
                 else:
-                    result += f"**⬇️ Rəsmi:** {'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n\n"
+                    result += basi("OFFIC") + f"{'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n\n"
             else:
-                result += f"**⬇️ Rəsmi:** {'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n"
+                result += basi("OFFIC") + f"{'✅' if CMD_HELP_BOT[cmd]['info']['official'] else '❌'}\n"
                 if CMD_HELP_BOT[cmd]["info"]["warning"] != "":
-                    result += f"**⚠️ Xəbərdarlıq:** {CMD_HELP_BOT[cmd]['info']['warning']}\n"
+                    result += basi("WRN") + f"{CMD_HELP_BOT[cmd]['info']['warning']}\n"
                 result += f"**ℹ️ Info:** {CMD_HELP_BOT[cmd]['info']['info']}\n\n"
 
             command = CMD_HELP_BOT[cmd]["commands"][komut]
