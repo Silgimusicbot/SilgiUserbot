@@ -21,6 +21,7 @@ from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.sync import TelegramClient, custom
 from telethon.sessions import StringSession
 from telethon.events import callbackquery, InlineQuery, NewMessage
+from telethon.errors.rpcerrorlist import MessageNotModifiedError
 from math import ceil
 import heroku3
 
@@ -243,12 +244,13 @@ def dil():
         except Exception:
             dill = {}
 
-def basi(key, **kwargs):
-    metn = dill.get(key, key)
+def basi(acar, **kwargs):
+    metn = dill.get(acar, acar)
     try:
         return metn.format(**kwargs)
     except Exception:
         return metn
+
 # CloudMail.ru və MEGA.nz
 if not os.path.exists('bin'):
     os.mkdir('bin')
@@ -336,16 +338,9 @@ def butonlastir(sayfa, moduller):
             custom.Button.inline("🔸 " + pair, data=f"bilgi[{sayfa}]({pair})") for pair in pairs
         ])
 
-    butonlar.append([
-        custom.Button.inline(
-            basi("BACKK"),
-            data=f"sayfa({(max_pages - 1) if sayfa == 0 else (sayfa - 1)})"
-        ),
-        custom.Button.inline(
-            basi("NEXT"),
-            data=f"sayfa({0 if sayfa == (max_pages - 1) else sayfa + 1})"
-        )
-    ])
+    geri = (max_pages - 1) if sayfa == 0 else (sayfa - 1)
+    ileri = 0 if sayfa == (max_pages - 1) else sayfa + 1
+    butonlar.append([custom.Button.inline(basi("BACKK"), data=f"sayfa({geri})"), custom.Button.inline(basi("NEXT"), data=f"sayfa({ileri})")])
     butonlar.append([custom.Button.inline("📂Menyu", data="evvel")])
     return [max_pages, butonlar]
 
@@ -500,7 +495,13 @@ with bot:
                 buttons = [list(filter(None, row)) for row in buttons]
 
             await event.answer(basi("CLIST"), cache_time=1)
-            await event.edit(text, buttons=buttons, link_preview=False)
+            try:
+                try:
+                await event.edit(text, buttons=buttons, link_preview=False)
+            except MessageNotModifiedError:
+                pass
+            except MessageNotModifiedError:
+                pass
 
         @tgbot.on(events.CallbackQuery(data=re.compile(b"config_edit:(.+)")))
         async def config_edit(event):
@@ -513,7 +514,10 @@ with bot:
             text = basi("VEDIT", key=key, current_value=current_value)
 
             await event.answer(basi("CEDIT", key=key), cache_time=1)
-            await event.edit(text, buttons=[[Button.inline(basi("BACK"), data="config_back")]])
+            try:
+                await event.edit(text, buttons=[[Button.inline(basi("BACK"), data="config_back")]])
+            except MessageNotModifiedError:
+                pass
 
         @tgbot.on(events.CallbackQuery(data=re.compile(b"config_back")))
         async def config_back(event):
@@ -582,11 +586,14 @@ with bot:
                 result += basi("DCMD") + f"`{command['usage']}`\n"
                 result += basi("ECMD") + f"`{PATTERNS[:1]}{command['example']}`\n\n"
 
-            await event.edit(
-                result,
-                buttons=[custom.Button.inline(basi("BACKK"), data=f"bilgi[{sayfa}]({cmd})")],
-                link_preview=False
-            )
+            try:
+                await event.edit(
+                    result,
+                    buttons=[custom.Button.inline(basi("BACKK"), data=f"bilgi[{sayfa}]({cmd})")],
+                    link_preview=False
+                )
+            except MessageNotModifiedError:
+                pass
 
     except Exception as e:
         print(e)
