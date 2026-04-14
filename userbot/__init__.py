@@ -68,7 +68,7 @@ if not LANGUAGE in ["EN", "TR", "AZ", "UZ", "DEFAULT"]:
     LANGUAGE = "DEFAULT"
     
 # SilgiUserbot Versiyası
-SILGI_VERSION = "x7.6.3"
+SILGI_VERSION = "x7.6.4"
 
 # Telegram API KEY ve HASH
 API_KEY = os.environ.get("API_KEY", None)
