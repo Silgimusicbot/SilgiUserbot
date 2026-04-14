@@ -1,4 +1,4 @@
-
+import json
 import os
 import time
 import re
@@ -225,6 +225,30 @@ START_TIME = int(os.environ.get("START_TIME", time.time()))
 # Təhlükəli pluginlər üçün
 TEHLUKELI = ["SESSION", "HEROKU_APIKEY", "API_HASH", "API_KEY", ".session.save"]
 botgif = "https://files.catbox.moe/eiqmdh.gif"
+dill = {}
+
+def dil():
+    global dill
+    dilfayl = f"./userbot/language/{LANGUAGE}.silgijson"
+
+    try:
+        with open(dilfayl, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            dill = data.get("STRINGS", {}).get("init", {})
+    except Exception:
+        try:
+            with open("./userbot/language/DEFAULT.silgijson", "r", encoding="utf-8") as f:
+                data = json.load(f)
+                dill = data.get("STRINGS", {}).get("init", {})
+        except Exception:
+            dill = {}
+
+def basi(key, **kwargs):
+    metn = dill.get(key, key)
+    try:
+        return metn.format(**kwargs)
+    except:
+        return metn
 # CloudMail.ru və MEGA.nz
 if not os.path.exists('bin'):
     os.mkdir('bin')
