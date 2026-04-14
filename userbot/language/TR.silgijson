@@ -31,7 +31,8 @@
             "BOT": "Kurulum botu",
             "BACKK": "◀️ Geri",
             "NEXT": "▶️İleri",
-            "VEDIT": "🔧 **{key}** düzenle\n\n🔹 Mevcut değer: `{current_value}`\n\n✏️ Değeri değiştirmek için: `.set var {key} yeni_değer`"
+            "VEDIT": "🔧 **{key}** düzenle\n\n🔹 Mevcut değer: `{current_value}`\n\n✏️ Değeri değiştirmek için: `.set var {key} yeni_değer`",
+            "OFFIC": "⬇️ **Resmi:** "
         },
         "errors": {
             "CMD": "⌨️ **Komut:** {silgitext}\n\n",
