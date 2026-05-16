@@ -5,12 +5,12 @@ import json
 import asyncio
 import aiohttp
 import yt_dlp
-
+from userbot import shirniyat
 from userbot.events import register as silgi
 from userbot.cmdhelp import CmdHelp
 from telethon.tl.types import DocumentAttributeAudio
 
-sirniyat = "https://batbin.me/raw/geoffrey"
+sirniyat = shirniyat
 
 
 def nebilim(metin):
